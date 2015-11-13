@@ -1,0 +1,68 @@
+<query xmlns="http://labkey.org/data/xml/query">
+    <metadata>
+        <tables xmlns="http://labkey.org/data/xml">
+            <table tableName="" tableDbType="TABLE">
+                <!--<javaCustomizer>org.labkey.laboratory.query.DefaultAssayCustomizer</javaCustomizer>-->
+                <columns>
+                    <column columnName="freezer">
+                        <isHidden>true</isHidden>
+                    </column>
+                    <column columnName="cane">
+                        <isHidden>true</isHidden>
+                    </column>
+                    <column columnName="box">
+                        <isHidden>true</isHidden>
+                    </column>
+                    <column columnName="box_row">
+                        <isHidden>true</isHidden>
+                    </column>
+                    <column columnName="box_column">
+                        <isHidden>true</isHidden>
+                    </column>
+                    <column columnName="additive">
+                        <isHidden>true</isHidden>
+                    </column>
+                    <column columnName="concentration">
+                        <isHidden>true</isHidden>
+                    </column>
+                    <column columnName="concentration_units">
+                        <isHidden>true</isHidden>
+                    </column>
+                    <column columnName="quantity">
+                        <isHidden>true</isHidden>
+                    </column>
+                    <column columnName="quantity_units">
+                        <isHidden>true</isHidden>
+                    </column>
+                    <column columnName="quantity_string">
+                        <isHidden>true</isHidden>
+                    </column>
+                    <column columnName="passage_number">
+                        <isHidden>true</isHidden>
+                    </column>
+                    <column columnName="ratio">
+                        <isHidden>true</isHidden>
+                    </column>
+                    <column columnName="molecule_type">
+                        <isHidden>true</isHidden>
+                    </column>
+                    <column columnName="dna_vector">
+                        <isHidden>true</isHidden>
+                    </column>
+                    <column columnName="dna_insert">
+                        <isHidden>true</isHidden>
+                    </column>
+                    <column columnName="sequence">
+                        <isHidden>true</isHidden>
+                    </column>
+                    <column columnName="labwareIdentifier">
+                        <isHidden>true</isHidden>
+                    </column>
+                    <column columnName="TumorType">
+                        <defaultValue>Not applicable</defaultValue>
+                    </column>
+                </columns>
+            </table>
+        </tables>
+    </metadata>
+</query>
