@@ -61,6 +61,14 @@
                     <column columnName="TumorType">
                         <defaultValue>Not applicable</defaultValue>
                     </column>
+                    <column columnName="samplesource">
+                        <fk>
+                            <fkDbSchema>lists</fkDbSchema>
+                            <fkTable>SampleSourceLookup</fkTable>
+                            <fkColumnName>samplesource</fkColumnName>
+                            <fkDisplayColumnName useRawValue="true"/>
+                        </fk>
+                    </column>
                 </columns>
             </table>
         </tables>

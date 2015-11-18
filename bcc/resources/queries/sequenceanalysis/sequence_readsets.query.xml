@@ -19,7 +19,6 @@
                     <column columnName="SonicationSizeRange">
                         <defaultValue>150bp</defaultValue>
                     </column>
-
                 </columns>
             </table>
         </tables>
