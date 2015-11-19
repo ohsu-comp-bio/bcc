@@ -1,0 +1,10 @@
+<query xmlns="http://labkey.org/data/xml/query">
+    <metadata>
+        <tables xmlns="http://labkey.org/data/xml">
+            <table tableName="" tableDbType="TABLE">
+                <!--<javaCustomizer>org.labkey.laboratory.query.DefaultAssayCustomizer</javaCustomizer>-->
+                <tableTitle>Immune Cell Phenotyping</tableTitle>
+            </table>
+        </tables>
+    </metadata>
+</query>
