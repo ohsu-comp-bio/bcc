@@ -1,36 +1,6 @@
 <customView xmlns="http://labkey.org/data/xml/queryCustomView">
-<columns>
-    <column name="OPTR"/>
-    <column name="DatePerformed">
-        <properties>
-            <property name="columnTitle" value="Date test performed"/>
-        </properties>
-    </column>
-    <column name="Method">
-    <column name="PercentCD45Total">
-        <properties>
-            <property name="columnTitle" value="% CD45+ of total"/>
-        </properties>
-    </column>
-    <column name="PercentCD8ofCD45">
-        <properties>
-            <property name="columnTitle" value="CD8+ T Cells"/>
-        </properties>
-    </column>
-    <column name="PercentCD4ofCD45">
-        <properties>
-            <property name="columnTitle" value="CD4+ T Cells"/>
-        </properties>
-    </column>
-    <column name="PercentF4ofCD45">
-        <properties>
-            <property name="columnTitle" value="Macrophages"/>
-        </properties>
-    </column>
-    <column name="PercentCD19ofCD45">
-        <properties>
-            <property name="columnTitle" value="B Cells"/>
-        </properties>
-    </column>
-</columns>
+    <columns>
+        <column name="OPTR"/>
+        <column name="BLAH"/>
+    </columns>
 </customView>

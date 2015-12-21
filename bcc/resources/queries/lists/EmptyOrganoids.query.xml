@@ -5,9 +5,9 @@
                 <!--if you include this on a table, it will apply standard configuration-->
                 <javaCustomizer>org.labkey.bcc.query.BCCCustomizer</javaCustomizer>
                 <columns>
-                    <column columnName="BLAH">
-                        <isHidden>true</isHidden>
-                    </column>
+                    <column columnName="PrimaryInitiation"/>
+                    <column columnName="P6Initiation"/>
+                    <column columnName="PrimaryTumorCells"/>
                 </columns>
             </table>
         </tables>
