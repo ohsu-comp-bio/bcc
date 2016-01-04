@@ -2,7 +2,7 @@
     <columns>
         <column name="PrimaryInitiation">
             <properties>
-                <property name="columnTitle" value="Insert column title here"/>
+                <property name="columnTitle" value="This is the VIEW column title"/>
             </properties>
         </column>
         <column name="P6Initiation"/>

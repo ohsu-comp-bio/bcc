@@ -6,9 +6,10 @@
         <column name="sampletype"/>
         <column name="samplesubtype"/>
         <column name="samplesource"/>
+        <column name="sampleset"/>
         <column name="preparationmethod"/>
         <column name="comment"/>
-        <column name="species"/>
+        <column name="samplespecies"/>
         <column name="parentsample"/>
         <column name="OriginTissue"/>
         <column name="TumorNormal"/>
