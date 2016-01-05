@@ -1,0 +1,80 @@
+<script type="text/javascript">
+    Ext4.onReady(function (){
+        /* get the participant id from the request URL: this parameter is required. */
+        var participantId = LABKEY.ActionURL.getParameter('participantId') || LABKEY.ActionURL.getParameter('patientId');
+        if (!participantId){
+            alert('Must Provide Id');
+            return;
+        }
+
+        var title = 'Patient Details: ' + participantId;
+        document.title = title;
+
+        Ext4.define('bcc.panel.TabbedReportPanel', {
+            extend: 'LDK.panel.TabbedReportPanel',
+
+            initComponent: function(){
+                Ext4.ns('bcc.tabbedReports');
+
+                Ext4.apply(this, {
+                    //defaultReport: 'abstract',
+                    participantId: participantId,
+                    reportNamespace: bcc.tabbedReports
+                });
+
+                this.callParent();
+
+                this.down('#submitBtn').hidden = true;
+                this.loadReports();
+            },
+
+            getFilterOptionsItems: function(){
+                var items = this.callParent();
+                items[0].hidden = true;
+                items[1].hidden = true;
+
+                return items;
+            },
+
+            loadReports: function(){
+                this.reports = [
+                    this.getReportConfig('samples', 'study', 'Clinical', 'Samples'),
+                    this.getReportConfig('malignancies', 'study', 'Clinical', 'Malignancies'),
+                    this.getReportConfig('demographics', 'study', 'Clinical', 'Demographics'),
+                    this.getReportConfig('wgs', 'study', 'Genomics', 'Whole Genome Data'),
+                    this.getReportConfig('rnaseq', 'study', 'Genomics', 'RNA-Seq')
+                ];
+
+                this.reports = LDK.Utils.sortByProperty(this.reports, 'name', false);
+                this.reports = LDK.Utils.sortByProperty(this.reports, 'reportCategory', false);
+
+                this.createTabPanel();
+            },
+
+            filterTypes: [{
+                xtype: 'ldk-singlesubjectfiltertype',
+                inputValue: LDK.panel.SingleSubjectFilterType.filterName,
+                label: 'Single Participant',
+                hidden: true,
+                initialValue: participantId
+            }],
+
+            getReportConfig: function(queryName, schemaName, category, title){
+                return {
+                    id: queryName,
+                    name: queryName,
+                    category: category,
+                    schemaName: 'study',
+                    queryName: queryName,
+                    label: title,
+                    reportType: 'query',
+                    subjectFieldName: 'patientId',
+                    dateFieldName: 'patientId'
+                };
+            }
+        });
+
+        Ext4.create('bcc.panel.TabbedReportPanel').render('participantDiv');
+    });
+</script>
+<div id="participantDiv"></div>
