@@ -9,8 +9,10 @@
         <column name="sampleset"/>
         <column name="preparationmethod"/>
         <column name="comment"/>
-        <column name="samplespecies"/>
+        <column name="box"/>
+        <column name="quantity"/>
         <column name="parentsample"/>
+        <column name="samplespecies"/>
         <column name="OriginTissue"/>
         <column name="TumorNormal"/>
         <column name="TumorType"/>

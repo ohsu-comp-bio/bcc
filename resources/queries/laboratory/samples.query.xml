@@ -8,9 +8,6 @@
                     <column columnName="cane">
                         <isHidden>true</isHidden>
                     </column>
-                    <column columnName="box">
-                        <isHidden>true</isHidden>
-                    </column>
                     <column columnName="box_row">
                         <isHidden>true</isHidden>
                     </column>
@@ -24,9 +21,6 @@
                         <isHidden>true</isHidden>
                     </column>
                     <column columnName="concentration_units">
-                        <isHidden>true</isHidden>
-                    </column>
-                    <column columnName="quantity">
                         <isHidden>true</isHidden>
                     </column>
                     <column columnName="quantity_units">
@@ -59,8 +53,24 @@
                     <column columnName="labwareIdentifier">
                         <isHidden>true</isHidden>
                     </column>
+                    <column columnName="processdate">
+                        <isHidden>true</isHidden>
+                    </column>
+                    <column columnName="freezer">
+                        <isHidden>true</isHidden>
+                    </column>
+                    <column columnName="location">
+                        <isHidden>true</isHidden>
+                    </column>
+                    <column columnName="initials">
+                        <isHidden>true</isHidden>
+                    </column>
                     <column columnName="TumorType">
                         <defaultValue>Not applicable</defaultValue>
+                        <description>This is a test description</description>
+                    </column>
+                    <column columnName="subjectid">
+                        <columnTitle>OPTR</columnTitle>
                     </column>
                     <column columnName="samplesource">
                         <fk>
