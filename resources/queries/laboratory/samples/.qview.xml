@@ -1,5 +1,6 @@
 <customView xmlns="http://labkey.org/data/xml/queryCustomView">
     <columns>
+        <column name="freezerid"/>
         <column name="subjectid"/>
         <column name="samplename"/>
         <column name="sampledate"/>

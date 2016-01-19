@@ -1,0 +1,9 @@
+<query xmlns="http://labkey.org/data/xml/query">
+    <metadata>
+        <tables xmlns="http://labkey.org/data/xml">
+            <table tableName="" tableDbType="TABLE">
+                <javaCustomizer>org.labkey.bcc.query.MissingPatientDemographicsDataCustomizer</javaCustomizer>
+            </table>
+        </tables>
+    </metadata>
+</query>

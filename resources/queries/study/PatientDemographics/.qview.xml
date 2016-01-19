@@ -1,0 +1,7 @@
+<customView xmlns="http://labkey.org/data/xml/queryCustomView">
+    <columns>
+        <column name="FirstName"/>
+        <column name="LastName"/>
+        <column name="missingdata"/>
+    </columns>
+</customView>

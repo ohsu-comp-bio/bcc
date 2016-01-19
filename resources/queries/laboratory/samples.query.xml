@@ -72,6 +72,16 @@
                     <column columnName="subjectid">
                         <columnTitle>OPTR</columnTitle>
                     </column>
+<!-- begin testing lookups -->
+                    <column columnName="preparationmethod">
+                        <fk>
+                            <fkDbSchema>lists</fkDbSchema>
+                            <fkTable>DiagnosisTable</fkTable>
+                            <fkColumnName>Grade</fkColumnName>
+                            <fkDisplayColumnName useRawValue="true"/>
+                        </fk>
+                    </column>
+                    <!-- end testing lookups -->
                     <column columnName="samplesource">
                         <fk>
                             <fkDbSchema>lists</fkDbSchema>
