@@ -49,8 +49,26 @@ public class MissingPatientDemographicsDataCustomizer implements TableCustomizer
 
             ColumnInfo firstName = ti.getColumn("FirstName");
             ColumnInfo lastName = ti.getColumn("LastName");
+/* Original query, which works; keeping here for reference
             SQLFragment sql = new SQLFragment("(" + ExprColumn.STR_TABLE_ALIAS +".FirstName IS NULL)" );
             ExprColumn col = new ExprColumn(ti, "missingdata", sql, JdbcType.BOOLEAN, firstName);
+*/
+            SQLFragment sql = new SQLFragment("(" + ExprColumn.STR_TABLE_ALIAS +".FirstName IS NULL)"
+                    + " OR "
+                    + "(" + ExprColumn.STR_TABLE_ALIAS +".LastName IS NULL)"
+                    + " OR "
+                    + "(" + ExprColumn.STR_TABLE_ALIAS +".Gender IS NULL)"
+                    + " OR "
+                    + "(" + ExprColumn.STR_TABLE_ALIAS +".DOB IS NULL)"
+                    + " OR "
+                    + "(" + ExprColumn.STR_TABLE_ALIAS +".ConsentedDate IS NULL)"
+                    + " OR "
+                    + "(" + ExprColumn.STR_TABLE_ALIAS +".DeathDate IS NULL)"
+                    + " OR "
+                    + "(" + ExprColumn.STR_TABLE_ALIAS +".MRN IS NULL)"
+            );
+            ExprColumn col = new ExprColumn(ti, "missingdata", sql, JdbcType.BOOLEAN, firstName,
+                    lastName);
             //  need logic here about what's true, what's false
             col.setLabel("MissingData");
             col.setDescription("This field indicates whether data is missing from Patient Demographic records.");

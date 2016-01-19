@@ -9,5 +9,6 @@
         <column name="DOB"/>
         <column name="ConsentedDate"/>
         <column name="DeathDate"/>
+        <column name="missingdata"/>
     </columns>
 </customView>
