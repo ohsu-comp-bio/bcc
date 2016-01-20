@@ -37,6 +37,7 @@ public class MissingPatientDemographicsDataCustomizer implements TableCustomizer
             appendMissingDataColumn((AbstractTableInfo)ti);
         }
 
+        //  commented out for hygiene's sake; we don't sort, for one thing
         //this customizer also sorts columns, so we append first
 //        TableCustomizer tc2 = new LaboratoryTableCustomizer();
 //        tc2.customize(ti);
