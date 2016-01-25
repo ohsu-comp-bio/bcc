@@ -3,10 +3,14 @@
         <tables xmlns="http://labkey.org/data/xml">
             <table tableName="" tableDbType="TABLE">
                 <!--if you include this on a table, it will apply standard configuration-->
-                <javaCustomizer>org.labkey.bcc.query.BCCCustomizer</javaCustomizer>
+                <javaCustomizer>org.labkey.ldk.query.DefaultTableCustomizer</javaCustomizer>
                 <columns>
-                    <column columnName="TEST">
-                        <isHidden>true</isHidden>
+                    <column columnName="Type">
+                        <fk>
+                            <fkDbSchema>lists</fkDbSchema>
+                            <fkTable>TreatmentTypeLookup</fkTable>
+                            <fkColumnName>TreatmentType</fkColumnName>
+                        </fk>
                     </column>
                 </columns>
             </table>
