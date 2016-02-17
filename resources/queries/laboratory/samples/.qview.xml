@@ -17,6 +17,7 @@
         <column name="OriginTissue"/>
         <column name="TumorNormal"/>
         <column name="TumorType"/>
+        <column name="initials"/>
     </columns>
     <sorts>
         <sort column="subjectid" descending="false"/>

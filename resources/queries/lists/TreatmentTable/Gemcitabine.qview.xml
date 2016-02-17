@@ -1,0 +1,11 @@
+<customView xmlns="http://labkey.org/data/xml/queryCustomView">
+    <columns>
+        <column name="OPTR"/>
+        <column name="Date"/>
+        <column name="Type"/>
+        <column name="Comment"/>
+    </columns>
+    <filters>
+        <filter column="Type" operator="containsoneof" value="gem abraxane;gemcitabine;gem + oxaliplatin;gem + CISplatin;gem + HAPA"></filter>
+    </filters>
+</customView>

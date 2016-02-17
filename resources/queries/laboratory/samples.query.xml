@@ -62,8 +62,16 @@
                     <column columnName="location">
                         <isHidden>true</isHidden>
                     </column>
-                    <column columnName="initials">
+<!--                    <column columnName="initials">
                         <isHidden>true</isHidden>
+                    </column>
+-->
+                    <column columnName="initials">
+                        <fk>
+                            <fkDbSchema>laboratory</fkDbSchema>
+                            <fkTable>Samples</fkTable>
+                            <fkColumnName>samplespecies</fkColumnName>
+                        </fk>
                     </column>
                     <column columnName="TumorType">
                         <defaultValue>Not applicable</defaultValue>

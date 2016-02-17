@@ -1,0 +1,11 @@
+<customView xmlns="http://labkey.org/data/xml/queryCustomView">
+    <columns>
+        <column name="OPTR"/>
+        <column name="Date"/>
+        <column name="Type"/>
+        <column name="Comment"/>
+    </columns>
+    <filters>
+        <filter column="Type" operator="containsoneof" value="flu.leu.ox;fluorouracil;flu.ox;folfirinox;flu.ir.ox;flu.leu;fol.leu.ox;flu.ir.leu"></filter>
+    </filters>
+</customView>
