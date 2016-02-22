@@ -6,6 +6,6 @@
         <column name="Comment"/>
     </columns>
     <filters>
-        <filter column="Type" operator="containsoneof" value="gem abraxane;gemcitabine;gem + oxaliplatin;gem + CISplatin;gem + HAPA"></filter>
+        <filter column="Type" operator="containsoneof" value="gemcitabine + Abraxane;gemcitabine;gemcitabine + oxaliplatin;gemcitabine + cisplatin;gemcitabine + Algenpantucel-L"></filter>
     </filters>
 </customView>

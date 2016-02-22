@@ -6,6 +6,6 @@
         <column name="Comment"/>
     </columns>
     <filters>
-        <filter column="Type" operator="containsoneof" value="folfirinox;flu.ir.ox;flu.ir.leu"></filter>
+        <filter column="Type" operator="containsoneof" value="FOLFIRINOX;FIRINOX;FOLFIRI"></filter>
     </filters>
 </customView>

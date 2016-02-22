@@ -6,6 +6,6 @@
         <column name="Comment"/>
     </columns>
     <filters>
-        <filter column="Type" operator="containsoneof" value="HAPA;gem + HAPA"></filter>
+        <filter column="Type" operator="containsoneof" value="Algenpantucel-L;gemcitabine + Algenpantucel-L"></filter>
     </filters>
 </customView>

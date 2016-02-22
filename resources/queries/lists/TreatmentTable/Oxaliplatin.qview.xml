@@ -6,6 +6,6 @@
         <column name="Comment"/>
     </columns>
     <filters>
-        <filter column="Type" operator="containsoneof" value="flu.leu.ox;flu.ox;folfirinox;flu.ir.ox;gem + oxaliplatin;oxaliplatin;fol.leu.ox"></filter>
+        <filter column="Type" operator="containsoneof" value="FOLFOX;fluorouracil + oxaplatin;FOLFIRINOX;FIRINOX;gemcitabine + oxaliplatin;oxaliplatin"></filter>
     </filters>
 </customView>
