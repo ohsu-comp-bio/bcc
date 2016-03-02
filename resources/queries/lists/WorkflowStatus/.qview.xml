@@ -1,0 +1,8 @@
+<customView xmlns="http://labkey.org/data/xml/queryCustomView">
+    <columns>
+        <column name="OPTR"/>
+        <column name="Workflow 1"/>
+        <column name="Workflow 1"/>
+        <column name="Patient Name"/>
+    </columns>
+</customView>

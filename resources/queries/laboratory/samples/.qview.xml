@@ -1,0 +1,25 @@
+<customView xmlns="http://labkey.org/data/xml/queryCustomView">
+    <columns>
+        <column name="freezerid"/>
+        <column name="subjectid"/>
+        <column name="samplename"/>
+        <column name="sampledate"/>
+        <column name="sampletype"/>
+        <column name="samplesubtype"/>
+        <column name="samplesource"/>
+        <column name="sampleset"/>
+        <column name="preparationmethod"/>
+        <column name="comment"/>
+        <column name="box"/>
+        <column name="quantity"/>
+        <column name="parentsample"/>
+        <column name="samplespecies"/>
+        <column name="OriginTissue"/>
+        <column name="TumorNormal"/>
+        <column name="TumorType"/>
+        <column name="initials"/>
+    </columns>
+    <sorts>
+        <sort column="subjectid" descending="false"/>
+    </sorts>
+</customView>

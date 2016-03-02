@@ -1,0 +1,11 @@
+<customView xmlns="http://labkey.org/data/xml/queryCustomView">
+    <columns>
+        <column name="PrimaryInitiation">
+            <properties>
+                <property name="columnTitle" value="This is the VIEW column title"/>
+            </properties>
+        </column>
+        <column name="P6Initiation"/>
+        <column name="PrimaryTumorCells"/>
+    </columns>
+</customView>
