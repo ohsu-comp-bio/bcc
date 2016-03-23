@@ -1,0 +1,5 @@
+<view xmlns="http://labkey.org/data/xml/view" title="Tumor Board">
+    <dependencies>
+        <dependency path="LDK.context"/>
+    </dependencies>
+</view>
