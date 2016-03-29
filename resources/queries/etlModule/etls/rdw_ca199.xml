@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<etl xmlns="http://labkey.org/etl/xml">
+    <name>RDW CA19-9 >>> Local CA19-9</name>
+    <description>Copies data from RDW staging table to Main CA19-9 table.</description>
+    <transforms>
+        <transform id="all">
+            <source schemaName="TestRDW" queryName="RDW_CA19_9_V"/>
+            <destination schemaName="lists" queryName="new_CA199" targetOption="merge">
+                <columnTransforms>
+                    <column source="LAB_DTTM" target="Date"/>
+                    <column source="VALUE" target="CA199"/>
+                </columnTransforms>
+            </destination>
+        </transform>
+    </transforms>
+    <schedule>
+        <poll interval="1h"/>
+    </schedule>
+</etl>

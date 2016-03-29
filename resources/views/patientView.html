@@ -5,9 +5,9 @@
 
         //load this page with "&patientId=XXXXX" on the URL
 
-        var patientId = LABKEY.ActionURL.getParameter('patientId');
+        var patientId = LABKEY.ActionURL.getParameter('OPTR');
         if (!patientId){
-            Ext4.Msg.alert('Error', 'Must provide the patient Id');
+            Ext4.Msg.alert('Error', 'Must provide an OPTR number');
             return;
         }
 
@@ -28,50 +28,67 @@
                             type: 'labkey-store',
                             schemaName: 'study',
                             queryName: 'PatientDemographics',
-                            filterArray: LABKEY.Filter.create('patientId', this.patientId),
-                            //columns: 'a,b,c',
-                            autoLoad: true
-                        }
-                    //you could repeat this to keep adding more dataregions
-                    },{
-                        xtype: 'ldk-querypanel',
-                        queryConfig: {
-                            schemaName: 'study',
-                            queryName: 'images',
-                            filterArray: LABKEY.Filter.create('patientId', this.patientId)
-                        }
-                    //or use a dataview to stylize better
-                    },{
-                        xtype: 'dataview',
-                        store: {
-                            type: 'labkey-store',
-                            schemaName: 'lists',
-                            queryName: 'TreatmentTable',
-                            filterArray: LABKEY.Filter.create('patientId', this.patientId),
+//                            filterArray: LABKEY.Filter.create('OPTR', this.patientId),
+                            filterArray: [LABKEY.Filter.create('OPTR', this.patientId)],
+                            //  comment out line below to load all available columns, or list columns to be shown
+                            columns: 'OPTR,DOB,Gender',
                             autoLoad: true
                         },
-                        itemSelector: 'tr.patientRow',
-                        tpl: [
-                            '<table class="patientTable">' +
-                            '<tr><td>Readset Id</td><td>Readset Name</td><td>Sample Id</td><td>Platform</td><td>Forward Reads</td><td>Reverse Reads</td><td>Folder</td><td></td></tr>',
-                            '<tpl for=".">',
-                                '<tr class="patientRow">',
-                                    '<td><a href="{[LABKEY.ActionURL.buildURL("query", "executeQuery", values.queryContainerPath, {schemaName: "sequenceanalysis", "query.queryName":"sequence_readsets", "query.rowId~eq": values.rowid})]}" target="_blank">{rowid:htmlEncode}</a></td>',
-                                    '<td><a href="{[LABKEY.ActionURL.buildURL("query", "executeQuery", values.queryContainerPath, {schemaName: "sequenceanalysis", "query.queryName":"sequence_readsets", "query.rowId~eq": values.rowid})]}" target="_blank">{name:htmlEncode}</a></td>',
-                                    '<td>',
-                                    '<tpl if="sampleid &gt; 0">',
-                                        '<a href="{[LABKEY.ActionURL.buildURL("query", "executeQuery", values.queryContainerPath, {schemaName: "laboratory", "query.queryName":"samples", "query.rowid~eq": values.sampleid})]}" target="_blank">{sampleid:htmlEncode}</a>',
-                                    '</tpl>',
-                                    '</td>',
-                                    '<td>{platform:htmlEncode}</td>',
-                                    '<td><a href="{[LABKEY.ActionURL.buildURL("project", "start", values["container/path"], {})]}" target="_blank">{[Ext4.htmlEncode(values["container/displayName"])]}</a></td>',
-                                    '<td><a href="{[LABKEY.ActionURL.buildURL("sequenceanalysis", "fastqcReport", values["container/path"], {readsets: values.rowid})]}" target="_blank">View FASTQC Report</a></td>',
-                                '</tr>',
-                            '</tpl>',
-                            '</table>',
-                        ]
-                    }]
-                });
+                        title: 'Patient Information'
+                    //you could repeat this to keep adding more dataregions
+                    },
+                    {
+                        xtype: 'ldk-querypanel',
+                        queryConfig: {
+                            schemaName: 'lists',
+                            queryName: 'Variants',
+                            title: 'Noteworthy Variants',
+                            filterArray: [LABKEY.Filter.create('OPTR', this.patientId),
+                                LABKEY.Filter.create('Flagged', 'x')]
+                            //columns: 'OPTR'
+                        }
+                        //or use a dataview to stylize better
+                    },
+                    {
+                        xtype: 'ldk-querypanel',
+                        queryConfig: {
+                            schemaName: 'lists',
+                            queryName: 'TreatmentTable',
+                            filterArray: [LABKEY.Filter.create('Type', 'gemcitabine')]
+                        }
+                        //or use a dataview to stylize better
+                    },
+                    {
+                    xtype: 'dataview',
+                    store: {
+                        type: 'labkey-store',
+                        schemaName: 'lists',
+                        queryName: 'TreatmentTable',
+                        filterArray: LABKEY.Filter.create('Type', 'gemcitabine', LABKEY.Filter.Types.EQUAL),
+                        autoLoad: true
+                    },
+                    itemSelector: 'tr.patientRow',
+                    tpl: [
+                        '<table class="patientTable">' +
+                        '<tr><td>Readset Id</td><td>Readset Name</td><td>Sample Id</td><td>Platform</td><td>Forward Reads</td><td>Reverse Reads</td><td>Folder</td><td></td></tr>',
+                        '<tpl for=".">',
+                            '<tr class="patientRow">',
+                                '<td><a href="{[LABKEY.ActionURL.buildURL("query", "executeQuery", values.queryContainerPath, {schemaName: "sequenceanalysis", "query.queryName":"sequence_readsets", "query.rowId~eq": values.rowid})]}" target="_blank">{rowid:htmlEncode}</a></td>',
+                                '<td><a href="{[LABKEY.ActionURL.buildURL("query", "executeQuery", values.queryContainerPath, {schemaName: "sequenceanalysis", "query.queryName":"sequence_readsets", "query.rowId~eq": values.rowid})]}" target="_blank">{name:htmlEncode}</a></td>',
+                                '<td>',
+                                '<tpl if="sampleid &gt; 0">',
+                                    '<a href="{[LABKEY.ActionURL.buildURL("query", "executeQuery", values.queryContainerPath, {schemaName: "laboratory", "query.queryName":"samples", "query.rowid~eq": values.sampleid})]}" target="_blank">{sampleid:htmlEncode}</a>',
+                                '</tpl>',
+                                '</td>',
+                                '<td>{platform:htmlEncode}</td>',
+                                '<td><a href="{[LABKEY.ActionURL.buildURL("project", "start", values["container/path"], {})]}" target="_blank">{[Ext4.htmlEncode(values["container/displayName"])]}</a></td>',
+                                '<td><a href="{[LABKEY.ActionURL.buildURL("sequenceanalysis", "fastqcReport", values["container/path"], {readsets: values.rowid})]}" target="_blank">View FASTQC Report</a></td>',
+                            '</tr>',
+                        '</tpl>',
+                        '</table>',
+                    ]
+                }]
+            });
 
                 //other approach:
 //                tpl: [
