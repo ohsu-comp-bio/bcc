@@ -2,7 +2,7 @@
     <columns>
         <column name="PrimaryInitiation">
             <properties>
-                <property name="columnTitle" value="Insert column title here"/>
+                <property name="columnTitle" value="OPTR"/>
             </properties>
         </column>
         <column name="P6Initiation"/>
