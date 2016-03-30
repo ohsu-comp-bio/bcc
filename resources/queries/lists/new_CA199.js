@@ -11,19 +11,19 @@ var console = require("console");
 
 function beforeInsert(row, errors) {
 
-    var flag_match;
+    var flag_value;
 
-    if(row.CA199){
-        //  test - just do SOMEthing!
-        //row.CA199 = '123456';
-
-        //var match = row.stringResults.match(/^([<>=]*)[ ]*(\d*\.*\d*)([-]*\d*\.*\d*)([+]*)[ ]*(.*)$/);
-//        flag_match = row.CA199.match(/^([<>=]*)[ ]*(\d*\.*\d*)([-]*\d*\.*\d*)([+]*)[ ]*(.*)$/);
-        flag_match = row.CA199.match(/[<>=]/);
-        if(flag_match)
-            row.CA199 = '7734';
-
-    }
+    if(row.CA199Raw)
+    {
+        flag_value = row.CA199Raw.match(/[<>=]/);
+        if (flag_value)
+        {
+            //  Extract purely numeric value
+            row.CA199 = row.CA199Raw.substring(1);
+        }   else    {
+            row.CA199 = row.CA199Raw;
+        }
+    }   //  fi
 }
 
 
