@@ -1,0 +1,273 @@
+<form name="ParameterSelection_TTBplotA">
+    <table cellspacing="0" cellpadding="5" border="0">
+        <td valign="top">
+            <table cellspacing="0" cellpadding="5" border="0">
+                <tr>
+                    <td valign="top"><strong>Select patient by OPTR:</strong></td>
+                    <td valign="top">enter</td>
+                    <td valign="top"><input id="OPTR1_TTBplotA" onchange="optrEntryMade()" type="text" name="OPTR1" value="" size="10"></td>
+                    <td valign="top">or select</td>
+                    <td valign="top"><select id="OPTR2_TTBplotA" onchange="optrSelectionMade()" name="OPTR2"> <option></option> </select></td>
+                </tr>
+            </table>
+
+            <table cellspacing="0" cellpadding="5" border="0">
+                <tr>
+                    <td valign="top"> <input type="radio" name="PlotType" value="TTB" checked> Time Line </td>
+                    <td valign="top"> <input type="radio" name="PlotType" value="SizeVsGrade"> Tumor Size vs Grade </td>
+                    <td valign="top"> <input value='Update' type='button' onclick='submitRequest_TTBplotA()'></td>
+                </tr>
+            </table>
+        </td>
+        <!-- See this example (thanks to Ariel): http://plnkr.co/edit/lqF06Jl7yaoyD0BiOrKZ?p=preview -->
+        <td valign="top">
+            <table cellspacing="0" cellpadding="5" border="0">
+                <tr>
+                    <td valign="top">
+                        <div class="dropdown">
+                            <button
+                                    id="dropdown-button"
+                                    type='button'
+                                    onclick="toggleDropdown()"
+                            >Options &#x25bc;</button>
+                            <ul id='dropdown' class="dropdown-menu" z-index="99" style="display:none;list-style-type:none">
+                                <li>
+                                    <input class='OptionsCheckbox' type="checkbox" id="CA19_9_checkbox_TTBplotA" name="CA19_9" checked> Show CA19-9 </li>
+                                <li>
+                                    <input class='OptionsCheckbox' type="checkbox" id="ShowWeight_TTBplotA" name="Weight">Weight</li>
+                                <li>
+                                    <input class='OptionsCheckbox' type="checkbox" id="ShowTumorSize_TTBplotA" name="TumorSize" checked> Tumor Size </li>
+                                <li>
+                                    <input class='OptionsCheckbox' type="checkbox" id="ShowTreatments_TTBplotA" name="Treatments" checked> Treatments </li>
+                                <li>
+                                    <input class='OptionsCheckbox' type="checkbox" id="ShowFirstTreatments_TTBplotA" name="FirstTreatments" checked> First Treatments </li>
+                                <li>
+                                    <input class='OptionsCheckbox' type="checkbox" id="ShowInitialDiagnosis_TTBplotA" name="InitialDiagnosis" checked> InitialDiagnosis </li>
+                                <li>
+                                    <input class='OptionsCheckbox' type="checkbox" id="ShowSurgeries_TTBplotA" name="Surgeries" checked> Surgeries </li>
+                                <li>
+                                    <input class='OptionsCheckbox' type="checkbox" id="ShowBloodDraws_TTBplotA" name="BloodDraws" checked> Blood Draws </li>
+                                <li>
+                                    <input class='OptionsCheckbox' type="checkbox" id="DifferentiateMets_TTBplotA" name="DifferentiateMets"> Differentiate Mets </li>
+                                <li>
+                                    <input class='OptionsCheckbox' type="checkbox" id="ShowOtherEvents_TTBplotA" name="OtherEvents" checked> OtherEvents </li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </table>
+</form>
+
+<div id="reportDiv_TTBplotA">Loading...</div>
+
+<script type="text/javascript">
+
+var OPTR = LABKEY.ActionURL.getParameter("OPTR");
+
+
+    // Ensure that page dependencies are loaded
+    LABKEY.requiresExt3ClientAPI(true, function() {
+        Ext.onReady(init_TTBplotA);
+    });
+
+    var is_down = false;
+
+    function toggleDropdown() {
+      if (is_down) {
+        document.getElementById('dropdown').style.display = "none";
+        document.getElementById('dropdown-button').innerHTML = "Options &#x25bc;";
+        is_down = false;
+      } else {
+        document.getElementById('dropdown').style.display = "block";
+        document.getElementById('dropdown-button').innerHTML = "Options &#x25b2;";
+        is_down = true;
+      }
+    }
+
+    function populateOPTRvalues_TTBplotA(data) {
+        var el = document.getElementById("OPTR2_TTBplotA");
+        el.options[0].text = "<Select OPTR>";
+        for (var i = 0; i < data.rows.length; i++) {
+            var opt = document.createElement("option");
+            opt.text = data.rows[i].OPTR;
+            opt.value = data.rows[i].OPTR;
+           if (OPTR && OPTR == opt.value)
+             opt.selected = true;
+            el.options[el.options.length] = opt;
+        }
+    }
+
+    function optrSelectionMade() {
+      document.ParameterSelection_TTBplotA.OPTR1.value = document.ParameterSelection_TTBplotA.OPTR2.value;
+    }
+
+    function optrEntryMade() {
+      var el = document.getElementById("OPTR2_TTBplotA");
+      el.options[0].selected = true;
+    }
+
+    function initChart_TTBplotA() {
+      // Select the OPTR to use based on the two entry options.
+      var selected_OPTR = "4086";
+      if (document.ParameterSelection_TTBplotA.OPTR1.value != "") {
+        selected_OPTR = document.ParameterSelection_TTBplotA.OPTR1.value;
+      } else {
+        selected_OPTR = document.ParameterSelection_TTBplotA.OPTR2.value;
+      }
+      // What is the selected plot type?
+      if (document.ParameterSelection_TTBplotA.PlotType.value == "TTB") {
+        // Draw the graph.
+        var CA19_9_Option = "OFF";
+        if (document.getElementById("CA19_9_checkbox_TTBplotA").checked) CA19_9_Option = "ON";
+        var Weight_Option = "OFF";
+        if (document.getElementById("ShowWeight_TTBplotA").checked) Weight_Option = "ON";
+        var TumorSize_Option = "OFF";
+        if (document.getElementById("ShowTumorSize_TTBplotA").checked) TumorSize_Option = "ON";
+        var Treatments_Option = "OFF";
+        if (document.getElementById("ShowTreatments_TTBplotA").checked) Treatments_Option = "ON";
+        var FirstTreatments_Option = "OFF";
+        if (document.getElementById("ShowFirstTreatments_TTBplotA").checked) FirstTreatments_Option = "ON";
+        var InitialDiagnosis_Option = "OFF";
+        if (document.getElementById("ShowInitialDiagnosis_TTBplotA").checked) InitialDiagnosis_Option = "ON";
+        var Surgeries_Option = "OFF";
+        if (document.getElementById("ShowSurgeries_TTBplotA").checked) Surgeries_Option = "ON";
+        var BloodDraws_Option = "OFF";
+        if (document.getElementById("ShowBloodDraws_TTBplotA").checked) BloodDraws_Option = "ON";
+        var DifferentiateMets_Option = "OFF";
+        if (document.getElementById("DifferentiateMets_TTBplotA").checked) DifferentiateMets_Option = "ON";
+        var OtherEvents_Option = "OFF";
+        if (document.getElementById("ShowOtherEvents_TTBplotA").checked) OtherEvents_Option = "ON";
+        var reportWebPartRenderer_TTBplotA = new LABKEY.WebPart({
+            partName: 'Report',
+	    renderTo: 'reportDiv_TTBplotA',
+	    frame: 'title',
+	    partConfig: {
+	      title: 'Translational Tumor Board View',
+	      reportId: 'db:50',
+              'OPTR': selected_OPTR,
+              'CA199': CA19_9_Option,
+              'Weight': Weight_Option,
+              'TumorSize': TumorSize_Option,
+              'Treatments': Treatments_Option,
+              'FirstTreatments': FirstTreatments_Option,
+              'InitialDiagnosis': InitialDiagnosis_Option,
+              'Surgeries': Surgeries_Option,
+              'BloodDraws': BloodDraws_Option,
+              'DifferentiateMets': DifferentiateMets_Option,
+              'OtherEvents': OtherEvents_Option
+	    }
+        });
+        reportWebPartRenderer_TTBplotA.render();
+      } else {
+        // Draw the graph.
+        var reportWebPartRenderer_TTBplotA = new LABKEY.WebPart({
+            partName: 'Report',
+            renderTo: 'reportDiv_TTBplotA',
+            frame: 'title',
+            partConfig: {
+                title: 'Tumor Size Vs Grade View',
+                reportId: 'db:49',
+                'OPTR': selected_OPTR
+            }
+        });
+        reportWebPartRenderer_TTBplotA.render();
+      }
+    }
+
+    function refreshChart_TTBplotA() {
+      // Select the OPTR to use based on the two entry options.
+      var selected_OPTR = "4086";
+      if (document.ParameterSelection_TTBplotA.OPTR1.value != "") {
+        selected_OPTR = document.ParameterSelection_TTBplotA.OPTR1.value;
+      } else {
+        selected_OPTR = document.ParameterSelection_TTBplotA.OPTR2.value;
+      }
+      // What is the selected plot type?
+      if (document.ParameterSelection_TTBplotA.PlotType.value == "TTB") {
+        // Draw the graph.
+        var CA19_9_Option = "OFF";
+        if (document.getElementById("CA19_9_checkbox_TTBplotA").checked) CA19_9_Option = "ON";
+        var Weight_Option = "OFF";
+        if (document.getElementById("ShowWeight_TTBplotA").checked) Weight_Option = "ON";
+        var TumorSize_Option = "OFF";
+        if (document.getElementById("ShowTumorSize_TTBplotA").checked) TumorSize_Option = "ON";
+        var Treatments_Option = "OFF";
+        if (document.getElementById("ShowTreatments_TTBplotA").checked) Treatments_Option = "ON";
+        var FirstTreatments_Option = "OFF";
+        if (document.getElementById("ShowFirstTreatments_TTBplotA").checked) FirstTreatments_Option = "ON";
+        var InitialDiagnosis_Option = "OFF";
+        if (document.getElementById("ShowInitialDiagnosis_TTBplotA").checked) InitialDiagnosis_Option = "ON";
+        var Surgeries_Option = "OFF";
+        if (document.getElementById("ShowSurgeries_TTBplotA").checked) Surgeries_Option = "ON";
+        var BloodDraws_Option = "OFF";
+        if (document.getElementById("ShowBloodDraws_TTBplotA").checked) BloodDraws_Option = "ON";
+        var DifferentiateMets_Option = "OFF";
+        if (document.getElementById("DifferentiateMets_TTBplotA").checked) DifferentiateMets_Option = "ON";
+        var OtherEvents_Option = "OFF";
+        if (document.getElementById("ShowOtherEvents_TTBplotA").checked) OtherEvents_Option = "ON";
+        var reportWebPartRenderer_TTBplotA = new LABKEY.WebPart({
+            partName: 'Report',
+            renderTo: 'reportDiv_TTBplotA',
+            frame: 'title',
+            partConfig: {
+                title: 'Translational Tumor Board View',
+                reportId: 'db:50',
+                'OPTR': selected_OPTR,
+                'CA199': CA19_9_Option,
+                'Weight': Weight_Option,
+                'TumorSize': TumorSize_Option,
+                'Treatments': Treatments_Option,
+                'FirstTreatments': FirstTreatments_Option,
+                'InitialDiagnosis': InitialDiagnosis_Option,
+                'Surgeries': Surgeries_Option,
+                'BloodDraws': BloodDraws_Option,
+                'DifferentiateMets': DifferentiateMets_Option,
+                'OtherEvents': OtherEvents_Option
+            }
+        });
+        reportWebPartRenderer_TTBplotA.render();
+      } else {
+        // Draw the graph.
+        var reportWebPartRenderer_TTBplotA = new LABKEY.WebPart({
+            partName: 'Report',
+            renderTo: 'reportDiv_TTBplotA',
+            frame: 'title',
+            partConfig: {
+                title: 'Tumor Size Vs Grade View',
+                reportId: 'db:49',
+                'OPTR': selected_OPTR
+            }
+        });
+        reportWebPartRenderer_TTBplotA.render();
+      }
+    }
+
+    function init_TTBplotA() {
+       LABKEY.Query.selectRows({
+            schemaName: 'study',
+            queryName: 'PatientDemographics',
+            success: populateOPTRvalues_TTBplotA
+        });
+
+        initChart_TTBplotA();
+    }
+
+    // Enter form data into list.
+    function submitRequest_TTBplotA() {
+        // Insert form data into the list.
+        refreshChart_TTBplotA();
+    }
+
+Ext4.onReady(function ()
+{
+   if (OPTR)
+       alert("do something here");
+});
+
+</script>
+
+
+<div id="reportDiv_TTBplotA">Loading...</div>
+
