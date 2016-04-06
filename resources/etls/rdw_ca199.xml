@@ -5,10 +5,10 @@
     <transforms>
         <transform id="all">
             <source schemaName="TestRDW" queryName="RDW_CA19_9_V"/>
-            <destination schemaName="lists" queryName="new_CA199" targetOption="merge">
+            <destination schemaName="lists" queryName="new_CA199" targetOption="truncate">
                 <columnTransforms>
                     <column source="LAB_DTTM" target="Date"/>
-                    <column source="VALUE" target="CA199"/>
+                    <column source="VALUE" target="CA199Raw"/>
                 </columnTransforms>
             </destination>
         </transform>
