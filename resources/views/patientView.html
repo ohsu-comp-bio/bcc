@@ -20,10 +20,11 @@
                     //layout: 'border',
                     bodyStyle: 'padding: 5px;',
                     defaults: {
-                        border: false
+                        border: false,
+                        style: 'margin-bottom: 10px;'
                     },
                     items: [{
-                        xtype: 'ldk-detailspanel',
+                        xtype: 'labkey-detailspanel',
                         store: {
                             type: 'labkey-store',
                             schemaName: 'study',
@@ -32,7 +33,12 @@
                             filterArray: [LABKEY.Filter.create('OPTR', this.patientId)],
                             //  comment out line below to load all available columns, or list columns to be shown
                             columns: 'OPTR,DOB,Gender',
-                            autoLoad: true
+                            autoLoad: true,
+                            metadata : {
+                                OPTR: {
+                                    fieldLabel: 'Patrick'
+                                }
+                            }
                         },
                         title: 'Patient Information'
                     //you could repeat this to keep adding more dataregions
@@ -64,7 +70,7 @@
                         type: 'labkey-store',
                         schemaName: 'lists',
                         queryName: 'TreatmentTable',
-                        filterArray: LABKEY.Filter.create('Type', 'gemcitabine', LABKEY.Filter.Types.EQUAL),
+                        filterArray: [LABKEY.Filter.create('Type', 'gemcitabine', LABKEY.Filter.Types.EQUAL)],
                         autoLoad: true
                     },
                     itemSelector: 'tr.patientRow',
@@ -80,7 +86,7 @@
                                     '<a href="{[LABKEY.ActionURL.buildURL("query", "executeQuery", values.queryContainerPath, {schemaName: "laboratory", "query.queryName":"samples", "query.rowid~eq": values.sampleid})]}" target="_blank">{sampleid:htmlEncode}</a>',
                                 '</tpl>',
                                 '</td>',
-                                '<td>{platform:htmlEncode}</td>',
+                                '<td>{Type:htmlEncode}</td>',
                                 '<td><a href="{[LABKEY.ActionURL.buildURL("project", "start", values["container/path"], {})]}" target="_blank">{[Ext4.htmlEncode(values["container/displayName"])]}</a></td>',
                                 '<td><a href="{[LABKEY.ActionURL.buildURL("sequenceanalysis", "fastqcReport", values["container/path"], {readsets: values.rowid})]}" target="_blank">View FASTQC Report</a></td>',
                             '</tr>',
