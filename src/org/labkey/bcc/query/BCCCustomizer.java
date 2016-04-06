@@ -40,5 +40,10 @@ public class BCCCustomizer extends AbstractTableCustomizer
         {
             ti.getColumn("lsid").setHidden(true);
         }
+
+        if (ti.getColumn("StudyId") != null)
+        {
+            ti.getColumn("StudyId").setLabel("Study ID");
+        }
     }
 }

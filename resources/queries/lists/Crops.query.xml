@@ -3,16 +3,20 @@
         <tables xmlns="http://labkey.org/data/xml">
             <table tableName="" tableDbType="TABLE">
                 <!--if you include this on a table, it will apply standard configuration-->
-                <javaCustomizer>org.labkey.bcc.query.BCCCustomizer</javaCustomizer>
+                <javaCustomizer>org.labkey.ldk.query.DefaultTableCustomizer</javaCustomizer>
                 <columns>
                     <column columnName="SlideID">
                         <fk>
                             <fkDbSchema>lists</fkDbSchema>
-                            <fkTable>Slides</fkTable>
-                            <fkColumnName>SlideID</fkColumnName>
+                            <fkTable>MarkerImages</fkTable>
+                            <fkColumnName>ImageID</fkColumnName>
+                            <fkDisplayColumnName useRawValue="true"/>
                         </fk>
                     </column>
                 </columns>
+            </table>
+
+            <table tableName="MarkerImages" tableDbType="TABLE">
                 <columns>
                     <column columnName="StudyID">
                         <fk>
@@ -23,36 +27,19 @@
                     </column>
                 </columns>
             </table>
-        </tables>
-    </metadata>
-</query>
 
-<!--table tableName="Slides" tableDbType="TABLE">
-<columns>
-    <column columnName="StudyID">
-        <fk>
-            <fkDbSchema>lists</fkDbSchema>
-            <fkTable>Slides</fkTable>
-            <fkColumnName>StudyID</fkColumnName>
-        </fk>
-    </column>
-</columns>
-</table>
-                    <column columnName="StudyID">
+            <table tableName="" tableDbType="NOT_IN_DB">
+                <columns>
+                    <column columnName="CaseID">
                         <fk>
                             <fkDbSchema>lists</fkDbSchema>
                             <fkTable>Slides</fkTable>
-                            <fkColumnName>StudyID</fkColumnName>
+                            <fkColumnName>CaseID</fkColumnName>
                         </fk>
                     </column>
-<table tableName="" tableDbType="NOT_IN_DB">
-<columns>
-    <column columnName="CaseID">
-        <fk>
-            <fkDbSchema>lists</fkDbSchema>
-            <fkTable>Slides</fkTable>
-            <fkColumnName>CaseID</fkColumnName>
-        </fk>
-    </column>
-</columns-->
-</table>
+                </columns>
+            </table>
+
+        </tables>
+    </metadata>
+</query>
