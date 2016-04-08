@@ -5,8 +5,10 @@
         <column name="Protein_Change"/>
         <column name="Variant_Classification"/>
         <column name="1000Genome_AF"/>
-        <column name="CGC_Cancer Somatic Mut"/>
+        <column name="CGC_Cancer_Somatic_Mut"/>
         <column name="CGC_Mutation_Type"/>
+        <column name="CGC_Judgment"/>
+        <column name="Previously_Found_In_COSMIC"/>
     </columns>
     <filters>
         <filter column="Flagged" operator="eq" value="x"/>

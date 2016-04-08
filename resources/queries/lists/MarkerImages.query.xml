@@ -5,12 +5,20 @@
                 <!--if you include this on a table, it will apply standard configuration-->
                 <javaCustomizer>org.labkey.bcc.query.BCCCustomizer</javaCustomizer>
                 <columns>
-                    <column columnName="Slide ID">
+                    <column columnName="SlideID">
                         <fk>
                             <fkDbSchema>lists</fkDbSchema>
                             <fkTable>Slides</fkTable>
-                            <fkColumnName>Slide Name</fkColumnName>
+                            <fkColumnName>SlideID</fkColumnName>
                             <fkDisplayColumnName useRawValue="true"/>
+                        </fk>
+                    </column>
+                    <column columnName="StudyID">
+                        <fk>
+                            <fkDbSchema>lists</fkDbSchema>
+                            <fkTable>Slides</fkTable>
+                            <fkColumnName>SlideID</fkColumnName>
+                            <fkDisplayColumnName useRawValue="false"/>
                         </fk>
                     </column>
                 </columns>

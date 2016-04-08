@@ -1,7 +1,8 @@
 <customView xmlns="http://labkey.org/data/xml/queryCustomView">
     <columns>
-        <column name="Slide ID"/>
+        <column name="SlideID"/>
         <column name="Aperio ID"/>
         <column name="Marker"/>
+        <column name="StudyID"/>
     </columns>
 </customView>
