@@ -10,15 +10,15 @@
                             <fkDbSchema>lists</fkDbSchema>
                             <fkTable>Slides</fkTable>
                             <fkColumnName>SlideID</fkColumnName>
+                            <fkDisplayColumnName useRawValue="true"/>
                         </fk>
                     </column>
-                </columns>
-                <columns>
                     <column columnName="StudyID">
                         <fk>
                             <fkDbSchema>lists</fkDbSchema>
                             <fkTable>Slides</fkTable>
-                            <fkColumnName>StudyID</fkColumnName>
+                            <fkColumnName>SlideID</fkColumnName>
+                            <fkDisplayColumnName useRawValue="false"/>
                         </fk>
                     </column>
                 </columns>
@@ -26,33 +26,3 @@
         </tables>
     </metadata>
 </query>
-
-<!--table tableName="Slides" tableDbType="TABLE">
-<columns>
-    <column columnName="StudyID">
-        <fk>
-            <fkDbSchema>lists</fkDbSchema>
-            <fkTable>Slides</fkTable>
-            <fkColumnName>StudyID</fkColumnName>
-        </fk>
-    </column>
-</columns>
-</table>
-                    <column columnName="StudyID">
-                        <fk>
-                            <fkDbSchema>lists</fkDbSchema>
-                            <fkTable>Slides</fkTable>
-                            <fkColumnName>StudyID</fkColumnName>
-                        </fk>
-                    </column>
-<table tableName="" tableDbType="NOT_IN_DB">
-<columns>
-    <column columnName="CaseID">
-        <fk>
-            <fkDbSchema>lists</fkDbSchema>
-            <fkTable>Slides</fkTable>
-            <fkColumnName>CaseID</fkColumnName>
-        </fk>
-    </column>
-</columns-->
-</table>
