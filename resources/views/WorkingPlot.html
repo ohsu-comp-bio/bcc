@@ -1,38 +1,44 @@
+
 <div id="myDiv" width=800 height=800></div>
 
 <script>
 
-console.log("in script");
+console.log("in script in default");
 
-${labkey.dependency(path = 'https://cdn.plot.ly/plotly-latest.min.js')};
-
+//${labkey.dependency(path = 'https://cdn.plot.ly/plotly-latest.min.js')};
 
 (function()
 {
+    console.log("in IIFE");
+
     var selected_OPTR = "4086";
 
-    var doQuery = function()
+    doQuery();
+
+    function doQuery()
     {
         // When all the dependencies are loaded we then load the data via selectRows.
         // The queryConfig object stores all the information needed to make a selectRows request.
-        var query_config = {
+        var query_config =
+        {
             "schemaName": "lists",
-            "queryName": "CA19_9Table",
+            "queryName": "CA199Table",
             "viewName": null,
             "dataRegionName": "query",
             "queryLabel": "CA199Table",
-            "parameters":
-            {},
+            "parameters":{},
             "maxRows": 5000,
             "requiredVersion": 13.2,
             "method": "POST",
-            "columns": ["Date", "CA19_9"],
-            "filterArray": [
-            {
-                "name": "OPTR",
-                "value": [selected_OPTR],
-                "type": "eq"
-            }]
+            "columns": ["Date", "CA199"],
+            "filterArray":
+            [
+                {
+                    "name": "OPTR",
+                    "value": [selected_OPTR],
+                    "type": "eq"
+                }
+            ]
         };
 
         if (query_config.filterArray && query_config.filterArray.length > 0)
@@ -53,7 +59,7 @@ ${labkey.dependency(path = 'https://cdn.plot.ly/plotly-latest.min.js')};
         query_config.success = onSuccess;
         query_config.failure = onError;
         LABKEY.Query.selectRows(query_config);
-    };
+    }
 
 
     function onError(errorInfo)
@@ -62,54 +68,49 @@ ${labkey.dependency(path = 'https://cdn.plot.ly/plotly-latest.min.js')};
     }
 
 
-    console.log(doQuery());
+    //console.log(doQuery());
 
 
     function onSuccess(results)
     {
-        /*
-        console.log(Object.keys(results));
-        console.log(results.getColumnModel());
-        console.log(results.getMetaData());
-        console.log(results.getQueryName());
-        console.log(results.getRowCount());
-        console.log(results.getSchemaName());
-        */
 
-        console.log(results);
+        //console.log(results);
 
-        dates = [];
-        ca199 = [];
+        var dates = [];
+        var ca199 = [];
 
         var rows = results.getRows();
 
+        rows.sort(function(v1, v2)
+        {
+            return new Date(v1['Date'].value) - new Date(v2['Date'].value);
+        });
+
         var data = '';
         var length = rows.length;
-
+        console.log(length);
 
         for (var idxRow = 0; idxRow < length; idxRow++)
         {
             var row = rows[idxRow];
 
-            date = new Date(row['Date'].value).toLocaleDateString(
+            var date = new Date(row['Date'].value).toLocaleDateString(
                 "en-US");
-            //console.log("Date: " + date + " CA19-9: " + row['CA19_9'].value);
+            //console.log("Date: " + date + " CA19-9: " + row['CA199'].value);
 
             dates.push(date);
-            ca199.push(row['CA19_9'].value);
-
-            console.log("length: " + dates.length);
-
-            for (var i = 0; i < dates.length; i++)
-            {
-                console.log("[" + i + "] date: " + dates[i] +
-                    " ca199: " + ca199[i]);
-            }
-
+            ca199.push(row['CA199'].value);
 
         }
 
-	makeScatterPlot(dates, ca199);
+            console.log("listing");
+        for (var i = 0; i < dates.length; i++)
+        {
+            console.log("[" + i + "] date: " + dates[i] + " ca199: " + ca199[i]);
+        }
+
+        console.log("making plot");
+        makeScatterPlot(dates, ca199);
 
     }
 
@@ -135,7 +136,7 @@ ${labkey.dependency(path = 'https://cdn.plot.ly/plotly-latest.min.js')};
             type: 'scatter'
         };
 
-        data = [timeline];
+        var data = [timeline];
 
         var layout = {
             title: "Title",
@@ -165,6 +166,7 @@ ${labkey.dependency(path = 'https://cdn.plot.ly/plotly-latest.min.js')};
             }
         };
 
+
         Plotly.plot(
             "myDiv",
             data,
@@ -174,5 +176,7 @@ ${labkey.dependency(path = 'https://cdn.plot.ly/plotly-latest.min.js')};
 
     }
 })();
+
+
 
 </script>
