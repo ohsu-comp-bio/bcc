@@ -1,11 +1,6 @@
-<div id="myDiv" width=800 height=800></div>
-
-<script>
-
 console.log("in script");
 
-${labkey.dependency(path = 'https://cdn.plot.ly/plotly-latest.min.js')};
-
+${ labkey.dependency(path = 'https://cdn.plot.ly/plotly-latest.min.js') };
 
 (function()
 {
@@ -93,7 +88,7 @@ ${labkey.dependency(path = 'https://cdn.plot.ly/plotly-latest.min.js')};
 
             date = new Date(row['Date'].value).toLocaleDateString(
                 "en-US");
-            //console.log("Date: " + date + " CA19-9: " + row['CA19_9'].value);
+            console.log("Date: " + date + " CA19-9: " + row['CA19_9'].value);
 
             dates.push(date);
             ca199.push(row['CA19_9'].value);
@@ -106,73 +101,70 @@ ${labkey.dependency(path = 'https://cdn.plot.ly/plotly-latest.min.js')};
                     " ca199: " + ca199[i]);
             }
 
-
+            makeScatterPlot(dates, ca199);
         }
 
-	makeScatterPlot(dates, ca199);
 
     }
 
-
-    function toDate(d)
-    {
-        var parts = d.split('/');
-
-        return new Date(parts[2], parts[0], parts[1]).getTime();
-    }
-
-
-    function makeScatterPlot(x, y)
-    {
-        console.log("in plot");
-        console.log(x);
-        console.log(y);
-
-        var timeline = {
-            x: x.map(toDate),
-            y: y,
-            mode: 'lines+markers',
-            type: 'scatter'
-        };
-
-        data = [timeline];
-
-        var layout = {
-            title: "Title",
-            displayModeBar: true,
-            xaxis:
+            function toDate(d)
             {
-                type: 'date',
-                tickvals: x.map(toDate),
-                ticktext: x,
-                tickfont:
-                {
-                    color: "rgb(107, 107, 107)",
-                    size: 11
-                },
-                ticks: "outside",
-                tickwidth: 1,
-                tickangle: 40,
-                ticklen: 5,
-                showticklabels: true,
-                showline: false,
-                showgrid: true,
-                autorange: true,
-            },
-            yaxis:
-            {
-                showgrid: true,
+                var parts = d.split('/');
+
+                return new Date(parts[2], parts[0], parts[1]).getTime();
             }
-        };
 
-        Plotly.plot(
-            "myDiv",
-            data,
-            layout
-        );
+
+
+            function makeScatterPlot(x, y)
+            {
+                console.log("in plot");
+                console.log(x);
+                console.log(y);
+
+                var timeline = {
+                    x: x.map(toDate),
+                    y: y,
+                    mode: 'lines+markers',
+                    type: 'scatter'
+                };
+
+                data = [timeline];
+
+                var layout = {
+                    title: "Title",
+                    displayModeBar: true,
+                    xaxis:
+                    {
+                        type: 'date',
+                        tickvals: x.map(toDate),
+                        ticktext: x,
+                        tickfont:
+                        {
+                            color: "rgb(107, 107, 107)",
+                            size: 11
+                        },
+                        ticks: "outside",
+                        tickwidth: 1,
+                        tickangle: 40,
+                        ticklen: 5,
+                        showticklabels: true,
+                        showline: false,
+                        showgrid: true,
+                        autorange: true,
+                    },
+                    yaxis:
+                    {
+                        showgrid: true,
+                    }
+                };
+
+                Plotly.plot(
+                    "myDiv",
+                    data,
+                    layout
+                );
 
 
     }
 })();
-
-</script>
