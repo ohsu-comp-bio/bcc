@@ -7,7 +7,8 @@
 
 var console = require("console");
 
-//console.log("** evaluating: " + this['javax.script.filename']);
+console.log("** evaluating: " + this['javax.script.filename']);
+console.log(row.CA199Raw)
 
 function beforeInsert(row, errors) {
 
