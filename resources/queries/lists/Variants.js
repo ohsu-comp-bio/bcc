@@ -6,7 +6,7 @@
 // ================================================
 
 var console = require("console");
-var LABKEY = require("labkey");
+//var LABKEY = require("labkey");
 
 console.log("** evaluating Variants.js");
 
@@ -18,10 +18,6 @@ function beforeUpdate(row, errors){
     beforeUpsert(row, errors);
 }
 
-function afterInsert(row, errors){
-    beforeUpsert(row, errors);
-}
-
 function beforeUpsert(row, errors) {
 
     //if((row.CGC_Cancer_Somatic_Mut == "yes") && (row.CGC_Mutation_Type == "Mis"))    {
@@ -29,13 +25,11 @@ function beforeUpsert(row, errors) {
         row.CGCJudgment = "Yes";
     }
 
-//        row.CGC_Judgment = "blah";
-//        row.Flagged = "x";
-//        row.CGC_Judgment = 'blah';
-
-        console.log("Flagged is: " + row.Flagged);
-        console.log("CGC_Judgment AFTER is: " + row.CGCJudgment);
+    console.log("Flagged is: " + row.Flagged);
+    console.log("CGC_Judgment AFTER is: " + row.CGCJudgment);
 }
+
+
 
 
 
