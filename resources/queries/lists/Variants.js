@@ -20,13 +20,21 @@ function beforeUpdate(row, errors){
 
 function beforeUpsert(row, errors) {
 
-    //if((row.CGC_Cancer_Somatic_Mut == "yes") && (row.CGC_Mutation_Type == "Mis"))    {
-    if(row.Flagged == "x")  {
+    if((row.CGC_Cancer_Somatic_Mut == "yes") && (row.CGC_Mutation_Type == "Mis"))    {
         row.CGCJudgment = "Yes";
     }
 
-    console.log("Flagged is: " + row.Flagged);
-    console.log("CGC_Judgment AFTER is: " + row.CGCJudgment);
+    var tempy = row.PreviousCOSMIC;
+
+
+//    if(tempy.includes("blah"))  {
+    if(tempy.includes("blah"))  {
+        console.log("I contain a blah");
+    }
+
+//    if()
+//        row.Previous_COSMIC = "Yes";
+
 }
 
 
