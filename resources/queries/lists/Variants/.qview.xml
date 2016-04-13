@@ -7,6 +7,6 @@
         <column name="CGC_Cancer_Somatic_Mut"/>
         <column name="CGC_Mutation_Type"/>
         <column name="CGCJudgment"/>
-        <column name="Previously_Found_In_COSMIC"/>
+        <column name="PreviousCOSMIC"/>
     </columns>
 </customView>
