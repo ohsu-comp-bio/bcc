@@ -68,9 +68,7 @@ console.log("in WorkingPlot.html script");
 
 var OPTR = LABKEY.ActionURL.getParameter("OPTR");
 
-alert   (OPTR);
-
-exit();
+alert(OPTR);
 
     // Ensure that page dependencies are loaded
     LABKEY.requiresExt3ClientAPI(true, function() {
