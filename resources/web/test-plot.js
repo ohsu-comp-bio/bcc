@@ -1,30 +1,92 @@
+// Just a note.
+// Way to include external library
+//${labkey.dependency(path = 'https://cdn.plot.ly/plotly-latest.min.js')};
+
+//${labkey.dependency(path = 'https://cdn.plot.ly/plotly-latest.min.js')};
+
+
+console.log("in test-plot.js");
+
 $ = jQuery;
 
 $(document).ready(function()
 {
+    console.log
+    console.log($('#plot-container').data);
+
+//********************
+// Main Routine
+
+    $.getJSON('/labkey/ttb_plot_data_sources.json', function(response)
+        {
+            var fields = response;
+            getOPTRs();
+            configureOptionsDropdown(fields);
+            configureSubmitButton(fields);
+
+        })
+    .fail(function(err)
+        {
+            console.log("jqXHR.readyState: " + jqXHR.readyState);
+            console.log("jqXHR.status " + jqXHR.status);
+            console.log("jqXHR.statusText " + jqXHR.statusText);
+            console.log("jqXHR.responseText " + jqXHR.responseText);
+            console.log("error_textStatus: " + error_textStatus);
+            console.log(errorThrown + "<br/>");
+        })
+    .always(function()
+        {
+            console.log("complete");
+        });
+
+//**********************
+
+
+
+
+    //console.log("loading fields");
+    //console.log(fields);
+
+    // *** Not sure if this is needed. Was in old code.
+    // Ensure that page dependencies are loaded
+    //LABKEY.requiresExt3ClientAPI(true, function()
+    //{
+        //Ext.onReady(init_TTBplotA);
+    //});
+
     //alert("changed13");
 
-    console.log("before getting OPTRs");
+    // using global variable until I figure out how to
+    // do it properly
+    //all_graph_data = {};
 
-    console.log("calling getOPTRs");
-    getOPTRs();
+    //console.log("before getting OPTRs");
 
-    console.log("after calling optrs");
-    console.log(optrs);
+    //console.log("calling getOPTRs");
+    //var optrs = [];
+    //getOPTRs();
+
+    //console.log("after calling optrs");
+    //console.log(optrs);
 
 
+
+    // ****************************
+    // Fill the select list for OPTRs
+
+    // Query the OPTRs
     function getOPTRs()
     {
 
         console.log("in getOPTRs");
-        var query_config =
-        {
+        var query_config = {
             "schemaName": "lists",
             "queryName": "CA199Table",
             "viewName": null,
             "dataRegionName": "query",
             "queryLabel": "PatientDemographics",
-            "parameters":{},
+            "parameters":
+            {},
             "maxRows": 5000,
             "requiredVersion": 13.2,
             "method": "POST",
@@ -32,176 +94,441 @@ $(document).ready(function()
             "sort": "OPTR"
         };
 
-        query_config.success = processOPTRResults;
+        query_config.success = function(results)
+        {
+            populateOPTRsFromQuery(results);
+        };
         query_config.failure = onError;
 
-        console.log("running query");
+        console.log("running optr query");
         LABKEY.Query.selectRows(query_config);
 
-        //console.log("inside getOPTRs: optrs");
-        //console.log(optrs);
     }
 
-
-    var optrs = [];
-
-    function processOPTRResults(results)
+    // Populate the select
+    function populateOPTRsFromQuery(results)
     {
-        console.log("beginning of success");
+        console.log("beginning of populate optrs");
+        //var optrs = [];
+        //console.log("results");
+        //console.log(results);
         //console.log(optrs);
 
         rows = results.getRows();
+        //console.log(rows);
 
-        for (index in rows)
+        // loop through OPTR results
+        optrs = [];
+        for (var index in rows)
         {
+            //console.log("index: " + index);
+            //console.log(rows[index]);
+            // Make sure the row has an OPTR vaule to prevent errors
             if (rows[index].hasOwnProperty("OPTR"))
             {
+                // Append OPTR to list of UNIQUE OPTRs
                 var optr = rows[index]["OPTR"].value;
+                //console.log("OPTR: " + optr);
                 if (optrs.indexOf(optr) == -1)
                 {
-                    console.log("optrs doesn't have: " + optr);
+                    //console.log("optrs doesn't have: " + optr);
                     optrs.push(optr);
-                    console.log("appending text: " + "<option value=" + optr + ">" + optr + "</option>");
-                    $("<option value=" + optr + ">" + optr + "</option>").appendTo('#optr-select');
+                    //console.log("appending text: " + "<option value=" + optr + ">" + optr + "</option>");
+                    //console.log("appending: " + "<option value=" + optr + ">" + optr + "</option>");
+                    $("<option value=" + optr + ">" + optr + "</option>").appendTo(
+                        '#optr-select');
                     //$('#optr_select').append("<option value=" + optr + ">" + optr + "</option>");
                 }
                 else
                 {
-                    console.log("optrs already has " + optr);
+                    //console.log("optrs already has " + optr);
                 }
             }
 
-            //unique_optrs = Array.from(new Set(optrs));
-
-            //unique_optrs.forEach(function(optr)
-            //{
-            //    $('#optr_list').append("<option value=" + optr + ">");
-            //});
-
         }
 
-        console.log("end of success");
+        //console.log("end of success");
         //console.log(optrs);
     }
 
-    console.log("outside after");
+    //console.log("outside after");
     //console.log(optrs);
 
-    $('#dropdown-button').on('click', function(){
-        toggleDropdown();
-        });
+    //*****************************
 
-    var is_down = false;
 
-    function toggleDropdown()
+    //*****************************
+    // Populate graph options
+    function populateGraphOptions(fields)
     {
-        if (is_down)
+        console.log("populating graph options");
+        for (var field in fields)
         {
-            document.getElementById('dropdown').style.display = "none";
-            document.getElementById('dropdown-button').innerHTML = "Options &#x25bc;";
-            is_down = false;
-        }
-        else
-        {
-            document.getElementById('dropdown').style.display = "block";
-            document.getElementById('dropdown-button').innerHTML = "Options &#x25b2;";
-            is_down = true;
+            if (!fields.hasOwnProperty(field)){continue}
+
+            console.log("option item: " + field);
+            var string =
+                "        <li>" + "<input class='OptionsCheckbox' type='checkbox' " +
+                "id='" + field + "' name='" + field + "' checked>" + fields[field].DisplayName +
+                "</li>";
+            console.log(string);
+
+            $('#dropdown-list').append(string);
+            //console.log($('#dropdown-list').html());
         }
     }
+    //*****************************
 
 
-/*
-    $('#theform').on('submit', function(e){
-        e.preventDefault();
-        console.log("form submitted");
-        return false;
-    return false;});
-    */
+    //******************************
+    // Graph options dropdown control
+    function configureOptionsDropdown(fields)
+    {
+        populateGraphOptions(fields);
 
-    //document.getElementById('clickme').style.color = "red";
-
-    //$('#clickme').text("Ha!");
-
-    $('#submit-options').on('click', function(e)
+        console.log("setting dropdown button event");
+        $('#dropdown-button').on('click', function()
         {
-            console.log("button clicked");
-            e.stopPropagation();
+
+            if ($('#dropdown-list').css('display') != 'none')
+            {
+                $('#dropdown-list').css('display', 'none');
+                $('#dropdown-button').html("Select Graph Data &#x25bc;");
+            }
+            else
+            {
+                $('#dropdown-list').css('display', 'block');
+                $('#dropdown-button').html("Select Graph Data &#x25b2;");
+            }
+
+        });
+
+    }
+
+    //*******************************
+    // Program the submit button
+    function configureSubmitButton(fields)
+    {
+
+        console.log("setting submit button event");
+        $('#submit-options').on('click', function(event){
+            console.log("submit button clicked");
+
+            console.log("clearing current plot");
+            Plotly.newPlot("plot-container",[{}],{});
+
+            var selected_fields = [];
+
+            //event.stopPropagation();
             //e.preventDefault();
             console.log("selected OPTR: " + $('#optr-select').val());
             console.log("selected data");
 
-            var data_options = [];
-            $('.OptionsCheckbox').each(function(index, item)
+            $('.OptionsCheckbox').each(function(index, checkbox)
+            {
+                field_name = checkbox.name;
+                if (checkbox.checked)
                 {
-                    if (item.checked){data_options.push(item.name);}
-                    console.log(index + ": " + item.name + " " + item.checked);
-                });
+                    selected_fields[field_name] = fields[field_name];
+                }
+                console.log(index + ": " + field_name + " " + checkbox.checked);
+            });
+
+            // Hide options dropdown in case it was down
+            $('#dropdown-list').prop('display', 'block');
+            $('dropdown-button').html("Select Graph Data &#x25bc;");
 
             //return false;
-            console.log(data_options);
+            console.log(selected_fields);
+
+            var selected_OPTR = $('#optr-select').val();
+            selected_OPTR = 4086;
+            console.log("selected OPTR: " + selected_OPTR);
+
+            plotSelected(selected_fields, selected_OPTR);
         });
 
-
-    //${labkey.dependency(path = 'https://cdn.plot.ly/plotly-latest.min.js')};
-
-    var OPTR = LABKEY.ActionURL.getParameter("OPTR");
-    //alert("OPTR: " + OPTR);
-
-    // Ensure that page dependencies are loaded
-    LABKEY.requiresExt3ClientAPI(true, function()
-        {
-            //Ext.onReady(init_TTBplotA);
-        });
-
-    function populateOPTRvalues_TTBplotA(data)
-    {
-        var el = document.getElementById("OPTR2_TTBplotA");
-        el.options[0].text = "<Select OPTR>";
-        for (var i = 0; i < data.rows.length; i++)
-        {
-            var opt = document.createElement("option");
-            opt.text = data.rows[i].OPTR;
-            opt.value = data.rows[i].OPTR;
-            if (OPTR && OPTR == opt.value)
-                opt.selected = true;
-            el.options[el.options.length] = opt;
-        }
     }
 
 
-    return;
+    //**********************
+    // Collect graph data
 
-    var selected_OPTR = "4086";
+    function processError(error)
+    {
+        console.log("query error");
+        Object.keys(error).forEach(item, index)
+        {
+            console.log(error[key]);
+        }
+
+    }
+
+
+    function plotSelected(selected_fields, selected_OPTR)
+    {
+        if (!$('#plot-container').hasClass('js-plotly-plot'))
+        {
+            console.log('No existing plot, so creating an empty plot');
+            Plotly.newPlot("plot-container",[{}],{});
+        }
+        console.log("in plotSelected");
+        console.log(selected_fields);
+        var graph_data = [];
+        // Populate all_graph_data
+        for (field_name in selected_fields)
+        {
+            // safety thing that everyone says you need to do
+            if (!selected_fields.hasOwnProperty(field_name)){continue;}
+
+            console.log("field: " + field_name);
+            console.log("field data: ");
+            console.log(selected_fields[field_name]);
+
+            table_name = selected_fields[field_name].TableName;
+            //columns = table.Fields.forEach(function(index, item){return item.FieldName});
+            //console.log("columns");
+            //console.log(columns);
+
+            filter_array = [{"name": "OPTR", "value": [selected_OPTR], "type": "eq"}];
+
+            queryTable
+                (
+                    table_name,
+                    field_name, // fields = ["field1", "field2", ...]
+                    filter_array, // filter_array = [ {"name": field_name, "value": [val1, val2, ...], "type": "eq"}, ...]
+                    function(results){addToGraph(results, table_name, field_name, selected_OPTR);}, // success callback
+                    function(error)
+                    {
+                        console.log("query error");
+                        console.log(error);
+                    } // error callback
+                );
+        }
+    }
+
+    // Graphing routine??
+
+    //var selected_OPTR = "4086";
 
     //var selected_OPTR = OPTR;
 
-    doQuery();
+    function queryTable // parameters
+    (
+        table_name, // name of the table
+        field, // fields = ["field1", "field2", ...]
+        filter_array, // filter_array = [ {"name": field_name, "value": [val1, val2, ...], "type": "eq"}, ...]
+        processSucccess, // success callback
+        processError // error callback
+    )
+    {
+        console.log("in queryTable");
+        console.log(field);
 
+        var query_config =
+        {
+            "schemaName": "lists",
+            "queryName": table_name,
+            "viewName": null,
+            "dataRegionName": "query",
+            "queryLabel": "None",
+            "parameters":
+            {},
+            "maxRows": 5000,
+            "requiredVersion": 13.2,
+            "method": "POST",
+            "columns": ['Date', field],
+            "filterArray": filter_array,
+            "success": function(results)
+                {
+                    processSuccess(results, table_name, field);
+                },
+            "failure": processError
+        };
+
+        if (query_config.filterArray && query_config.filterArray.length > 0)
+        {
+            var filters = [];
+
+            for (var i = 0; i < query_config.filterArray.length; i++)
+            {
+                var filter = query_config.filterArray[i];
+                filters.push(LABKEY.Filter.create(filter.name, filter.value,
+                    LABKEY.Filter.getFilterTypeForURLSuffix(
+                        filter.type)));
+            }
+
+            query_config.filterArray = filters;
+        }
+
+        LABKEY.Query.selectRows(query_config);
+
+        //return data;
+    }
+
+
+    function addToGraph(results, table_name, field, selected_OPTR)
+    {
+        console.log("in addToGraph. table_name: " + table_name + " field: " + field)
+
+        // this is the query callback.
+
+        var rows = results.rows;
+
+        if (rows.length == 0)
+        {
+            console.log("no rows returned for table " + table_name + " field " + field);
+            return;
+        }
+
+        if (!rows[0].hasOwnProperty('Date'))
+        {
+            console.log("table " + table_name + " has no Date field");
+            return;
+        }
+
+        rows.sort(function(v1, v2)
+        {
+            return new Date(v1['Date'].value) - new Date(v2['Date'].value);
+        });
+
+        var length = rows.length;
+        console.log("num rows returned " + length);
+
+        var x = [], y = [];
+        for (var idxRow = 0; idxRow < length; idxRow++)
+        {
+            var row = rows[idxRow];
+            //console.log("row " + idxRow);
+            //console.log(row);
+            for (var key in row)
+            {
+                //console.log(key + ": " + row[key]);
+                if (row.hasOwnProperty('Date'))
+                {
+                    //console.log(row['Date']);
+                }
+                else
+                {
+                    console.log("appears to not have a date");
+                }
+            }
+
+            if (row.hasOwnProperty("Date") && row.hasOwnProperty(field))
+            {
+                var temp_date = row['Date'].value;
+                var real_date = new Date(temp_date);
+                //console.log(real_date);
+                //console.log("real_date " + real_date);
+                var date = (new Date(temp_date)).toLocaleDateString();
+                //console.log("Date: " + date + " " + field + ": " + row[field].value);
+
+                x.push(date);
+                y.push(row[field].value);
+            }
+
+        }
+
+        console.log(x);
+        console.log(y);
+
+        var timeline =
+        {
+            x: x.map(toDate),
+            y: y,
+            mode: 'lines+markers',
+            type: 'scatter',
+            marker:
+            {
+                size: 9
+            },
+            name: field
+        };
+        //graph_data.push(timeline);
+
+
+        var layout =
+        {
+            title: selected_OPTR,
+            displayModeBar: true,
+            xaxis:
+            {
+                type: 'date',
+                tickfont:
+                {
+                    color: "rgb(107, 107, 107)",
+                    size: 11
+                },
+                ticks: "outside",
+                tickwidth: 1,
+                tickangle: 40,
+                ticklen: 5,
+                showticklabels: true,
+                showline: false,
+                showgrid: true,
+                autorange: true,
+            },
+            yaxis1:
+            {
+                title: field,
+                showgrid: true,
+            }
+        };
+
+    /*
+        Plotly.plot( "plot-container", [{
+            x: [1, 2, 3, 4, 5],
+            y: [1, 2, 4, 8, 16] }], {
+            margin: { t: 0 } } );
+        */
+
+        console.log("plotting " + timeline.name);
+        Plotly.plot
+        (
+            'plot-container',
+            [timeline],
+            layout
+        );
+    }
+
+
+    dates = [];
+    ca199 = [];
+    console.log("calling doQuery");
+    obj = new GraphData(["CA199"]);
+    console.log("obj keys " + Object.keys(obj));
+    //doQuery();
+    console.log("called doQuery");
+
+    console.log("get data: " + obj.getData());
+
+    console.log("dates");
+    console.log(dates);
+    console.log("ca199");
+    console.log(ca199);
 
     function doQuery()
     {
         // When all the dependencies are loaded we then load the data via selectRows.
         // The queryConfig object stores all the information needed to make a selectRows request.
-        var query_config =
-        {
+        var query_config = {
             "schemaName": "lists",
             "queryName": "CA199Table",
             "viewName": null,
             "dataRegionName": "query",
             "queryLabel": "CA199Table",
-            "parameters":{},
+            "parameters":
+            {},
             "maxRows": 5000,
             "requiredVersion": 13.2,
             "method": "POST",
             "columns": ["Date", "CA199"],
-            "filterArray":
-            [
-                {
-                    "name": "OPTR",
-                    "value": [selected_OPTR],
-                    "type": "eq"
-                }
-            ]
+            "filterArray": [
+            {
+                "name": "OPTR",
+                "value": [selected_OPTR],
+                "type": "eq"
+            }]
         };
 
         if (query_config.filterArray && query_config.filterArray.length > 0)
@@ -234,12 +561,9 @@ $(document).ready(function()
     //console.log(doQuery());
 
 
-    var dates = [];
-    var ca199 = [];
-
     function onSuccess(results)
     {
-
+        console.log(testvar);
         //console.log(results);
 
         var rows = results.getRows();
@@ -279,7 +603,6 @@ $(document).ready(function()
 
     }
 
-
     function toDate(d)
     {
         var parts = d.split('/');
@@ -299,7 +622,10 @@ $(document).ready(function()
             y: y,
             mode: 'lines+markers',
             type: 'scatter',
-            marker: {size: 9}
+            marker:
+            {
+                size: 9
+            }
         };
 
         var data = [timeline];
@@ -339,86 +665,98 @@ $(document).ready(function()
             layout
         );
 
-myPlot = document.getElementById('myDiv');
+        myPlot = document.getElementById('myDiv');
 
 
-myPlot.on('plotly_click',
-  function(data)
-  {
+        myPlot.on('plotly_click',
+                function(data)
+                {
+                    alert("plotly click");
+                    var point = data.points[0];
 
-    var point = data.points[0];
+                    var newAnnotation = {
+                        x: point.xaxis.d2l(point.x),
+                        y: point.yaxis.d2l(point.y),
+                        arrowhead: 8,
+                        ax: 0,
+                        ay: -80,
+                        bgcolor: 'rgba(255, 255, 255, 0.9)',
+                        arrowcolor: point.fullData.marker.color,
+                        font:
+                        {
+                            size: 12
+                        },
+                        bordercolor: point.fullData.marker.color,
+                        borderwidth: 3,
+                        borderpad: 4,
+                        text: '<b>Patient: </b>' + selected_OPTR + '<br>' +
+                            '<b>Date: </b>' + x[point.pointNumber] + '<br>' +
+                            '<b>CA199: </b>' + point.y + '<br>'
+                    };
 
-    var newAnnotation =
-    {
-      x: point.xaxis.d2l(point.x),
-      y: point.yaxis.d2l(point.y),
-      arrowhead: 8,
-      ax: 0,
-      ay: -80,
-      bgcolor: 'rgba(255, 255, 255, 0.9)',
-      arrowcolor: point.fullData.marker.color,
-      font:
-      {
-        size: 12
-      },
-      bordercolor: point.fullData.marker.color,
-      borderwidth: 3,
-      borderpad: 4,
-      text: '<b>Patient: </b>' + selected_OPTR + '<br>'
-          + '<b>Date: </b>' + dates[point.pointNumber] + '<br>'
-          + '<b>CA199: </b>' + point.y + '<br>'
-    };
+                    var divid = document.getElementById('myDiv');
+                    var newIndex = (divid.layout.annotations || []).length;
 
-    var divid = document.getElementById('myDiv');
-    var newIndex = (divid.layout.annotations || []).length;
+                    console.log(point.pointNumber);
+                    // delete instead if clicked twice
+                    if (newIndex)
+                    {
+                        var foundCopy = false;
+                        divid.layout.annotations.forEach(
+                            function(ann, sameIndex)
+                            {
+                                if (ann.text === newAnnotation.text)
+                                {
+                                    Plotly.relayout(
+                                        'myDiv',
+                                        'annotations[' + sameIndex + ']',
+                                        'remove'
+                                    );
 
-    console.log(point.pointNumber);
-    // delete instead if clicked twice
-    if (newIndex)
-    {
-			var foundCopy = false;
-			divid.layout.annotations.forEach(
-      function(ann, sameIndex)
-      {
-        if (ann.text === newAnnotation.text)
-        {
-          Plotly.relayout
-          (
-            'myDiv',
-            'annotations[' + sameIndex + ']',
-            'remove'
-          );
+                                    foundCopy = true;
 
-          foundCopy = true;
+                                }
+                            });
 
-        }
-      });
+                        if (foundCopy)
+                        {
+                            return;
+                        }
 
-			if (foundCopy)
-			{
-			  return;
-			}
-
-		}
-			Plotly.relayout
-			(
-			  'myDiv',
-			  'annotations[' + newIndex + ']',
-			  newAnnotation
-			);
-		})
-  .on('plotly_clickannotation', function(event, data)
-  {
-		Plotly.relayout
-		(
-      'myDiv',
-      'annotations[' + newIndex + ']',
-      newAnnotation
-    );
-  });
-
-
+                    }
+                    Plotly.relayout(
+                        'myDiv',
+                        'annotations[' + newIndex + ']',
+                        newAnnotation
+                    );
+                })
+            .on('plotly_clickannotation', function(event, data)
+            {
+                Plotly.relayout(
+                    'myDiv',
+                    'annotations[' + newIndex + ']',
+                    newAnnotation
+                );
+            });
 
     }
+
 });
 
+
+/*
+1) tables object --> layout
+2) tables object --> query
+3) query --> process query
+                   |
+            _______V________
+            |        ,     |
+            V              V
+        get layout     make graph
+
+Problem: process query is passed data only from query.
+How to get layout in scope of query callback?
+
+
+
+*/

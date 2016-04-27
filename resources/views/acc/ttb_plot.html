@@ -1,0 +1,440 @@
+<form name="ParameterSelection_TTBplotA">
+    <table cellspacing="0" cellpadding="5" border="0">
+        <td valign="top">
+            <table cellspacing="0" cellpadding="5" border="0">
+                <tr>
+                    <td valign="top"><strong>Select patient by OPTR:</strong></td>
+                    <td valign="top">enter</td>
+                    <td valign="top"><input id="OPTR1_TTBplotA" onchange="optrEntryMade()" type="text" name="OPTR1" value="" size="10"></td>
+                    <td valign="top">or select</td>
+                    <td valign="top"><select id="OPTR2_TTBplotA" onchange="optrSelectionMade()" name="OPTR2"> <option></option> </select></td>
+                </tr>
+            </table>
+
+            <table cellspacing="0" cellpadding="5" border="0">
+                <tr>
+                    <td valign="top"> <input type="radio" name="PlotType" value="TTB" checked> Time Line </td>
+                    <td valign="top"> <input type="radio" name="PlotType" value="SizeVsGrade"> Tumor Size vs Grade </td>
+                    <td valign="top"> <input value='Update' type='button' onclick='submitRequest_TTBplotA()'></td>
+                </tr>
+            </table>
+        </td>
+        <!-- See this example (thanks to Ariel): http://plnkr.co/edit/lqF06Jl7yaoyD0BiOrKZ?p=preview -->
+        <td valign="top">
+            <table cellspacing="0" cellpadding="5" border="0">
+                <tr>
+                    <td valign="top">
+                        <div class="dropdown">
+                            <button
+                                    id="dropdown-button"
+                                    type='button'
+                                    onclick="toggleDropdown()"
+                            >Options &#x25bc;</button>
+                            <ul id='dropdown' class="dropdown-menu" z-index="99" style="display:none;list-style-type:none">
+                                <li>
+                                    <input class='OptionsCheckbox' type="checkbox" id="CA19_9_checkbox_TTBplotA" name="CA19_9" checked> Show CA19-9 </li>
+                                <li>
+                                    <input class='OptionsCheckbox' type="checkbox" id="ShowWeight_TTBplotA" name="Weight">Weight</li>
+                                <li>
+                                    <input class='OptionsCheckbox' type="checkbox" id="ShowTumorSize_TTBplotA" name="TumorSize" checked> Tumor Size </li>
+                                <li>
+                                    <input class='OptionsCheckbox' type="checkbox" id="ShowTreatments_TTBplotA" name="Treatments" checked> Treatments </li>
+                                <li>
+                                    <input class='OptionsCheckbox' type="checkbox" id="ShowFirstTreatments_TTBplotA" name="FirstTreatments" checked> First Treatments </li>
+                                <li>
+                                    <input class='OptionsCheckbox' type="checkbox" id="ShowInitialDiagnosis_TTBplotA" name="InitialDiagnosis" checked> InitialDiagnosis </li>
+                                <li>
+                                    <input class='OptionsCheckbox' type="checkbox" id="ShowSurgeries_TTBplotA" name="Surgeries" checked> Surgeries </li>
+                                <li>
+                                    <input class='OptionsCheckbox' type="checkbox" id="ShowBloodDraws_TTBplotA" name="BloodDraws" checked> Blood Draws </li>
+                                <li>
+                                    <input class='OptionsCheckbox' type="checkbox" id="DifferentiateMets_TTBplotA" name="DifferentiateMets"> Differentiate Mets </li>
+                                <li>
+                                    <input class='OptionsCheckbox' type="checkbox" id="ShowOtherEvents_TTBplotA" name="OtherEvents" checked> OtherEvents </li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </table>
+</form>
+
+
+
+<div id="reportDiv_TTBplotA">
+    Loading...
+</div>
+
+
+<div id="reportDiv_TTBplotB">
+    Loading...
+</div>
+
+
+<script type="text/javascript">
+    // Wrap in function to prevent leaking variables into global namespace.
+    (function() {
+
+    var chartId = 'exportedChart';
+
+    var renderMessages = function(id, messages) {
+        var errorDiv;
+        var el = document.getElementById(id);
+        var child;
+        if (el && el.children.length > 0) {
+            child = el.children[0];
+        }
+
+        for (var i = 0; i < messages.length; i++) {
+            errorDiv = document.createElement('div');
+            errorDiv.setAttribute('class', 'labkey-error');
+            errorDiv.innerHTML = messages[i];
+            if(child) {
+                el.insertBefore(errorDiv, child);
+            } else {
+                el.appendChild(errorDiv);
+            }
+        }
+    };
+
+    var myHover = function(id, messages) {
+        var errorDiv;
+        var el = document.getElementById(id);
+        var child;
+        if (el && el.children.length > 0) {
+            child = el.children[0];
+        }
+
+        for (var i = 0; i < messages.length; i++) {
+            errorDiv = document.createElement('div');
+            errorDiv.setAttribute('class', 'labkey-error');
+            errorDiv.innerHTML = messages[i];
+            if(child) {
+                el.insertBefore(errorDiv, child);
+            } else {
+                el.appendChild(errorDiv);
+            }
+        }
+    };
+
+    var selectRowsCallback = function(responseData) {
+        // After the data is loaded we can render the chart.
+        // chartConfig is the saved information about the chart (labels, scales, etc.)
+        var gch = LABKEY.vis.GenericChartHelper;
+        // Change the "pointClickFn" function for this:
+        //var chartConfig = {"width":null,"height":null,"renderType":"scatter_plot","pointType":"outliers","geomOptions":{"boxFillColor":"3366FF","lineColor":"000000","lineWidth":1,"opacity":0.5,"pointFillColor":"3366FF","pointSize":5,"position":null},"scales":{"x":{"trans":"linear"},"y":{"trans":"linear"}},"labels":{"x":"Date","y":"Weight","main":"WeightTable - Weight"},"measures":{"y":{"label":"Weight","name":"Weight","hidden":false,"measure":false,"dimension":false,"type":"float","displayFieldJsonType":"","normalizedType":"float"},"x":{"label":"Date","name":"Date","hidden":false,"measure":false,"dimension":false,"type":"date","displayFieldJsonType":"","normalizedType":"date"},"color":{"name":"OPTR","label":"OPTR"},"pointClickFn":"function (data, measureInfo, clickEvent) {\n   // use LABKEY.ActionURL.buildURL to generate a link to a different controller/action within LabKey server\n   var queryHref = LABKEY.ActionURL.buildURL('query', 'executeQuery', LABKEY.container.path, \n                      {schemaName: measureInfo[\"schemaName\"], \"query.queryName\": measureInfo[\"queryName\"]});\n\n   // display an Ext message box with some information from the function parameters\n   Ext4.Msg.alert('Data Point Information',\n       'Schema: ' + measureInfo[\"schemaName\"]\n       + '<br/> Query: <a href=\"' + queryHref + '\">' + measureInfo[\"queryName\"] + '<\/a>'\n       + '<br/>' + measureInfo[\"xAxis\"] + ': ' + (data[measureInfo[\"xAxis\"]].displayValue ? data[measureInfo[\"xAxis\"]].displayValue : data[measureInfo[\"xAxis\"]].value)\n       + '<br/>' + measureInfo[\"yAxis\"] + ': ' + (data[measureInfo[\"yAxis\"]].displayValue ? data[measureInfo[\"yAxis\"]].displayValue : data[measureInfo[\"yAxis\"]].value)\n   );\n\n   // you could also directly navigate away from the chart using window.location\n   // window.location = queryHref;\n}"}};
+
+     var chartConfig =
+    {
+        "width":null,
+        "height":null,
+        "renderType":"scatter_plot",
+        "pointType":"outliers",
+        "geomOptions":
+        {
+            "boxFillColor":"3366FF",
+            "lineColor":"000000",
+            "lineWidth":1,
+            "opacity":0.5,
+            "pointFillColor":"3366FF",
+            "pointSize":5,"position":null
+        },
+        "scales":
+        {
+            "x":{"trans":"linear"},
+            "y":{"trans":"linear"}
+        },
+        "labels":
+        {
+            "x":"Date",
+            "y":"Weight",
+            "main":"WeightTable - Weight"
+        },
+        "measures":
+        {
+            "y":
+            {
+                "label":"Weight",
+                "name":"Weight",
+                "hidden":false,
+                "measure":false,
+                "dimension":false,
+                "type":"float",
+                "displayFieldJsonType":"",
+                "normalizedType":"float"
+            },
+            "x":
+            {
+                "label":"Date",
+                "name":"Date",
+                "hidden":false,
+                "measure":false,
+                "dimension":false,
+                "type":"date",
+                "displayFieldJsonType":"",
+                "normalizedType":"date"
+            },
+            "color":
+            {
+                "name":"OPTR",
+                "label":"OPTR"
+            },
+            "pointClickFn":"function (data, measureInfo, clickEvent){ //Note.\n window.location = \"https://omero.ohsu.edu/webclient/img_detail/\" + data.ID.value; \n //window.location = \"https://omero.ohsu.edu/webclient/img_detail/269093/\"; \n}"
+        }
+    };
+
+        chartConfig.geomOptions.showOutliers = chartConfig.pointType ? chartConfig.pointType == 'outliers' : true;
+        var DEFAULT_WIDTH = 1200, DEFAULT_HEIGHT = 600;
+        var chartType = gch.getChartType(chartConfig.renderType, chartConfig.measures.x.normalizedType);
+        var layerConfig =
+    {
+            data: responseData.rows,
+                geom: gch.generateGeom(chartType, chartConfig.geomOptions),
+                aes:
+        {
+            hoverText: function(row) { return 'test'; }
+        }
+        };
+        var aes = gch.generateAes(chartType, chartConfig.measures, responseData.schemaName, responseData.queryName);
+        var scales = gch.generateScales(chartType, chartConfig.measures, chartConfig.scales, aes, responseData);
+        var labels = gch.generateLabels(chartConfig.labels);
+        var messages = [];
+        var validation = gch.validateXAxis(chartType, chartConfig, aes, scales, responseData.rows);
+
+        if (validation.message != null) {
+            messages.push(validation.message);
+        }
+
+        if (!validation.success) {
+            renderMessages(chartId, messages);
+            return;
+        }
+
+        validation = gch.validateYAxis(chartType, chartConfig, aes, scales, responseData.rows);
+
+        if (validation.message != null) {
+            messages.push(validation.message);
+        }
+
+        if (!validation.success) {
+            renderMessages(chartId, messages);
+            return;
+        }
+
+        var layers = [];
+
+        if(chartConfig.pointType == 'all') {
+           layers.push(new LABKEY.vis.Layer({
+               data: responseData.rows,
+               geom: gch.generatePointGeom(chartConfig.geomOptions),
+               //aes: {hoverText: gch.generatePointHover()}
+               aes: {hoverText: function(row) { return 'test'; }}
+               }));
+        }
+
+        layers.push(new LABKEY.vis.Layer(layerConfig));
+        var plotConfig = {
+            renderTo: chartId,
+            width: chartConfig.width ? chartConfig.width : DEFAULT_WIDTH,
+            height: chartConfig.height? chartConfig.height : DEFAULT_HEIGHT,
+            labels: labels,
+            aes: aes,
+            scales: scales,
+            layers: layers,
+            data: responseData.rows
+        }
+        var plot = new LABKEY.vis.Plot(plotConfig);
+
+        plot.render();
+        renderMessages(chartId, messages);
+    };
+
+    var dependencyCallback = function() {
+        // When all the dependencies are loaded we then load the data via selectRows.
+        // The queryConfig object stores all the information needed to make a selectRows request.
+        var queryConfig = {"schemaName":"lists","queryName":"WeightTable","viewName":null,"dataRegionName":"query","queryLabel":"WeightTable","parameters":{},"maxRows":5000,"requiredVersion":12.1,"method":"POST","columns":["Date","Weight","OPTR"],"filterArray":[]};
+
+        if (queryConfig.filterArray && queryConfig.filterArray.length > 0) {
+            var filters = [];
+
+            for (var i = 0; i < queryConfig.filterArray.length; i++) {
+                var f = queryConfig.filterArray[i];
+                filters.push(LABKEY.Filter.create(f.name,  f.value, LABKEY.Filter.getFilterTypeForURLSuffix(f.type)));
+            }
+
+            queryConfig.filterArray = filters;
+        }
+
+        queryConfig.success = selectRowsCallback;
+        queryConfig.containerPath = "/Brenden-Colson Center";
+        LABKEY.Query.selectRows(queryConfig);
+    };
+
+    // Load the script dependencies for charts.
+    LABKEY.requiresScript('/vis/genericChart/genericChartHelper.js', function(){LABKEY.vis.GenericChartHelper.loadVisDependencies(dependencyCallback);});
+    })();
+
+    var OPTR = LABKEY.ActionURL.getParameter("OPTR");
+
+    alert(OPTR);
+
+    alert(document.getElementById("OPTR2_TTBplotA"));
+    alert(document.getElementById("OPTR1_TTBplotA"));
+
+
+    // Ensure that page dependencies are loaded
+    LABKEY.requiresExt3ClientAPI(true, function() {
+        Ext.onReady(init_TTBplotA);
+        //Ext.onReady(init_TTBplotB);
+    });
+
+    function populateOPTRvalues_TTBplotA(data) {
+        var el = document.getElementById("OPTR2_TTBplotA");
+        el.options[0].text = "<Select OPTR>";
+        for (var i = 0; i < data.rows.length; i++) {
+            var opt = document.createElement("option");
+            opt.text = data.rows[i].OPTR;
+            opt.value = data.rows[i].OPTR;
+           if (OPTR && OPTR == opt.value)
+             opt.selected = true;
+            el.options[el.options.length] = opt;
+        }
+    }
+
+    function optrSelectionMade() {
+      document.ParameterSelection_TTBplotA.OPTR1.value = document.ParameterSelection_TTBplotA.OPTR2.value;
+    }
+
+    function optrEntryMade() {
+      var el = document.getElementById("OPTR2_TTBplotA");
+      el.options[0].selected = true;
+    }
+
+    function initChart_TTBplotA() {
+        // Draw the graph.
+        var selected_OPTR = "4086";
+        if (document.ParameterSelection_TTBplotA.OPTR1.value != "") {
+          selected_OPTR = document.ParameterSelection_TTBplotA.OPTR1.value;
+        } else {
+          selected_OPTR = document.ParameterSelection_TTBplotA.OPTR2.value;
+        }
+        var reportWebPartRenderer_TTBplotA = new LABKEY.WebPart({
+            partName: 'Report',
+            renderTo: 'reportDiv_TTBplotA',
+            frame: 'title',
+            partConfig: {
+                title: 'TranslationalTumorBoardView',
+                reportId: 'db:117',
+                'OPTR': selected_OPTR,
+                'CA19_9': 'ON',
+                'Weight': 'ON'
+            }
+        });
+        reportWebPartRenderer_TTBplotA.render();
+    }
+
+    function initChart_TTBplotB() {
+        // Draw the graph.
+        var reportWebPartRenderer_TTBplotB = new LABKEY.QueryWebPart({
+                renderTo: 'reportDiv_TTBplotB',
+        title: 'SurgeryTable',
+        schemaName: 'lists',
+        queryName: 'SurgeryTable'
+        });
+        reportWebPartRenderer_TTBplotB.render();
+    }
+
+    function refreshChart_TTBplotA() {
+      // What is the selected plot type?
+      if (document.ParameterSelection_TTBplotA.PlotType.value == "TTB") {
+        // Draw the graph.
+        var selected_OPTR = "4086";
+        if (document.ParameterSelection_TTBplotA.OPTR1.value != "") {
+          selected_OPTR = document.ParameterSelection_TTBplotA.OPTR1.value;
+        } else {
+          selected_OPTR = document.ParameterSelection_TTBplotA.OPTR2.value;
+        }
+        var CA19_9_Option = "OFF";
+        if (document.getElementById("CA19_9_checkbox_TTBplotA").checked) CA19_9_Option = "ON";
+        var Weight_Option = "OFF";
+        if (document.getElementById("Weight_checkbox_TTBplotA").checked) Weight_Option = "ON";
+
+        var reportWebPartRenderer_TTBplotA = new LABKEY.WebPart({
+            partName: 'Report',
+            renderTo: 'reportDiv_TTBplotA',
+            frame: 'title',
+            partConfig: {
+                title: 'TranslationalTumorBoardView',
+                reportId: 'db:117',
+                'OPTR': selected_OPTR,
+                'CA19_9': CA19_9_Option,
+                'Weight': Weight_Option
+            }
+        });
+        reportWebPartRenderer_TTBplotA.render();
+      }
+    }
+
+    function init_TTBplotA() {
+        LABKEY.Query.selectRows({
+            schemaName: 'study',
+            queryName: 'PatientDemographics',
+            success: populateOPTRvalues_TTBplotA
+        });
+
+        initChart_TTBplotA();
+        initChart_TTBplotB();
+    }
+
+    // Enter form data into list.
+    function submitRequest_TTBplotA() {
+        // Insert form data into the list.
+        refreshChart_TTBplotA();
+    }
+
+    Ext4.onReady(function ()
+    {
+    if (OPTR)
+       alert("do something here");
+    });
+    </script>
+
+<div id='bar'></div>
+
+
+<script type="text/javascript">
+    // Fake data which will be aggregated by the LABKEY.vis.BarPlot wrapper.
+    var barPlotData = [
+    {gender: 'Male', age: '21'}, {gender: 'Male', age: '43'},
+    {gender: 'Male', age: '24'}, {gender: 'Male', age: '54'},
+    {gender: 'Female', age: '24'}, {gender: 'Female', age: '33'},
+    {gender: 'Female', age: '43'}, {gender: 'Female', age: '43'},
+    ];
+
+    // Create a new bar plot object.
+    var barChart = new LABKEY.vis.BarPlot({
+    renderTo: 'bar',
+    rendererType: 'd3',
+    width: 900,
+    height: 300,
+    labels: {
+        main: {value: 'Example Bar Plot With Cumulative Totals'},
+        yLeft: {value: 'Count'},
+        x: {value: 'Value'}
+    },
+    options: {
+        color: 'black',
+        fill: '#c0c0c0',
+        lineWidth: 1.5,
+        colorTotal: 'black',
+        fillTotal: 'steelblue',
+        opacityTotal: .8,
+        showCumulativeTotals: true
+    },
+    xAes: function(row){return row['age']},
+    data: barPlotData
+    });
+
+    barChart.render();
+</script>
