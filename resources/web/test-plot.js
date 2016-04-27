@@ -19,6 +19,7 @@ $(document).ready(function()
 
     $.getJSON('/labkey/ttb_plot_data_sources.json', function(response)
         {
+            console.log("got json file");
             var fields = response;
             getOPTRs();
             configureOptionsDropdown(fields);
