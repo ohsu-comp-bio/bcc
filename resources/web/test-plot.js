@@ -339,10 +339,7 @@ $(document).ready(function()
             "method": "POST",
             "columns": ['Date', field],
             "filterArray": filter_array,
-            "success": function(results)
-                {
-                    processSuccess(results, table_name, field);
-                },
+            "success": processSucccess,
             "failure": processError
         };
 
