@@ -162,6 +162,8 @@ $(document).ready(function()
     // Populate graph options
     function populateGraphOptions(fields)
     {
+        console.log("fields");
+        console.log(fields);
         console.log("populating graph options");
         for (var field in fields)
         {
