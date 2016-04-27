@@ -15,6 +15,9 @@ console.log("in script in default");
 
     doQuery();
 
+    dates = [];
+    ca199 = [];
+
     function doQuery()
     {
         // When all the dependencies are loaded we then load the data via selectRows.
@@ -76,8 +79,8 @@ console.log("in script in default");
 
         //console.log(results);
 
-        var dates = [];
-        var ca199 = [];
+        //dates = [];
+        //ca199 = [];
 
         var rows = results.getRows();
 
@@ -172,6 +175,88 @@ console.log("in script in default");
             data,
             layout
         );
+
+
+
+myPlot = document.getElementById('myDiv');
+
+
+myPlot.on('plotly_click',
+  function(data)
+  {
+    //alert("plotly click");
+    var point = data.points[0];
+
+    var newAnnotation =
+    {
+      x: point.xaxis.d2l(point.x),
+      y: point.yaxis.d2l(point.y),
+      arrowhead: 8,
+      ax: 0,
+      ay: -80,
+      bgcolor: 'rgba(255, 255, 255, 0.9)',
+      arrowcolor: point.fullData.marker.color,
+      font:
+      {
+        size: 12
+      },
+      bordercolor: point.fullData.marker.color,
+      borderwidth: 3,
+      borderpad: 4,
+      text: '<b>Patient: </b>' + selected_OPTR + '<br>'
+          + '<b>Date: </b>' + point.x + '<br>'
+          + '<b>CA199: </b>' + point.y + '<br>'
+    };
+
+    var divid = document.getElementById('myDiv');
+    var newIndex = (divid.layout.annotations || []).length;
+
+    console.log(point.pointNumber);
+    // delete instead if clicked twice
+    if (newIndex)
+    {
+			var foundCopy = false;
+			divid.layout.annotations.forEach(
+      function(ann, sameIndex)
+      {
+        if (ann.text === newAnnotation.text)
+        {
+          Plotly.relayout
+          (
+            'myDiv',
+            'annotations[' + sameIndex + ']',
+            'remove'
+          );
+
+          foundCopy = true;
+
+        }
+      });
+
+			if (foundCopy)
+			{
+			  return;
+			}
+
+		}
+			Plotly.relayout
+			(
+			  'myDiv',
+			  'annotations[' + newIndex + ']',
+			  newAnnotation
+			);
+		})
+  .on('plotly_clickannotation', function(event, data)
+  {
+		Plotly.relayout
+		(
+      'myDiv',
+      'annotations[' + newIndex + ']',
+      newAnnotation
+    );
+  });
+
+
 
 
     }
