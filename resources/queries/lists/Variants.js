@@ -24,9 +24,10 @@ function beforeUpsert(row, errors) {
         row.CGCJudgment = "Yes";
     }   //  fi
 
-    var COSMIC_value = row.COSMIC_overlapping_mutations;
+    var COSMIC_value = row  .COSMIC_overlapping_mutations;
     var protein_value = row.Protein_Change;
-    if(protein_value != "")    {
+    if(protein_value)    {
+        console.log("protein_value: " + protein_value);
         var result = COSMIC_value.indexOf(protein_value);
         if(result > 0)
         {
