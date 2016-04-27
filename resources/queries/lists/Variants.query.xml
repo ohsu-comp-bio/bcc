@@ -6,7 +6,7 @@
             <javaCustomizer>org.labkey.bcc.query.BCCCustomizer</javaCustomizer>
             <columns>
                 <column columnName="CGCJudgment">
-                    <columnTitle>CGC Known Cancer Gene</columnTitle>
+                    <columnTitle>CGC Known Cancer Gene?</columnTitle>
                 </column>
             </columns>
         </table>
