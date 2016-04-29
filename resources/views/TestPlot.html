@@ -1,44 +1,44 @@
 
 <h1>Select Patient by OPTR:</h1>
 
-<div id="optr_dropdown" style="display: inline">
-    <label for="optr-select">Select or Type OPTR: </label>
-    <select name="optr-select" id="optr-select">
+<div id="data-selection">
+    <label for="optr-select" style="display: inline; float: left; margin: 0 1em 0 0 ">Select OPTR: </label>
+    <select name="optr-select" id="optr-select" style="display: inline; margin: 0 1em 0 0 ">
         <!-- populate by query -->
     </select>
+
+    <button id="dropdown-button" type='button' style="display: inline; margin: 0 1em 0 0 ">Select Graph Data &#x25bc;</button>
+
+    <button id="submit-options" style="display: inline; margin: 0 1em 0 0 ">Submit</button>
 </div>
 
-<div class="dropdown" style="display: inline">
-    <button
-        id="dropdown-button"
-        type='button'
-    >Select Graph Data &#x25bc;
-    </button>
-    <ul id='dropdown' class="dropdown-menu" z-index="99" style="display:none;list-style-type:none">
+
+<div class="dropdown">
+    <ul id='dropdown-list' class="dropdown-menu" z-index="99" style="display:none;list-style-type:none; position: relative; left: 10em">
+        <!--
         <li>
             <input class='OptionsCheckbox' type="checkbox" id="CA19_9_checkbox_TTBplotA" name="CA19_9" checked> Show CA19-9 </li>
         <li>
-            <input class='OptionsCheckbox' type="checkbox" id="ShowWeight_TTBplotA" name="Weight">Weight</li>
+            <input class='OptionsCheckbox' type="checkbox" id="ShowWeight_TTBplotA" name="Weight" checked>Weight</li>
         <li>
-            <input class='OptionsCheckbox' type="checkbox" id="ShowTumorSize_TTBplotA" name="TumorSize" checked> Tumor Size </li>
+            <input class='OptionsCheckbox' type="checkbox" id="ShowTumorSize_TTBplotA" name="TumorSize"> Tumor Size </li>
         <li>
             <input class='OptionsCheckbox' type="checkbox" id="ShowTreatments_TTBplotA" name="Treatments" checked> Treatments </li>
         <li>
-            <input class='OptionsCheckbox' type="checkbox" id="ShowFirstTreatments_TTBplotA" name="FirstTreatments" checked> First Treatments </li>
+            <input class='OptionsCheckbox' type="checkbox" id="ShowFirstTreatments_TTBplotA" name="FirstTreatments"> First Treatments </li>
         <li>
-            <input class='OptionsCheckbox' type="checkbox" id="ShowInitialDiagnosis_TTBplotA" name="InitialDiagnosis" checked> InitialDiagnosis </li>
+            <input class='OptionsCheckbox' type="checkbox" id="ShowInitialDiagnosis_TTBplotA" name="InitialDiagnosis"> InitialDiagnosis </li>
         <li>
-            <input class='OptionsCheckbox' type="checkbox" id="ShowSurgeries_TTBplotA" name="Surgeries" checked> Surgeries </li>
+            <input class='OptionsCheckbox' type="checkbox" id="ShowSurgeries_TTBplotA" name="Surgeries"> Surgeries </li>
         <li>
-            <input class='OptionsCheckbox' type="checkbox" id="ShowBloodDraws_TTBplotA" name="BloodDraws" checked> Blood Draws </li>
+            <input class='OptionsCheckbox' type="checkbox" id="ShowBloodDraws_TTBplotA" name="BloodDraws"> Blood Draws </li>
         <li>
             <input class='OptionsCheckbox' type="checkbox" id="DifferentiateMets_TTBplotA" name="DifferentiateMets"> Differentiate Mets </li>
         <li>
-            <input class='OptionsCheckbox' type="checkbox" id="ShowOtherEvents_TTBplotA" name="OtherEvents" checked> OtherEvents </li>
+            <input class='OptionsCheckbox' type="checkbox" id="ShowOtherEvents_TTBplotA" name="OtherEvents"> OtherEvents </li>
+            -->
     </ul>
 </div>
 
-<button id="submit-options" style="display: inline">Submit</button>
-
-<div id="myDiv"></div>
+<div id="plot-container" ></div>
 
