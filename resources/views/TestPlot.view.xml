@@ -1,7 +1,9 @@
 <view xmlns="http://labkey.org/data/xml/view" title="Test Plot" frame="portal">
     <dependencies>
         <dependency path="Ext4ClientApi" />
-        <dependency path="plotly.min.js"/>
-        <dependency path="test-plot.js"/>
+        <dependency path="bcc/plotly.min.js"/>
+        <dependency path="bcc/test-plot.js"/>
+        <dependency path="bcc/ttb_plot_data_sources.json" />
+        <!--dependency path="require.js" /-->
     </dependencies>
 </view>
