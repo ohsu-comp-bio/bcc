@@ -4,6 +4,8 @@
         <dependency path="bcc/plotly.min.js"/>
         <dependency path="bcc/test-plot.js"/>
         <dependency path="bcc/ttb_plot_data_sources.json" />
+        <!--dependency path="bcc/prettyprint.js" /-->
+        <!--dependency path="bcc/plotly_templates.js" /-->
         <!--dependency path="require.js" /-->
     </dependencies>
 </view>
