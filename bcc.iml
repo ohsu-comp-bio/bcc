@@ -18,5 +18,7 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="API" />
+    <orderEntry type="module" module-name="LDK-API" />
   </component>
 </module>
+

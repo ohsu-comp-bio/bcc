@@ -1,0 +1,16 @@
+<script type="text/javascript">
+
+    Ext4.onReady(function(){
+        var webpart = <%=webpartContext%>;
+
+        Ext4.create('LDK.panel.PopulateDataPanel', {
+            moduleName: 'bcc',
+            tables: [{
+                label: 'Method Types',
+                queryName: 'method_types'
+            }]
+        }).render(webpart.wrapperDivId);
+
+    });
+
+</script>
