@@ -1,0 +1,1 @@
+require("bcc/triggers").initScript(this);

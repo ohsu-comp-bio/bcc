@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<datasets metaDataFile="datasets_metadata.xml" xmlns="http://labkey.org/study/xml">
+  <datasets>
+    <dataset name="Procedures" id="5004" category="Clinical" type="Standard">
+      <tags/>
+    </dataset>
+    <dataset name="Diagnoses" id="5005" category="Clinical" type="Standard">
+      <tags/>
+    </dataset>
+    <dataset name="Treatments" id="5010" category="Clinical" type="Standard">
+      <tags/>
+    </dataset>
+    <dataset name="TumorSize" id="5012" category="Clinical" type="Standard">
+      <tags/>
+    </dataset>
+    <dataset name="Weight" id="5013" category="Clinical" type="Standard">
+      <tags/>
+    </dataset>
+    <dataset name="Outcomes" id="5014" category="Clinical" type="Standard">
+      <tags/>
+    </dataset>
+    <dataset name="Variants" id="5011" category="Research" type="Standard">
+      <tags/>
+    </dataset>
+    <dataset name="LabResults" id="5003" type="Standard">
+      <tags/>
+    </dataset>
+    <dataset name="immuneCellPhenotyping" id="5006" type="Standard">
+      <tags/>
+    </dataset>
+    <dataset name="Images" id="5007" type="Standard">
+      <tags/>
+    </dataset>
+    <dataset name="Demographics" id="5008" demographicData="true" type="Standard">
+      <tags/>
+    </dataset>
+    <dataset name="Events" id="5009" type="Standard">
+      <tags/>
+    </dataset>
+  </datasets>
+</datasets>
