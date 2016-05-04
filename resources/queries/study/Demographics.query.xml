@@ -1,0 +1,25 @@
+<query xmlns="http://labkey.org/data/xml/query">
+    <metadata>
+        <tables xmlns="http://labkey.org/data/xml">
+            <table tableName="" tableDbType="TABLE">
+                <tableTitle>Patient Demographics</tableTitle>
+                <!--if you include this on a table, it will apply standard configuration-->
+                <javaCustomizer>org.labkey.bcc.query.BCCCustomizer</javaCustomizer>
+                <columns>
+                    <column columnName="mrn">
+                        <columnTitle>MRN</columnTitle>
+                        <phi>PHI</phi>
+                    </column>
+                    <column columnName="firstName">
+                        <columnTitle>First Name</columnTitle>
+                        <phi>PHI</phi>
+                    </column>
+                    <column columnName="lastName">
+                        <columnTitle>Last Name</columnTitle>
+                        <phi>PHI</phi>
+                    </column>
+                </columns>
+            </table>
+        </tables>
+    </metadata>
+</query>

@@ -1,0 +1,19 @@
+<query xmlns="http://labkey.org/data/xml/query">
+    <metadata>
+        <tables xmlns="http://labkey.org/data/xml">
+            <table tableName="" tableDbType="TABLE">
+                <tableTitle>Images</tableTitle>
+                <!--if you include this on a table, it will apply standard configuration-->
+                <javaCustomizer>org.labkey.bcc.query.BCCCustomizer</javaCustomizer>
+                <columns>
+                    <column columnName="omeroId">
+                        <columnTitle>OMERO ID</columnTitle>
+                        <displayColumnFactory>
+                            <className>org.labkey.omerointegration.OmeroDisplayColumFactory</className>
+                        </displayColumnFactory>
+                    </column>
+                </columns>
+            </table>
+        </tables>
+    </metadata>
+</query>

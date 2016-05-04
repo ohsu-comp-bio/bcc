@@ -2,6 +2,7 @@ package org.labkey.bcc.query;
 
 import org.labkey.api.data.AbstractTableInfo;
 import org.labkey.api.data.TableInfo;
+import org.labkey.api.ldk.LDKService;
 import org.labkey.api.ldk.table.AbstractTableCustomizer;
 import org.labkey.api.query.QueryForeignKey;
 import org.labkey.api.query.QueryService;
@@ -15,6 +16,8 @@ public class BCCCustomizer extends AbstractTableCustomizer
     @Override
     public void customize(TableInfo ti)
     {
+        LDKService.get().getDefaultTableCustomizer().customize(ti);
+
         //this allows us to apply standard customization to any table configured to use this customizer
         if (ti instanceof AbstractTableInfo)
         {
@@ -45,5 +48,11 @@ public class BCCCustomizer extends AbstractTableCustomizer
         {
             ti.getColumn("StudyId").setLabel("Study ID");
         }
+
+        if (ti.getColumn("objectid") != null)
+        {
+            ti.getColumn("objectid").setHidden(true);
+        }
+
     }
 }

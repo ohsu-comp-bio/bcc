@@ -1,0 +1,39 @@
+<script type="text/javascript">
+
+    Ext4.onReady(function(){
+        var webpart = <%=webpartContext%>;
+
+        Ext4.create('LDK.panel.PopulateDataPanel', {
+            moduleName: 'bcc',
+            tables: [
+                {queryName: 'ca199_version', label: 'CA199 Version'},
+                {queryName: 'differentiation', label: 'Differentiation'},
+                {queryName: 'endtype', label: 'End Type'},
+                {queryName: 'gemcitabine_sensitivity', label: 'Gemcitabine Sensitivity'},
+                {queryName: 'gender', label: 'Gender'},
+                {queryName: 'hybrid_capture_bait', label: 'Hybrid Capture Bait'},
+                {queryName: 'hybrid_capture_protocol', label: 'Hybrid Capture Protocol'},
+                {queryName: 'immune_phenotyping_method', label: 'Immune Phenotyping Method'},
+                {queryName: 'library_construction_protocol', label: 'Library Construction Protocol'},
+                {queryName: 'nucleic_acid_extraction_product', label: 'Nucleic Acid Extraction Product'},
+                {queryName: 'organoid_outcomes', label: 'Organoid Outcomes'},
+                {queryName: 'research_type', label: 'Research Type'},
+                {queryName: 'sample_location', label: 'Sample Location'},
+                {queryName: 'sample_organism', label: 'Sample Organism'},
+                {queryName: 'sample_origin_tissue', label: 'Sample Origin Tissue'},
+                {queryName: 'sample_preparation_method', label: 'Sample Preparation Method'},
+                {queryName: 'sample_source', label: 'Sample Source'},
+                {queryName: 'sample_status', label: 'Sample Status'},
+                {queryName: 'sequencing_site', label: 'Sequencing Site'},
+                {queryName: 'stage', label: 'Stage'},
+                {queryName: 'treatment_type', label: 'Treatment Type'},
+                {queryName: 'tumor_grade', label: 'Tumor Grade'},
+                {queryName: 'tumor_normal', label: 'Tumor/Normal'},
+                {queryName: 'tumor_type', label: 'Tumor Type'},
+                {queryName: 'yes_no', label: 'Yes/No'}
+            ]
+        }).render(webpart.wrapperDivId);
+
+    });
+
+</script>

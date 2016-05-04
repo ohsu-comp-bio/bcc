@@ -1,0 +1,584 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tables xmlns="http://labkey.org/data/xml">
+  <table tableName="Procedures" tableDbType="TABLE">
+    <description>Contains up to one row of Procedures data for each Patient/Date combination.</description>
+    <columns>
+      <column columnName="OPTR">
+        <datatype>varchar</datatype>
+        <columnTitle>OPTR</columnTitle>
+        <description>Subject identifier</description>
+        <propertyURI>http://cpas.labkey.com/Study#ParticipantId</propertyURI>
+        <nullable>false</nullable>
+        <importAliases>
+          <importAlias>ptid</importAlias>
+        </importAliases>
+        <fk>
+          <fkDbSchema>study</fkDbSchema>
+          <fkTable>Patient</fkTable>
+          <fkColumnName>OPTR</fkColumnName>
+        </fk>
+        <scale>32</scale>
+      </column>
+      <column columnName="date">
+        <datatype>timestamp</datatype>
+        <columnTitle>Date</columnTitle>
+        <propertyURI>http://cpas.labkey.com/Study#VisitDate</propertyURI>
+        <conceptURI>http://cpas.labkey.com/Study#VisitDate</conceptURI>
+        <nullable>false</nullable>
+      </column>
+      <column columnName="procedure">
+        <datatype>varchar</datatype>
+        <columnTitle>Procedure</columnTitle>
+        <rangeURI>http://www.w3.org/2001/XMLSchema#string</rangeURI>
+        <scale>4000</scale>
+      </column>
+      <column columnName="comment">
+        <datatype>varchar</datatype>
+        <inputType>textarea</inputType>
+        <columnTitle>Comment</columnTitle>
+        <rangeURI>http://www.w3.org/2001/XMLSchema#multiLine</rangeURI>
+        <scale>4000</scale>
+      </column>
+    </columns>
+    <tableTitle>Procedures</tableTitle>
+  </table>
+  <table tableName="Diagnoses" tableDbType="TABLE">
+    <description>Contains up to one row of Diagnoses data for each Patient/Date combination.</description>
+    <columns>
+      <column columnName="OPTR">
+        <datatype>varchar</datatype>
+        <columnTitle>OPTR</columnTitle>
+        <description>Subject identifier</description>
+        <propertyURI>http://cpas.labkey.com/Study#ParticipantId</propertyURI>
+        <nullable>false</nullable>
+        <importAliases>
+          <importAlias>ptid</importAlias>
+        </importAliases>
+        <fk>
+          <fkDbSchema>study</fkDbSchema>
+          <fkTable>Patient</fkTable>
+          <fkColumnName>OPTR</fkColumnName>
+        </fk>
+        <scale>32</scale>
+      </column>
+      <column columnName="date">
+        <datatype>timestamp</datatype>
+        <columnTitle>Date</columnTitle>
+        <propertyURI>http://cpas.labkey.com/Study#VisitDate</propertyURI>
+        <conceptURI>http://cpas.labkey.com/Study#VisitDate</conceptURI>
+        <nullable>false</nullable>
+      </column>
+    </columns>
+    <tableTitle>Diagnoses</tableTitle>
+  </table>
+  <table tableName="Treatments" tableDbType="TABLE">
+    <description>Contains up to one row of Treatments data for each Patient/Date combination.</description>
+    <columns>
+      <column columnName="OPTR">
+        <datatype>varchar</datatype>
+        <columnTitle>OPTR</columnTitle>
+        <description>Subject identifier</description>
+        <propertyURI>http://cpas.labkey.com/Study#ParticipantId</propertyURI>
+        <nullable>false</nullable>
+        <importAliases>
+          <importAlias>ptid</importAlias>
+        </importAliases>
+        <fk>
+          <fkDbSchema>study</fkDbSchema>
+          <fkTable>Patient</fkTable>
+          <fkColumnName>OPTR</fkColumnName>
+        </fk>
+        <scale>32</scale>
+      </column>
+      <column columnName="date">
+        <datatype>timestamp</datatype>
+        <columnTitle>Date</columnTitle>
+        <propertyURI>http://cpas.labkey.com/Study#VisitDate</propertyURI>
+        <conceptURI>http://cpas.labkey.com/Study#VisitDate</conceptURI>
+        <nullable>false</nullable>
+      </column>
+      <column columnName="type">
+        <datatype>varchar</datatype>
+        <columnTitle>Type</columnTitle>
+        <rangeURI>http://www.w3.org/2001/XMLSchema#string</rangeURI>
+        <scale>4000</scale>
+      </column>
+      <column columnName="comment">
+        <datatype>varchar</datatype>
+        <inputType>textarea</inputType>
+        <columnTitle>Comment</columnTitle>
+        <rangeURI>http://www.w3.org/2001/XMLSchema#multiLine</rangeURI>
+        <scale>4000</scale>
+      </column>
+    </columns>
+    <tableTitle>Treatments</tableTitle>
+  </table>
+  <table tableName="TumorSize" tableDbType="TABLE">
+    <description>Contains up to one row of TumorSize (Tumor Size) data for each Patient/Date combination.</description>
+    <columns>
+      <column columnName="OPTR">
+        <datatype>varchar</datatype>
+        <columnTitle>OPTR</columnTitle>
+        <description>Subject identifier</description>
+        <propertyURI>http://cpas.labkey.com/Study#ParticipantId</propertyURI>
+        <nullable>false</nullable>
+        <importAliases>
+          <importAlias>ptid</importAlias>
+        </importAliases>
+        <fk>
+          <fkDbSchema>study</fkDbSchema>
+          <fkTable>Patient</fkTable>
+          <fkColumnName>OPTR</fkColumnName>
+        </fk>
+        <scale>32</scale>
+      </column>
+      <column columnName="date">
+        <datatype>timestamp</datatype>
+        <columnTitle>Date</columnTitle>
+        <propertyURI>http://cpas.labkey.com/Study#VisitDate</propertyURI>
+        <conceptURI>http://cpas.labkey.com/Study#VisitDate</conceptURI>
+        <nullable>false</nullable>
+      </column>
+      <column columnName="tumorId">
+        <datatype>varchar</datatype>
+        <columnTitle>Tumor Id</columnTitle>
+        <rangeURI>http://www.w3.org/2001/XMLSchema#string</rangeURI>
+        <scale>4000</scale>
+      </column>
+      <column columnName="sizeAxis1">
+        <datatype>double</datatype>
+        <columnTitle>Size Axis1</columnTitle>
+        <rangeURI>http://www.w3.org/2001/XMLSchema#double</rangeURI>
+      </column>
+      <column columnName="sizeAxis2">
+        <datatype>double</datatype>
+        <columnTitle>Size Axis2</columnTitle>
+        <rangeURI>http://www.w3.org/2001/XMLSchema#double</rangeURI>
+      </column>
+      <column columnName="sizeAxis3">
+        <datatype>double</datatype>
+        <columnTitle>Size Axis3</columnTitle>
+        <rangeURI>http://www.w3.org/2001/XMLSchema#double</rangeURI>
+      </column>
+      <column columnName="comment">
+        <datatype>varchar</datatype>
+        <inputType>textarea</inputType>
+        <columnTitle>Comment</columnTitle>
+        <rangeURI>http://www.w3.org/2001/XMLSchema#multiLine</rangeURI>
+        <scale>4000</scale>
+      </column>
+    </columns>
+    <tableTitle>Tumor Size</tableTitle>
+  </table>
+  <table tableName="Weight" tableDbType="TABLE">
+    <description>Contains up to one row of Weight data for each Patient/Date combination.</description>
+    <columns>
+      <column columnName="OPTR">
+        <datatype>varchar</datatype>
+        <columnTitle>OPTR</columnTitle>
+        <description>Subject identifier</description>
+        <propertyURI>http://cpas.labkey.com/Study#ParticipantId</propertyURI>
+        <nullable>false</nullable>
+        <importAliases>
+          <importAlias>ptid</importAlias>
+        </importAliases>
+        <fk>
+          <fkDbSchema>study</fkDbSchema>
+          <fkTable>Patient</fkTable>
+          <fkColumnName>OPTR</fkColumnName>
+        </fk>
+        <scale>32</scale>
+      </column>
+      <column columnName="date">
+        <datatype>timestamp</datatype>
+        <columnTitle>Date</columnTitle>
+        <propertyURI>http://cpas.labkey.com/Study#VisitDate</propertyURI>
+        <conceptURI>http://cpas.labkey.com/Study#VisitDate</conceptURI>
+        <nullable>false</nullable>
+      </column>
+      <column columnName="weight">
+        <datatype>double</datatype>
+        <columnTitle>Weight</columnTitle>
+        <rangeURI>http://www.w3.org/2001/XMLSchema#double</rangeURI>
+      </column>
+      <column columnName="units">
+        <datatype>varchar</datatype>
+        <columnTitle>Units</columnTitle>
+        <rangeURI>http://www.w3.org/2001/XMLSchema#string</rangeURI>
+        <scale>4000</scale>
+      </column>
+    </columns>
+    <tableTitle>Weight</tableTitle>
+  </table>
+  <table tableName="Outcomes" tableDbType="TABLE">
+    <description>Contains up to one row of Outcomes data for each Patient/Date combination.</description>
+    <columns>
+      <column columnName="OPTR">
+        <datatype>varchar</datatype>
+        <columnTitle>OPTR</columnTitle>
+        <description>Subject identifier</description>
+        <propertyURI>http://cpas.labkey.com/Study#ParticipantId</propertyURI>
+        <nullable>false</nullable>
+        <importAliases>
+          <importAlias>ptid</importAlias>
+        </importAliases>
+        <fk>
+          <fkDbSchema>study</fkDbSchema>
+          <fkTable>Patient</fkTable>
+          <fkColumnName>OPTR</fkColumnName>
+        </fk>
+        <scale>32</scale>
+      </column>
+      <column columnName="date">
+        <datatype>timestamp</datatype>
+        <columnTitle>Date</columnTitle>
+        <propertyURI>http://cpas.labkey.com/Study#VisitDate</propertyURI>
+        <conceptURI>http://cpas.labkey.com/Study#VisitDate</conceptURI>
+        <nullable>false</nullable>
+      </column>
+      <column columnName="dateOfFirstRecurrence">
+        <datatype>timestamp</datatype>
+        <columnTitle>Date Of First Recurrence</columnTitle>
+        <rangeURI>http://www.w3.org/2001/XMLSchema#dateTime</rangeURI>
+      </column>
+      <column columnName="typeOfFirstRecurrence">
+        <datatype>varchar</datatype>
+        <columnTitle>Type Of First Recurrence</columnTitle>
+        <rangeURI>http://www.w3.org/2001/XMLSchema#string</rangeURI>
+        <scale>4000</scale>
+      </column>
+      <column columnName="siteOfFirstRecurrence">
+        <datatype>varchar</datatype>
+        <columnTitle>Site Of First Recurrence</columnTitle>
+        <rangeURI>http://www.w3.org/2001/XMLSchema#string</rangeURI>
+        <scale>4000</scale>
+      </column>
+      <column columnName="cancerStatus">
+        <datatype>varchar</datatype>
+        <columnTitle>Cancer Status</columnTitle>
+        <rangeURI>http://www.w3.org/2001/XMLSchema#string</rangeURI>
+        <scale>4000</scale>
+      </column>
+      <column columnName="followupDate">
+        <datatype>timestamp</datatype>
+        <columnTitle>Followup Date</columnTitle>
+        <rangeURI>http://www.w3.org/2001/XMLSchema#dateTime</rangeURI>
+      </column>
+      <column columnName="statusAtFollowup">
+        <datatype>varchar</datatype>
+        <columnTitle>Status At Followup</columnTitle>
+        <rangeURI>http://www.w3.org/2001/XMLSchema#string</rangeURI>
+        <scale>4000</scale>
+      </column>
+      <column columnName="death">
+        <datatype>timestamp</datatype>
+        <columnTitle>Death</columnTitle>
+        <rangeURI>http://www.w3.org/2001/XMLSchema#dateTime</rangeURI>
+      </column>
+    </columns>
+    <tableTitle>Outcomes</tableTitle>
+  </table>
+  <table tableName="Variants" tableDbType="TABLE">
+    <description>Contains up to one row of Variants data for each Patient/Date combination.</description>
+    <columns>
+      <column columnName="OPTR">
+        <datatype>varchar</datatype>
+        <columnTitle>OPTR</columnTitle>
+        <description>Subject identifier</description>
+        <propertyURI>http://cpas.labkey.com/Study#ParticipantId</propertyURI>
+        <nullable>false</nullable>
+        <importAliases>
+          <importAlias>ptid</importAlias>
+        </importAliases>
+        <fk>
+          <fkDbSchema>study</fkDbSchema>
+          <fkTable>Patient</fkTable>
+          <fkColumnName>OPTR</fkColumnName>
+        </fk>
+        <scale>32</scale>
+      </column>
+      <column columnName="date">
+        <datatype>timestamp</datatype>
+        <columnTitle>Date</columnTitle>
+        <propertyURI>http://cpas.labkey.com/Study#VisitDate</propertyURI>
+        <conceptURI>http://cpas.labkey.com/Study#VisitDate</conceptURI>
+        <nullable>false</nullable>
+      </column>
+    </columns>
+    <tableTitle>Variants</tableTitle>
+  </table>
+  <table tableName="LabResults" tableDbType="TABLE">
+    <description>Contains up to one row of LabResults (Lab Results) data for each Patient/Date combination.</description>
+    <columns>
+      <column columnName="OPTR">
+        <datatype>varchar</datatype>
+        <columnTitle>OPTR</columnTitle>
+        <description>Subject identifier</description>
+        <propertyURI>http://cpas.labkey.com/Study#ParticipantId</propertyURI>
+        <nullable>false</nullable>
+        <importAliases>
+          <importAlias>ptid</importAlias>
+        </importAliases>
+        <fk>
+          <fkDbSchema>study</fkDbSchema>
+          <fkTable>Patient</fkTable>
+          <fkColumnName>OPTR</fkColumnName>
+        </fk>
+        <scale>32</scale>
+      </column>
+      <column columnName="date">
+        <datatype>timestamp</datatype>
+        <columnTitle>Date</columnTitle>
+        <propertyURI>http://cpas.labkey.com/Study#VisitDate</propertyURI>
+        <conceptURI>http://cpas.labkey.com/Study#VisitDate</conceptURI>
+        <nullable>false</nullable>
+      </column>
+      <column columnName="test">
+        <datatype>varchar</datatype>
+        <columnTitle>Test</columnTitle>
+        <rangeURI>http://www.w3.org/2001/XMLSchema#string</rangeURI>
+        <scale>4000</scale>
+      </column>
+      <column columnName="result">
+        <datatype>double</datatype>
+        <columnTitle>Result</columnTitle>
+        <rangeURI>http://www.w3.org/2001/XMLSchema#double</rangeURI>
+      </column>
+      <column columnName="version">
+        <datatype>varchar</datatype>
+        <columnTitle>Version</columnTitle>
+        <rangeURI>http://www.w3.org/2001/XMLSchema#string</rangeURI>
+        <scale>4000</scale>
+      </column>
+      <column columnName="comment">
+        <datatype>varchar</datatype>
+        <inputType>textarea</inputType>
+        <columnTitle>Comment</columnTitle>
+        <rangeURI>http://www.w3.org/2001/XMLSchema#multiLine</rangeURI>
+        <scale>4000</scale>
+      </column>
+    </columns>
+    <tableTitle>Lab Results</tableTitle>
+  </table>
+  <table tableName="immuneCellPhenotyping" tableDbType="TABLE">
+    <description>Contains up to one row of immuneCellPhenotyping (Immune Cell Phenotyping) data for each Patient/Date combination.</description>
+    <columns>
+      <column columnName="OPTR">
+        <datatype>varchar</datatype>
+        <columnTitle>OPTR</columnTitle>
+        <description>Subject identifier</description>
+        <propertyURI>http://cpas.labkey.com/Study#ParticipantId</propertyURI>
+        <nullable>false</nullable>
+        <importAliases>
+          <importAlias>ptid</importAlias>
+        </importAliases>
+        <fk>
+          <fkDbSchema>study</fkDbSchema>
+          <fkTable>Patient</fkTable>
+          <fkColumnName>OPTR</fkColumnName>
+        </fk>
+        <scale>32</scale>
+      </column>
+      <column columnName="date">
+        <datatype>timestamp</datatype>
+        <columnTitle>Date</columnTitle>
+        <propertyURI>http://cpas.labkey.com/Study#VisitDate</propertyURI>
+        <conceptURI>http://cpas.labkey.com/Study#VisitDate</conceptURI>
+        <nullable>false</nullable>
+      </column>
+      <column columnName="method">
+        <datatype>varchar</datatype>
+        <columnTitle>Method</columnTitle>
+        <rangeURI>http://www.w3.org/2001/XMLSchema#string</rangeURI>
+        <scale>4000</scale>
+      </column>
+      <column columnName="datePerformed">
+        <datatype>timestamp</datatype>
+        <columnTitle>Date Performed</columnTitle>
+        <rangeURI>http://www.w3.org/2001/XMLSchema#dateTime</rangeURI>
+      </column>
+      <column columnName="bCells">
+        <datatype>double</datatype>
+        <columnTitle>B-Cells</columnTitle>
+        <rangeURI>http://www.w3.org/2001/XMLSchema#double</rangeURI>
+      </column>
+      <column columnName="macrophages">
+        <datatype>double</datatype>
+        <columnTitle>Macrophages</columnTitle>
+        <rangeURI>http://www.w3.org/2001/XMLSchema#double</rangeURI>
+      </column>
+      <column columnName="cd4">
+        <datatype>double</datatype>
+        <columnTitle>CD4+ T-Cells</columnTitle>
+        <rangeURI>http://www.w3.org/2001/XMLSchema#double</rangeURI>
+      </column>
+      <column columnName="cd8">
+        <datatype>double</datatype>
+        <columnTitle>CD8+ T-Cells</columnTitle>
+        <rangeURI>http://www.w3.org/2001/XMLSchema#double</rangeURI>
+      </column>
+      <column columnName="cd45">
+        <datatype>double</datatype>
+        <columnTitle>% CD45+ Of Total</columnTitle>
+        <rangeURI>http://www.w3.org/2001/XMLSchema#double</rangeURI>
+      </column>
+    </columns>
+    <tableTitle>Immune Cell Phenotyping</tableTitle>
+  </table>
+  <table tableName="Images" tableDbType="TABLE">
+    <description>Contains up to one row of Images data for each Patient/Date combination.</description>
+    <columns>
+      <column columnName="OPTR">
+        <datatype>varchar</datatype>
+        <columnTitle>OPTR</columnTitle>
+        <description>Subject identifier</description>
+        <propertyURI>http://cpas.labkey.com/Study#ParticipantId</propertyURI>
+        <nullable>false</nullable>
+        <importAliases>
+          <importAlias>ptid</importAlias>
+        </importAliases>
+        <fk>
+          <fkDbSchema>study</fkDbSchema>
+          <fkTable>Patient</fkTable>
+          <fkColumnName>OPTR</fkColumnName>
+        </fk>
+        <scale>32</scale>
+      </column>
+      <column columnName="date">
+        <datatype>timestamp</datatype>
+        <columnTitle>Date</columnTitle>
+        <propertyURI>http://cpas.labkey.com/Study#VisitDate</propertyURI>
+        <conceptURI>http://cpas.labkey.com/Study#VisitDate</conceptURI>
+        <nullable>false</nullable>
+      </column>
+      <column columnName="type">
+        <datatype>varchar</datatype>
+        <columnTitle>Type</columnTitle>
+        <rangeURI>http://www.w3.org/2001/XMLSchema#string</rangeURI>
+        <scale>4000</scale>
+      </column>
+      <column columnName="name">
+        <datatype>varchar</datatype>
+        <columnTitle>Name</columnTitle>
+        <rangeURI>http://www.w3.org/2001/XMLSchema#string</rangeURI>
+        <scale>4000</scale>
+      </column>
+      <column columnName="omeroId">
+        <datatype>integer</datatype>
+        <columnTitle>Omero Id</columnTitle>
+        <rangeURI>http://www.w3.org/2001/XMLSchema#int</rangeURI>
+        <measure>true</measure>
+      </column>
+    </columns>
+    <tableTitle>Images</tableTitle>
+  </table>
+  <table tableName="Demographics" tableDbType="TABLE">
+    <description>Contains up to one row of Demographics data for each Patient.</description>
+    <columns>
+      <column columnName="OPTR">
+        <datatype>varchar</datatype>
+        <columnTitle>OPTR</columnTitle>
+        <description>Subject identifier</description>
+        <propertyURI>http://cpas.labkey.com/Study#ParticipantId</propertyURI>
+        <nullable>false</nullable>
+        <importAliases>
+          <importAlias>ptid</importAlias>
+        </importAliases>
+        <fk>
+          <fkDbSchema>study</fkDbSchema>
+          <fkTable>Patient</fkTable>
+          <fkColumnName>OPTR</fkColumnName>
+        </fk>
+        <scale>32</scale>
+      </column>
+      <column columnName="date">
+        <datatype>timestamp</datatype>
+        <columnTitle>Date</columnTitle>
+        <propertyURI>http://cpas.labkey.com/Study#VisitDate</propertyURI>
+        <conceptURI>http://cpas.labkey.com/Study#VisitDate</conceptURI>
+        <nullable>false</nullable>
+      </column>
+      <column columnName="firstName">
+        <datatype>varchar</datatype>
+        <columnTitle>First Name</columnTitle>
+        <rangeURI>http://www.w3.org/2001/XMLSchema#string</rangeURI>
+        <scale>4000</scale>
+      </column>
+      <column columnName="lastName">
+        <datatype>varchar</datatype>
+        <columnTitle>Last Name</columnTitle>
+        <rangeURI>http://www.w3.org/2001/XMLSchema#string</rangeURI>
+        <scale>4000</scale>
+      </column>
+      <column columnName="mrn">
+        <datatype>varchar</datatype>
+        <columnTitle>Mrn</columnTitle>
+        <rangeURI>http://www.w3.org/2001/XMLSchema#string</rangeURI>
+        <scale>4000</scale>
+      </column>
+      <column columnName="birth">
+        <datatype>timestamp</datatype>
+        <columnTitle>Birth</columnTitle>
+        <rangeURI>http://www.w3.org/2001/XMLSchema#dateTime</rangeURI>
+      </column>
+      <column columnName="gender">
+        <datatype>varchar</datatype>
+        <columnTitle>Gender</columnTitle>
+        <rangeURI>http://www.w3.org/2001/XMLSchema#string</rangeURI>
+        <scale>4000</scale>
+      </column>
+      <column columnName="consentStatus">
+        <datatype>varchar</datatype>
+        <columnTitle>Consent Status</columnTitle>
+        <rangeURI>http://www.w3.org/2001/XMLSchema#string</rangeURI>
+        <scale>4000</scale>
+      </column>
+      <column columnName="consentedDate">
+        <datatype>timestamp</datatype>
+        <columnTitle>Consented Date</columnTitle>
+        <rangeURI>http://www.w3.org/2001/XMLSchema#dateTime</rangeURI>
+      </column>
+      <column columnName="death">
+        <datatype>timestamp</datatype>
+        <columnTitle>Death</columnTitle>
+        <rangeURI>http://www.w3.org/2001/XMLSchema#dateTime</rangeURI>
+      </column>
+    </columns>
+    <tableTitle>Demographics</tableTitle>
+  </table>
+  <table tableName="Events" tableDbType="TABLE">
+    <description>Contains up to one row of Events data for each Patient/Date combination.</description>
+    <columns>
+      <column columnName="OPTR">
+        <datatype>varchar</datatype>
+        <columnTitle>OPTR</columnTitle>
+        <description>Subject identifier</description>
+        <propertyURI>http://cpas.labkey.com/Study#ParticipantId</propertyURI>
+        <nullable>false</nullable>
+        <importAliases>
+          <importAlias>ptid</importAlias>
+        </importAliases>
+        <fk>
+          <fkDbSchema>study</fkDbSchema>
+          <fkTable>Patient</fkTable>
+          <fkColumnName>OPTR</fkColumnName>
+        </fk>
+        <scale>32</scale>
+      </column>
+      <column columnName="date">
+        <datatype>timestamp</datatype>
+        <columnTitle>Date</columnTitle>
+        <propertyURI>http://cpas.labkey.com/Study#VisitDate</propertyURI>
+        <conceptURI>http://cpas.labkey.com/Study#VisitDate</conceptURI>
+        <nullable>false</nullable>
+      </column>
+      <column columnName="type">
+        <datatype>varchar</datatype>
+        <columnTitle>Type</columnTitle>
+        <rangeURI>http://www.w3.org/2001/XMLSchema#string</rangeURI>
+        <scale>4000</scale>
+      </column>
+    </columns>
+    <tableTitle>Events</tableTitle>
+  </table>
+</tables>
