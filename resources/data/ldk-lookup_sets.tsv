@@ -1,2 +1,26 @@
 setname	label	keyfield	titleColumn
-method_types	Method Types	value
+ca199_version	CA199 Version	value
+differentiation	Differentiation	value
+endtype	End Type	value
+gemcitabine_sensitivity	Gemcitabine Sensitivity	value
+gender	Gender	value
+hybrid_capture_bait	Hybrid Capture Bait	value
+hybrid_capture_protocol	Hybrid Capture Protocol	value
+immune_phenotyping_method	Immume Phenotyping Method	value
+library_construction_protocol	Library Construction Protocol	value
+nucleic_acid_extraction_product	Nucleic Acid Extraction Product	value
+organoid_outcomes	Organoid Outcomes	value
+research_type	Research Type	value
+sample_location	Sample Location	value
+sample_organism	Sample Organism	value
+sample_origin_tissue	Sample Origin Tissue	value
+sample_preparation_method	Sample Preparation Method	value
+sample_source	Sample	Source	value
+sample_status	Sample Status	value
+sequencing_site	Sequencing Site	value
+stage	Stage	value
+treatment_type	Treatment Type	value
+tumor_grade	Tumor Grade	value
+tumor_normal	Tumor/Normal	value
+tumor_type	Tumor Type	value
+yes_no	Yes/No	value

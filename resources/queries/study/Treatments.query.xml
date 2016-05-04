@@ -1,0 +1,14 @@
+<query xmlns="http://labkey.org/data/xml/query">
+    <metadata>
+        <tables xmlns="http://labkey.org/data/xml">
+            <table tableName="" tableDbType="TABLE">
+                <tableTitle>Treatments</tableTitle>
+                <!--if you include this on a table, it will apply standard configuration-->
+                <javaCustomizer>org.labkey.bcc.query.BCCCustomizer</javaCustomizer>
+                <columns>
+
+                </columns>
+            </table>
+        </tables>
+    </metadata>
+</query>
