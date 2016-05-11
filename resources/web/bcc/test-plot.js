@@ -31,7 +31,7 @@ $(document).ready(function()
     //********************
     // Main Routine
 
-    $.getJSON(LABKEY.ActionURL.getContextPath() + '/bcc/ttb_plot_data_sources.json', function(response)
+    $.getJSON(LABKEY.ActionURL.getContextPath() + '/bcc/data_sources.json', function(response)
         {
             console.log("got json file");
             var fields = response;
@@ -42,12 +42,13 @@ $(document).ready(function()
         })
     .fail(function(err)
         {
-            console.log("jqXHR.readyState: " + jqXHR.readyState);
-            console.log("jqXHR.status " + jqXHR.status);
-            console.log("jqXHR.statusText " + jqXHR.statusText);
-            console.log("jqXHR.responseText " + jqXHR.responseText);
-            console.log("error_textStatus: " + error_textStatus);
-            console.log(errorThrown + "<br/>");
+            //console.log("jqXHR.readyState: " + jqXHR.readyState);
+            //console.log("jqXHR.status " + jqXHR.status);
+            //console.log("jqXHR.statusText " + jqXHR.statusText);
+            //console.log("jqXHR.responseText " + jqXHR.responseText);
+            //console.log("error_textStatus: " + error_textStatus);
+            console.log("error" + "<br/>");
+            console.log(err);
         })
     .always(function()
         {
@@ -686,16 +687,6 @@ $(document).ready(function()
         console.log("y values");
         console.log(timeline.y);
 
-        h1 = document.createElement("h1");
-        console.log("plotting " + timeline.name);
-        console.log("adding trace for " + timeline.name);
-        //console.log(pp(timeline));
-        console.log(timeline);
-        h1.innerHTML = "<h1>TIMELINE FOR " + timeline.name + "</h1>";
-        document.body.appendChild(h1);
-        document.body.appendChild(prettyPrint(timeline));
-        Plotly.addTraces(plot_container, [timeline]);
-
         console.log("adding layout for " + timeline.name);
         //console.log(pp(layout));
         console.log(layout);
@@ -708,6 +699,18 @@ $(document).ready(function()
         document.body.appendChild(h1);
         document.body.appendChild(prettyPrint(layout));
         Plotly.relayout(plot_container, layout);
+
+
+        h1 = document.createElement("h1");
+        console.log("plotting " + timeline.name);
+        console.log("adding trace for " + timeline.name);
+        //console.log(pp(timeline));
+        console.log(timeline);
+        h1.innerHTML = "<h1>TIMELINE FOR " + timeline.name + "</h1>";
+        document.body.appendChild(h1);
+        document.body.appendChild(prettyPrint(timeline));
+        Plotly.addTraces(plot_container, [timeline]);
+
 
         console.log(plot_container.layout);
 
@@ -1076,3 +1079,20 @@ var layout_template= function()
     },
     this.position= 0;
 };
+
+
+
+/*
+tableName	schema	eventDisplayName
+BiopsyTable	lists	Biopsy
+BloodDrawTable	lists	BloodDraw
+DiagnosisTable	lists	Diagnosis
+ImagingTable	lists	Imaging
+TreatmentTable	lists	Treatment
+WeightTable	lists	Weight
+PancNextPanelTable	lists	PancNextPanel
+CA199Table	lists	CA19-9
+OutcomesTable	lists	Outcomes
+OncoLogTreatmentTable	lists	Treatments
+TumorSizeTable	lists	TumorSize
+*/
