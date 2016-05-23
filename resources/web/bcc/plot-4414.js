@@ -1,460 +1,404 @@
-function plot()
+/*jslint browser: true, white: true, nomen: true, sloppy: true, stupid: true, vars: true, indent: 4, maxerr: 999*/
+
+function plot(selected_OPTR)
 {
-    console.log("in plot-4414");
+    console.log("in plot");
 
-    selected_OPTR = 4414;
+    var annotation_makers = {};
+    var fields = [];
+    var plot_data = {};
+    var trace = {};
+    var traces = [];
+    var layouts = [];
+    var yaxis = {};
+    var layout = {};
+    var schema = {};
+    var annotation_maker;
+    var y_key = "";
+    var event_domain = [];
+    var series_domain = [];
+    var max_domain = 1.0;
+    var num_events = 0;
+    var num_series = 0;
+    var series_axis_position = 0;
+    var trace_mode;
+    var event_axis_height_increment = 0.05;
+    var series_axis_position_increment = 0.07;
+    var ranges = {};
+    
+    var tables_to_plot = 
+    [
+     	"DiagnosisTable",
+     	"BloodDrawTable",
+     	"TreatmentTable",
+     	"OncoLogTreatmentTable",
+     	//"ImagingTable",
+     	"SampleTable",
+     	"CA199Table",
+     	"TumorSizeTable",
+     	"WeightTable"
+    ];
 
-    var xy_temp;
-    xy_temp = getDataFromJS
-    (
-        "CA199Table",
-        {x: "date",y: "ca199"},
-        {key: "optr",value: selected_OPTR}
-    );
-
-    var trace1 =
+    $.each(tables_to_plot, function(index, table_name)
     {
-        x: xy_temp.x,
-        y: xy_temp.y,
-        text: xy_temp.y,
-        hoverinfo:"x+y+name",
-        name: 'CA199',
-        type: 'scatter',
-        mode: 'lines+markers',
-        marker:
+    	schema = table_schema[table_name];
+    	//console.log(schema);
+    	if (schema.Type == "Event")
         {
-            size: 9,
-            color: "#FFA500"
+            num_events += 1;
         }
-    };
-
-    var yaxis1 =
-    {
-        "title": "CA199",
-        "titlefont":
+        else if (schema.Type == "Series")
         {
-            size: 12,
-            color: '#FFA500'
-        },
-        "domain": [0, 0.8],
-        "showgrid": true,
-        "side": "left",
-        "nticks": 7,
-        "showline": true
-    };
-
-    var layout1 =
-    {
-        yaxis1: yaxis1,
-        hovermode: "closest"
-    };
-
-    xy_temp = getDataFromJS
-    (
-        "TumorSizeTable",
-        {x: "date",y: "sizeaxis1"},
-        {key: "optr",value: selected_OPTR}
-    );
-
-    var trace2 =
-    {
-        x: xy_temp.x,
-        y: xy_temp.y,
-        text: xy_temp.y,
-        hoverinfo:"x+y+name",
-        name: 'Tumor Size',
-        yaxis: 'y2',
-        type: 'scatter',
-        mode: "lines+markers",
-        marker:
-        {
-            size: 9,
-            color: "#808000"
+            num_series += 1;
         }
-    };
+    });
+    
+    var series_domain = [0, 1.0 - event_axis_height_increment*num_events];
+    //console.log("series_domain");
+    //console.log(series_domain);
+    
+    var num_markers = tables_to_plot.length;
+    var marker_colors = makeMarkerColors(10, 350, 50, 50, num_markers);
+    //console.log("marker colors");
+    //console.log(marker_colors);
 
-    var yaxis2 =
-    {
-        "title": 'Tumor Size',
-        "titlefont":
-        {
-            size: 12,
-            color: '#808000'
-        },
-        "domain": [0, 0.85],
-        "showgrid": true,
-        "gridcolor":
-        {
-            color: 'rgb(148, 103, 189)'
-        },
-        "overlaying": 'y1',
-        "side": 'right',
-        "nticks": 7,
-        "showline": true
-    };
-
-    var layout2 =
-    {
-        yaxis2: yaxis2,
-        hovermode: "closest"
-    };
-
-    xy_temp = getDataFromJS
-    (
-        "TreatmentTable",
-        {
-            x: "date",
-            value: "type"
-        },
-        {
-            key: "optr",
-            value: selected_OPTR
-        }
-    );
-
-    console.log("treatment type");
-    console.log(xy_temp.value);
-
-    trace3 =
-    {
-        x: xy_temp.x,
-        y: xy_temp.y,
-        text: xy_temp.value,
-        //hoverinfo: "x+text",
-        name: 'Treatment',
-        yaxis: 'y3',
-        type: 'scatter',
-        mode: "markers",
-        marker:
-        {
-            size: 9,
-            color: "#800000"
-        }
-    }
-
-    var yaxis3 =
-    {
-        "titlefont":
-        {
-            size: 12,
-            color: '#800000'
-        },
-        "domain": [0.9, 0.95],
-        "showgrid": false,
-        "overlaying": 'y2',
-        "showline": false,
-        "showticklabels": false,
-        "zeroline": true
-    };
-
-    var layout3 =
-    {
-        yaxis3: yaxis3,
-        hovermode: "closest"
-    };
-
-    xy_temp = getDataFromJS
-    (
-        "BloodDrawTable",
-        {
-            x: "date"
-        },
-        {
-            key: "optr",
-            value: selected_OPTR
-        }
-    );
-
-    trace4 = {
-        x: xy_temp.x,
-        y: xy_temp.y,
-        text: new Array(xy_temp.x.length).fill(""),
-        name: 'Blood Draw',
-        yaxis: 'y4',
-        type: 'scatter',
-        mode: "markers",
-        marker:
-        {
-            size: 9,
-            color: "#FDD017"
-        }
-    }
-
-    var yaxis4 = {
-        "titlefont":
-        {
-            size: 12,
-            color: '#FDD017'
-        },
-        "domain": [0.95, 1.0],
-        "showgrid": false,
-        "overlaying": 'y3',
-        "showline": false,
-        "showticklabels": false,
-        "zeroline": true,
-    };
-
-    var layout4 = {
-        yaxis4: yaxis4,
-        hovermode: "closest"
-    };
-
-    xy_temp = getDataFromJS("OncoLogTreatmentTable", {x:"date", value:"type"}, {key:"optr", value: selected_OPTR});
-
-    console.log("oncolog xy_temp");
-    console.log(xy_temp);
-
-    trace5 =
-    {
-        x: xy_temp.x,
-        y: xy_temp.y,
-        text: xy_temp.value,
-        //hoverinfo:"x+text",
-        name: 'OncoLog',
-        yaxis: 'y5',
-        type: 'scatter',
-        mode: "markers",
-        marker:{size: 9, color: "#800080"}
-    }
-
-    var yaxis5 =
-    {
-        "titlefont":
-        {
-          size: 12,
-          color: '#800080'
-        },
-        "domain": [0.95, 1],
-        "showgrid": false,
-        "overlaying": 'y4',
-        "showline": false,
-        "showticklabels": false,
-        "zeroline": true,
-    };
-
-    var layout5 =
-    {
-        yaxis5: yaxis5,
-        hovermode: "closest"
-    };
-
+/*
     // start out with empty plot
     Plotly.newPlot("graph", [],
     {
-        title: "Multiple Y-Axis Plot",
-        height: 600
+        title: "Patient: " + selected_OPTR,
+        height: 800
     });
+*/
 
-    //Plotly.relayout("graph", layout5);
-    //Plotly.addTraces("graph", [trace5]);
-
-    Plotly.relayout("graph", layout4);
-    Plotly.addTraces("graph", [trace4]);
-
-    Plotly.relayout("graph", layout3);
-    Plotly.addTraces("graph", [trace3]);
-
-    Plotly.relayout("graph", layout1);
-    Plotly.addTraces("graph", [trace1]);
-
-    Plotly.relayout("graph", layout2);
-    Plotly.addTraces("graph", [trace2]);
-
-    myPlot = document.getElementById('graph');
-
-    myPlot.on('plotly_click', function(data)
+    //console.log("table_schema");
+    //console.log(table_schema);
+    
+    //console.log("Object.keys(table_schema)");
+    //console.log(Object.keys(table_schema));
+    //table_names = Object.keys(table_schema);
+    //console.log("table_names");
+    //console.log(table_names);
+    
+    var base_layout = 
     {
-        //console.log(data);
-
-        var point = data.points[0];
-
-        console.log("point");
-        console.log(point);
-
-        console.log("point.pointNumber: " + point.pointNumber);
-        //console.log("x[point.pointNumber]: " + x[point.pointNumber]);
-
-        Object.keys(point).forEach(function(value, key)
+    	height: 800,
+    	hovermode: 'closest', 
+    	xaxis: 
+    	{
+    		position: 0,
+    		domain: [series_axis_position_increment*(num_series-1), 1],
+    		type: "date", 
+    		showline: true,
+    		nticks: 12,
+    		tickangle: 45,
+    		linewidth: 2
+    	}
+    };
+    
+    var layout = base_layout;
+    
+    var table_name;
+    var plot_number;
+    var num_tables = tables_to_plot.length;
+    
+    for (var i = 0 ; i < num_tables ; i ++)
+    {
+    	plot_number = i + 1;
+    	console.log(plot_number);
+    	table_name = tables_to_plot[i];
+    	
+        console.log("plotting table " + plot_number + ": " + table_name);
+        schema = table_schema[table_name];
+        
+        var units = "";
+        if ("Units" in schema)
         {
-            console.log(key + ": " + value);
-        });
+        	units = " (" + schema.Units + ")";
+        }
+        var name = schema.DisplayName + units;
+        
+        //console.log(table_name + " schema");
+        //console.log(schema);
+        fields = getFields(table_name);
+        //console.log(table_name + " fields");
+        //console.log(fields);
+        
+        plot_data = getDataFromJS
+        (
+            table_name,
+            fields,
+            {key: "optr", value: selected_OPTR}
+        );
+        
+        //console.log("plot_data for " + table_name);
+        //console.log(plot_data);
 
-        console.log("point.x " + point.x);
-        console.log("point.y " + point.y);
-        var name = point.fullData.name;
-        console.log("name " + point.fullData.name);
-        console.log("point.xaxis.d2l(point.x) " + point.xaxis.d2l(point.x))
+        var annotation_maker = getAnnotationMaker(table_name, plot_data, selected_OPTR);
+        //console.log("name for annotation maker " + name);
+        annotation_makers[name] = annotation_maker;
+        //console.log(plot_data.date);
+        
+        
+        var yaxisname_modifier = plot_number>1 ? plot_number : "";
 
-        x_datetime = new Date(point.xaxis.d2l(point.x));
-        console.log("x_datetime: " + x_datetime);
-        x_datestring = x_datetime.toLocaleDateString('en-US');
-        console.log("x_datestring: " + x_datestring);
-
-        var yref = point.yaxis._id;
-        console.log("yref: " + yref);
-
-        text = point.fullData.text[point.pointNumber];
-        console.log("text " + text);
-
-        var newAnnotation =
+        if (schema.Type == "Event")
         {
-            x: point.x,
-            y: point.y,
-            yref: yref,
-            arrowhead: 8,
-            ax: 0,
-            ay: -80,
-            bgcolor: 'rgba(255, 255, 255, 0.9)',
-            arrowcolor: point.fullData.marker.color,
-            font:
+            y_key = "dummy";
+            trace_mode = "markers";
+        }
+        else
+        {
+            y_key = fields[1];
+            trace_mode = "lines+markers";
+            
+            var y = plot_data[y_key].map(parseFloat);
+            y_range = getRange(y, 1);
+            ranges["yaxis" + yaxisname_modifier] = y_range;
+            //console.log("y_range");
+            //console.log(y_range);
+            
+        }
+        
+        //console.log("y_key " + y_key);
+        
+        //console.log("plot_data.date");
+        //console.log(plot_data.date);
+
+        //console.log("plot_data['ykey']");
+        //console.log(plot_data[y_key]);
+
+        trace =
+        {
+            x: plot_data.date,
+            y: plot_data[y_key],
+            name: name,
+            text: getText(annotation_maker, plot_data.date.length),
+            hoverinfo: "name+text",
+            type: 'scatter',
+            mode: trace_mode,
+            marker:
             {
-                size: 12
+                size: 10,
+                color: marker_colors[plot_number - 1],
+                symbol: plot_number
             },
-            bordercolor: point.fullData.marker.color,
-            borderwidth: 3,
-            borderpad: 4,
-            text: '<b>Patient: </b>' + selected_OPTR + '<br>' + '<b>Date: </b>' +
-                x_datestring + '<br>' + '<b>' + name + ': </b>' + text + '<br>'
+            yaxis: "y" + yaxisname_modifier
         };
-
-        var divid = document.getElementById('graph');
-        var newIndex = (divid.layout.annotations || [])
-            .length;
-
-        // delete instead if clicked twice
-        if (newIndex)
+        
+        console.log("trace" + plot_number);
+        console.log(trace);
+        console.log("trace.yaxis");
+        console.log(trace.yaxis);
+        trace.yaxis = "y" + yaxisname_modifier;
+        console.log("trace.yaxis");
+        console.log(trace.yaxis);
+        traces.push(trace);
+        
+        yaxis =
         {
-            var foundCopy = false;
-            divid.layout.annotations.forEach(function(ann, sameIndex)
+            titlefont:
             {
-                if (ann.text === newAnnotation.text)
-                {
-                    Plotly.relayout(
-                        'graph',
-                        'annotations[' + sameIndex + ']',
-                        'remove'
-                    );
-
-                    foundCopy = true;
-
-                }
-            });
-
-            if (foundCopy)
-            {
-                return;
-            }
-
+                size: 12,
+                color: marker_colors[plot_number - 1]
+            },
+            side: "left",
+            color: marker_colors[plot_number - 1],
+            linecolor: marker_colors[plot_number-1],
+            showline: true
+        };
+        
+        if (schema.Type == "Series")
+        {
+            yaxis.position = series_axis_position;
+            series_axis_position += series_axis_position_increment;
+            
+            //console.log("trying to set range for yaxisname " + yaxisname);
+            //console.log(y_range);
+            yaxis.range = y_range;
+            yaxis.domain = series_domain;
+            yaxis.overlaying = "y" + num_tables;
+            yaxis.title = schema.DisplayName + units;
+            yaxis.nticks = 7;
+            yaxis.showgrid = false;
+            yaxis.showline = true;
+            yaxis.showticklabels = true;
+            //yaxis.zeroline = true;
+            yaxis.gridcolor = marker_colors[plot_number];
+        }
+        else
+        {
+        	console.log("got event");
+        	console.log("table name " + table_name);
+            event_domain = [max_domain - event_axis_height_increment*0.9, max_domain];
+            max_domain -= event_axis_height_increment;
+            //console.log("max domain " + max_domain);
+            console.log("domain");
+            console.log(event_domain);
+            
+            yaxis.autorange = "true";
+            yaxis.domain = event_domain;
+            yaxis.nticks = 0;
+            yaxis.showgrid = false;
+            yaxis.showline = false;
+            yaxis.showticklabels = false;
+            yaxis.position = series_axis_position_increment*num_series;
+            delete yaxis.range;
+            
         }
 
-        Plotly.relayout(
-            'graph',
-            'annotations[' + newIndex + ']',
-            newAnnotation
-        );
+        //console.log("setting layout for axis " + yaxisname);
+        //var layout = base_layout;
+        layout["yaxis" + yaxisname_modifier] = yaxis;
+        //console.log("layout[" + yaxisname + "]");
+        //console.log(layout[yaxisname]);
+        //console.log("layout");
+        //console.log(layout);
+        //console.log("layout[yaxisname].range");
+        //console.log(layout[yaxisname].range);
+              
+        //Plotly.relayout('graph', layout);
+        //Plotly.addTraces('graph', [trace]);
 
-    })
-    .on('plotly_clickannotation', function(event, data)
+    }
+    
+    //delete layout.yaxis.overlaying
+    layout["yaxis" + num_tables].overlaying = false;
+    
+//    traces[0].yaxis="y";
+//    traces[1].yaxis="y2";
+//    console.log("traces[1].yaxis");
+//    console.log(traces[1].yaxis);
+        
+    Plotly.newPlot("graph", traces, layout);
+    
+    g = document.getElementById('graph');
+    console.log("g.layout");
+    console.log(g.layout);
+    console.log("g.data");
+    console.log(g.data);
+    
+    a = 10;
+    
+    replot = function(plot=g)
     {
-        Plotly.relayout(
-            'graph',
-            'annotations[' + newIndex + ']',
-            newAnnotation
-        );
-    });
+        Plotly.redraw(plot);
+    }
+    
+    
+    /*
+    console.log("ranges");
+    console.log(ranges);
+    
+    for (var ax in ranges)
+    {
+    	console.log("setting range for axis " + ax + " to");
+    	console.log(ranges[ax]);
+    	
+    	g.layout[ax].range = ranges[ax];
+    }
+	*/
+    
+    myPlot = document.getElementById('graph');
+
+    myPlot
+	    .on('plotly_click', function(data)
+	    {
+	        makeAnnotations(data, annotation_makers);
+	    })
+	    .on('plotly_clickannotation', function(event, data)
+	    {
+	        Plotly.relayout
+	        (
+	            'graph',
+	            'annotations[' + newIndex + ']',
+	            newAnnotation
+	        );
+	    });
 
 }
 
-function getDataFromJS(table_name, fields, filter)
+function getFields(table_name)
 {
-    console.log("in getEventDataFromJS");
-    console.log("table_name " + table_name + " fields");
-    console.log(fields);
-    console.log("filter");
-    console.log(filter);
-
-    var selected_items = [];
-    var xy_data = {
-        x: [],
-        y: [],
-        value: []
-    };
-    data_list = data_sources[table_name].objects;
-    //console.log("data_list");
-    //console.log(data_list);
-
-
-    $.each(data_list, function(index, item)
-    {
-        //console.log("tablename " + table_name + " index :" + index + " item: ");
+    console.log("getting fields for table " + table_name);
+        
+    var fields = [];
+    
+    $.each(table_schema[table_name].Fields, function(index, item){
+        
+        //console.log("index: " + index + "item");
         //console.log(item);
-        //console.log("filter.key " + filter.key + " filter.value " + filter.value);
-        //console.log(item[filter.key] == filter.value);
-        //console.log(fields.x + " item[fields.x] " + item[fields.x] + " " + fields.y + " item[fields.y] " + item[fields.y]);
-        if (item[filter.key] == filter.value)
-        {
-            selected_items.push(item);
-            //xy_data.x.push(item[fields.x]);
-            //xy_data.y.push(item[fields.y]);
-        }
+        fields.push(item.FieldName);
     });
+    
+    //console.log("fields");
+    //console.log(fields);
+    
+    return fields;
+}
 
-    // Some data seems to have "Date" while other data hs "date".
-    // Normalize date attribute name.
-    var date_field = "";
-    var has_date = false;
-    if (fields.x == "date")
+function getText(annotation_maker, N)
+{
+    var text = [];
+    
+    var i;
+    for (i = 0 ; i < N ; i++)
     {
-        date_field = "date";
-        has_date = true;
+        text.push(annotation_maker(i));
     }
-    if (fields.x == "Date")
-    {
-        date_field = "Date";
-        has_date = true;
-    }
+    
+    return text;
+}
 
-    // Sort data by date
-    if (has_date)
-    {
-        selected_items.sort(function(d1, d2)
-        {
-            return new Date(d1[date_field]) - new Date(d2[date_field]);
-        });
-    }
+function makeMarkerColors(hue_start, hue_end, saturation, value, steps)
+{
+	var hue = 0;
+  var i = 0;
+  var color_text = "";
+  
+  var color_texts = [];
+  
+  for (i = 0 ; i < steps ; i++)
+  {
+  	hue = hue_start + i*(hue_end - hue_start)/steps;
+    //console.log("hue: " + hue);
+  	color_text = "hsl(" +
+      hue + ", " + 
+      saturation + "%, " + 
+      value + "%)";
+    //console.log("color_text");
+    //console.log(color_text);
+    
+    color_texts.push(color_text);
+    
+	var el = $('<div></div>');
+   	el.attr('class', 'color-spot').attr('id', color_text);
+    el.css({"background-color": color_text, "height": "20px", "width": "20px"});
+    
+    el.appendTo('#color-spots');
+    //console.log(el[0].outerHTML);
+    
+  }
 
-    console.log("selected_items");
-    console.log(selected_items);
+	return color_texts;
 
-    $.each(selected_items, function(index, item)
-    {
-        if ('x' in fields)
-        {
-            xy_data.x.push(item[fields.x]);
-        }
+}
 
-        if ('y' in fields)
-        {
-            xy_data.y.push(item[fields.y]);
-        }
-        else
-        {
-            xy_data.y.push(0);
-        }
+function getRange(x, fudge)
+{
+	var min = x[0];
+	var max = x[0];
+	for (y of x)
+	{
+		if (y<min)
+		{
+			min = y;
+		}
+		if (y>max)
+		{
+			max = y;
+		}
+	}
 
-        if ('value' in fields)
-        {
-            xy_data.value.push(item[fields.value]);
-        }
-        else
-        {
-            xy_data.value.push(item[fields.y]);
-        }
-
-    });
-
-    console.log("xy_data");
-    console.log(xy_data);
-
-    return xy_data;
+	return [min-fudge, max+fudge];
 }

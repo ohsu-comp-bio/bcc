@@ -3,6 +3,10 @@
         <dependency path="bcc/Ext4ClientApi" />
         <dependency path="bcc/all-data.js"/>
         <dependency path="bcc/plotly.min.js"/>
+        <dependency path="bcc/get-data-from-js.js" />
+        <dependency path="bcc/meta.js" />
+        <dependency path="bcc/make-annotations.js" />
+        <dependency path="bcc/annotation-makers.js" />
         <dependency path="bcc/plot-4414.js" />
     </dependencies>
 </view>

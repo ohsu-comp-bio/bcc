@@ -1,0 +1,62 @@
+4395
+Diagnosis 0
+Outcomes Table 0
+Treatment Table 4
+Blood draw 1
+CA199 many
+OncoLog 0
+Tumor size many
+
+4414
+Diagnosis 1
+Outcomes table 1
+Treatment Table 0
+Blood draw 0
+CA199 0
+OncoLog 2
+Tumor Size 1
+
+Tumor size
+* date
+* tumorid
+* sizeaxis1
+
+Diagnosis
+* date
+* initialdiagnosis
+* diagnosisfromhistologycode
+* grade
+* tumorsize
+
+OncoLogTreatment
+* date
+* type
+
+Outcomes
+* Date
+* Date Of First Recurrence
+* Type Of First Recurrence
+* First Site Of Distant Recurrence
+* Cancer Status
+* Followup Date
+* Status At Followup
+* Date Of Death
+
+TreatmentTable
+* date
+* type
+
+BloodDrawTable
+* date
+
+CA199
+* date
+* CA199
+
+
+
+
+
+
+
+

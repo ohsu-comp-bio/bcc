@@ -287,7 +287,7 @@ function plot()
 
         x_datetime = new Date(point.xaxis.d2l(point.x));
         console.log("x_datetime: " + x_datetime);
-        x_datestring = x_datetime.toLocaleDateString('en-US');
+
         console.log("x_datestring: " + x_datestring);
 
         var yref = point.yaxis._id;
