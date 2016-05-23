@@ -8,7 +8,7 @@
 var console = require("console");
 
 console.log("** evaluating: " + this['javax.script.filename']);
-console.log(row.CA199Raw)
+//console.log(row.CA199Raw) // 'row' not defined at this point in code!
 
 function beforeInsert(row, errors) {
 
