@@ -1,12 +1,12 @@
 <view xmlns="http://labkey.org/data/xml/view" title="Patient 4414 Plot" frame="portal">
     <dependencies>
         <dependency path="bcc/Ext4ClientApi" />
-        <dependency path="bcc/all-data.js"/>
-        <dependency path="bcc/plotly.min.js"/>
+        <dependency path="bcc/plotly-latest.min.js"/>
         <dependency path="bcc/get-data-from-js.js" />
         <dependency path="bcc/meta.js" />
         <dependency path="bcc/make-annotations.js" />
         <dependency path="bcc/annotation-makers.js" />
         <dependency path="bcc/plot-4414.js" />
+        <dependency path="https://rawgit.com/abalter/d8aa93bae5158a68c95028e032bbc62b/raw/f3b552fbdbd940d1b2acc31ffd3519c1470ca0a6/all-data.js" />
     </dependencies>
 </view>

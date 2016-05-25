@@ -1,5 +1,4 @@
 /*jslint browser: true, white: true, sloppy: true, indent: 4, maxerr: 999*/
-alert("here");
 function makeAnnotations(point_data, annotation_makers)
 {
     //console.log("in makeAnnotatoins");

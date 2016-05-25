@@ -1,5 +1,4 @@
 /*jslint browser: true, white: true, nomen: true, sloppy: true, vars: true, indent: 4, maxerr: 999*/
-alert("here");
 
 function getAnnotationMaker(table_name, plot_data, OPTR)
 {
