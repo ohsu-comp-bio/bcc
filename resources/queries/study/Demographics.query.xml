@@ -9,14 +9,25 @@
                     <column columnName="mrn">
                         <columnTitle>MRN</columnTitle>
                         <phi>PHI</phi>
+                        <protected>true</protected>
                     </column>
                     <column columnName="firstName">
                         <columnTitle>First Name</columnTitle>
                         <phi>PHI</phi>
+                        <protected>true</protected>
                     </column>
                     <column columnName="lastName">
                         <columnTitle>Last Name</columnTitle>
                         <phi>PHI</phi>
+                        <protected>true</protected>
+                    </column>
+                    <column columnName="birth">
+                        <phi>PHI</phi>
+                        <protected>true</protected>
+                    </column>
+                    <column columnName="death">
+                        <phi>PHI</phi>
+                        <protected>true</protected>
                     </column>
                 </columns>
             </table>
