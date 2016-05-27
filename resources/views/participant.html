@@ -82,8 +82,8 @@
                     queryName: queryName,
                     label: title,
                     reportType: 'query',
-                    subjectFieldName: 'patientId',
-                    dateFieldName: 'patientId'
+                    subjectFieldName: LABKEY.getModuleProperty('Study', 'subject').columnName,
+                    dateFieldName: 'date'
                 };
             }
         });
