@@ -2,5 +2,10 @@
     <dependencies>
         <dependency path="Ext4ClientApi" />
         <dependency path="ldk/LDKApi.lib.xml"/>
+
+        <dependency path="internal/jQuery"/>
+        <dependency path="https://cdn.plot.ly/plotly-latest.min.js"/>
+
+        <dependency path="bcc/panel/PatientSummaryPanel.js"/>
     </dependencies>
 </view>
