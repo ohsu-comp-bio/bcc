@@ -38,11 +38,17 @@
 
             loadReports: function(){
                 this.reports = [
-                    this.getReportConfig('samples', 'study', 'Clinical', 'Samples'),
-                    this.getReportConfig('malignancies', 'study', 'Clinical', 'Malignancies'),
-                    this.getReportConfig('demographics', 'study', 'Clinical', 'Demographics'),
-                    this.getReportConfig('wgs', 'study', 'Genomics', 'Whole Genome Data'),
-                    this.getReportConfig('rnaseq', 'study', 'Genomics', 'RNA-Seq')
+                    this.getReportConfig('Lab Results', 'study', 'Clinical', 'Lab Results'),
+                    this.getReportConfig('Procedures', 'study', 'Clinical', 'Procedures'),
+                    this.getReportConfig('Diagnoses', 'study', 'Clinical', 'Diagnoses'),
+                    this.getReportConfig('Treatments', 'study', 'Clinical', 'Treatments'),
+                    this.getReportConfig('Tumor Size', 'study', 'Clinical', 'Tumor Size'),
+                    this.getReportConfig('Weight', 'study', 'Clinical', 'Weight'),
+                    this.getReportConfig('Outcomes', 'study', 'Clinical', 'Outcomes'),
+                    this.getReportConfig('Variants', 'study', 'Genomics', 'Variants'),
+                    this.getReportConfig('Immune Cell Phenotyping', 'study', 'Research', 'Immune Cell Phenotyping'),
+                    this.getReportConfig('Images', 'study', 'Imaging', 'Images'),
+                    this.getReportConfig('Events', 'study', 'Clinical', 'Events')
                 ];
 
                 this.reports = LDK.Utils.sortByProperty(this.reports, 'name', false);
@@ -56,7 +62,15 @@
                 inputValue: LDK.panel.SingleSubjectFilterType.filterName,
                 label: 'Single Participant',
                 hidden: true,
-                initialValue: participantId
+                filterContext: {
+                    subjects: [participantId]
+                },
+                getSubjects: function(){
+                    return [participantId];
+                },
+                checkValid: function(){
+                    return true;
+                }
             }],
 
             getReportConfig: function(queryName, schemaName, category, title){

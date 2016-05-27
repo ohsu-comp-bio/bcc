@@ -44,7 +44,7 @@ public class BCCCustomizer extends AbstractTableCustomizer
             if (studySchema != null)
             {
                 //this FK will reference PatientDemographics, specifically pointing to OPTR, which is not the true PK of that dataset
-                ti.getColumn("OPTR").setFk(new QueryForeignKey(studySchema, ti.getUserSchema().getContainer(), "PatientDemographics", "OPTR", "OPTR"));
+                ti.getColumn("OPTR").setFk(new QueryForeignKey(studySchema, ti.getUserSchema().getContainer(), "PatientDemographics", "OPTR", "OPTR", true));
             }
         }
 
@@ -71,7 +71,7 @@ public class BCCCustomizer extends AbstractTableCustomizer
         if (ti.getColumn("somaticMutations") == null)
         {
             UserSchema us = getUserSchema(ti, "study");
-            ColumnInfo col17 = getWrappedIdCol(us, ti, "somaticMutations", "demographicsSomicMutations");
+            ColumnInfo col17 = getWrappedIdCol(us, ti, "somaticMutations", "demographicsSomaticMutations");
             col17.setLabel("Somatic Mutation Summary");
             col17.setDescription("Provides summaries of somatic mutation data");
             col17.setDisplayWidth("150");
