@@ -151,13 +151,6 @@
                                     });
                                 }
                                 else {
-                                    var data = [{
-                                        x: x,
-                                        y: y,
-                                        mode: 'lines+markers',
-                                        type: 'scatter'
-                                    }];
-
                                     tab.add(Ext4.create('LDK.panel.ContentResizingPanel', {
                                         plotConfig: tab.report.plotConfig,
                                         width: '100%',
@@ -166,37 +159,35 @@
                                         listeners: {
                                             scope: this,
                                             afterRender: function(panel){
-                                                Plotly.plot(
-                                                        panel.renderTarget,
-                                                        data,
-                                                        {
-                                                            title: panel.plotConfig.title,
-                                                            displayModeBar: true,
-                                                            xaxis: {
-                                                                type: 'date',
-                                                                tickvals: x,
-                                                                //TODO: make this more general
-                                                                ticktext: x.map(function(x){
-                                                                    return Ext4.isDate(x) ? Ext4.Date.format(x, 'Y-m-d') : x;
-                                                                }),
-                                                                tickfont: {
-                                                                    color: "rgb(107, 107, 107)",
-                                                                    size: 11
-                                                                },
-                                                                ticks: "outside",
-                                                                tickwidth: 1,
-                                                                tickangle: 40,
-                                                                ticklen: 5,
-                                                                showticklabels: true,
-                                                                showline: false,
-                                                                showgrid: true,
-                                                                autorange: true,
-                                                            },
-                                                            yaxis: {
-                                                                showgrid: true,
-                                                            }
-                                                        }
-                                                );
+                                                var data = [{
+                                                    x: x,
+                                                    y: y,
+                                                    mode: 'lines+markers',
+                                                    type: 'scatter'
+                                                }];
+
+                                                Plotly.plot(panel.renderTarget, data, {
+                                                    title: panel.plotConfig.title,
+                                                    //autosize: false,
+                                                    //width: '100%', //why not working?
+                                                    displayModeBar: true,
+                                                    xaxis: {
+                                                        type: 'date',
+                                                        tickformat: '%x',
+                                                        //tickmode: 'auto',
+                                                        ticks: 'outside',
+                                                        tickwidth: 1,
+                                                        tickangle: 40,
+                                                        ticklen: 5,
+                                                        showticklabels: true,
+                                                        showline: false,
+                                                        showgrid: true,
+                                                        autorange: true
+                                                    },
+                                                    yaxis: {
+                                                        showgrid: true
+                                                    }
+                                                });
                                             }
                                         }
                                     }));
