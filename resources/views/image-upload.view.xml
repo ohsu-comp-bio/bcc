@@ -1,0 +1,9 @@
+<view xmlns="http://labkey.org/data/xml/view" title="Image Upload" frame="portal">
+    <dependencies>
+        <dependency path="Ext4ClientApi" />
+        <dependency path="bcc/ckeditor/ckeditor.js" />
+        <dependency path="bcc/ckeditor/config.js" />
+        <dependency path="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js" />
+        <dependency path="bcc/image-upload.js" />
+    </dependencies>
+</view>

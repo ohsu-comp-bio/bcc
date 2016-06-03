@@ -1,0 +1,9 @@
+<view xmlns="http://labkey.org/data/xml/view" title="Dashboard 1" frame="portal">
+    <dependencies>
+        <dependency path="Ext4ClientApi" />
+        <dependency path="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js" />
+        <dependency path="https://code.jquery.com/ui/1.12.0-rc.2/jquery-ui.min.js" />
+        <dependency path="https://code.jquery.com/ui/1.12.0-rc.2/themes/smoothness/jquery-ui.css" />
+        <dependency path="bcc/dashboard-1.js" />
+    </dependencies>
+</view>

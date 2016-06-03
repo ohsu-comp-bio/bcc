@@ -86,6 +86,7 @@ function plot(selected_OPTR)
     		size: 36
     	},
     	height: 600,
+    	width: 800,
     	hovermode: 'closest',
     	xaxis:
     	{
