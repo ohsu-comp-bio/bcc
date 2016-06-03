@@ -1,0 +1,23 @@
+<query xmlns="http://labkey.org/data/xml/query">
+    <!--any config here will be applied to all datasets-->
+    <!--this can be a useful way to set quasi-global column config or other settings.-->
+    <!--it's an alternate way to accomplish what's done in BCCCustomizer-->
+    <metadata>
+        <tables xmlns="http://labkey.org/data/xml">
+            <table tableName="" tableDbType="TABLE">
+                <javaCustomizer>org.labkey.bcc.query.BCCCustomizer</javaCustomizer>
+                <columns>
+
+                </columns>
+                <buttonBarOptions position="both" includeStandardButtons="true">
+                    <item text="View Specimens" hidden="true">
+                        <originalText>View Specimens</originalText>
+                    </item>
+                    <item text="Manage Dataset" hidden="true">
+                        <originalText>Manage Dataset</originalText>
+                    </item>
+                </buttonBarOptions>
+            </table>
+        </tables>
+    </metadata>
+</query>

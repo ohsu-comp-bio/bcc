@@ -9,6 +9,7 @@ import org.labkey.api.ldk.table.AbstractTableCustomizer;
 import org.labkey.api.query.QueryForeignKey;
 import org.labkey.api.query.QueryService;
 import org.labkey.api.query.UserSchema;
+import org.labkey.api.study.DatasetTable;
 
 /**
  * Created by bimber on 11/18/2015.
@@ -63,6 +64,15 @@ public class BCCCustomizer extends AbstractTableCustomizer
         {
             ti.getColumn("objectid").setHidden(true);
         }
+
+        if (ti instanceof DatasetTable)
+        {
+            customizeDataset((DatasetTable)ti);
+        }
+    }
+
+    private void customizeDataset(DatasetTable ti)
+    {
 
     }
 

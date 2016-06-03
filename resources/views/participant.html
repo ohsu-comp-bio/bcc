@@ -37,13 +37,30 @@
             },
 
             loadReports: function(){
-                this.reports = [
+                this.reports = [{
+                    label: 'Summary',
+                    name: 'patientSummary',
+                    id: 'patientSummary',
+                    category: 'Clinical',
+                    reportType: 'js',
+                    subjectFieldName: LABKEY.getModuleProperty('Study', 'subject').columnName,
+                    dateFieldName: 'date',
+                    jsHandler: function(tabPanel, tab){
+                        tab.add(Ext4.create('BCC.panel.PatientSummaryPanel', {
+                            filterArray: tabPanel.getCombinedFilterArray(tab)
+                        }));
+                    }
+                },
                     this.getReportConfig('Lab Results', 'study', 'Clinical', 'Lab Results'),
                     this.getReportConfig('Procedures', 'study', 'Clinical', 'Procedures'),
                     this.getReportConfig('Diagnoses', 'study', 'Clinical', 'Diagnoses'),
                     this.getReportConfig('Treatments', 'study', 'Clinical', 'Treatments'),
                     this.getReportConfig('Tumor Size', 'study', 'Clinical', 'Tumor Size'),
                     this.getReportConfig('Weight', 'study', 'Clinical', 'Weight'),
+                    this.getSimpleXYPlot('Weight', 'study', 'Clinical', 'Weight Graph', {
+                        x: 'date',
+                        y: 'weight'
+                    }),
                     this.getReportConfig('Outcomes', 'study', 'Clinical', 'Outcomes'),
                     this.getReportConfig('Variants', 'study', 'Genomics', 'Variants'),
                     this.getReportConfig('Immune Cell Phenotyping', 'study', 'Research', 'Immune Cell Phenotyping'),
@@ -78,12 +95,106 @@
                     id: queryName,
                     name: queryName,
                     category: category,
-                    schemaName: 'study',
+                    schemaName: schemaName,
                     queryName: queryName,
                     label: title,
                     reportType: 'query',
                     subjectFieldName: LABKEY.getModuleProperty('Study', 'subject').columnName,
                     dateFieldName: 'date'
+                };
+            },
+
+            getSimpleXYPlot: function(queryName, schemaName, category, title, plotConfig){
+                if (!plotConfig || !plotConfig.x || !plotConfig.y){
+                    Ext4.Msg.alert('Error', 'Must provide the plotConfig and X/Y field names');
+                    return;
+                }
+
+                return {
+                    id: 'plot-' + queryName,
+                    name: queryName,
+                    category: category,
+                    schemaName: schemaName,
+                    queryName: queryName,
+                    label: title,
+                    reportType: 'js',
+                    subjectFieldName: LABKEY.getModuleProperty('Study', 'subject').columnName,
+                    dateFieldName: 'date',
+                    plotConfig: plotConfig,
+                    jsHandler: function(tabPanel, tab){
+                        var filterArray = tabPanel.getCombinedFilterArray(tab);
+
+                        LABKEY.Query.selectRows({
+                            schemaName: tab.report.schemaName,
+                            queryName: tab.report.queryName,
+                            filterArray: filterArray,
+                            scope: this,
+                            failure: LDK.Utils.getErrorCallback(),
+                            success: function(results){
+                                console.log(results);
+                                var x = [];
+                                var y = [];
+
+                                LDK.ConvertUtils.parseDatesInSelectRowsResults(results);
+
+                                Ext4.Array.forEach(results.rows, function(row){
+                                    if (Ext4.isDefined(row[tab.report.plotConfig.x]) && Ext4.isDefined(row[tab.report.plotConfig.y])){
+                                        x.push(row[tab.report.plotConfig.x]);
+                                        y.push(row[tab.report.plotConfig.y]);
+                                    }
+                                }, this);
+
+                                if (!results.rows.length){
+                                    tab.add({
+                                        html: 'No records found',
+                                        border: false
+                                    });
+                                }
+                                else {
+                                    tab.add(Ext4.create('LDK.panel.ContentResizingPanel', {
+                                        plotConfig: tab.report.plotConfig,
+                                        width: '100%',
+                                        minHeight: 50,
+                                        border: false,
+                                        listeners: {
+                                            scope: this,
+                                            afterRender: function(panel){
+                                                var data = [{
+                                                    x: x,
+                                                    y: y,
+                                                    mode: 'lines+markers',
+                                                    type: 'scatter'
+                                                }];
+
+                                                Plotly.plot(panel.renderTarget, data, {
+                                                    title: panel.plotConfig.title,
+                                                    //autosize: false,
+                                                    //width: '100%', //why not working?
+                                                    displayModeBar: true,
+                                                    xaxis: {
+                                                        type: 'date',
+                                                        tickformat: '%x',
+                                                        //tickmode: 'auto',
+                                                        ticks: 'outside',
+                                                        tickwidth: 1,
+                                                        tickangle: 40,
+                                                        ticklen: 5,
+                                                        showticklabels: true,
+                                                        showline: false,
+                                                        showgrid: true,
+                                                        autorange: true
+                                                    },
+                                                    yaxis: {
+                                                        showgrid: true
+                                                    }
+                                                });
+                                            }
+                                        }
+                                    }));
+                                }
+                            }
+                        });
+                    }
                 };
             }
         });
