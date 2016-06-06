@@ -4,15 +4,22 @@ $(document).ready(function()
 {
     console.log("document ready");
     configureDashboardMain();
-
+    configurePortletArea();
+    $('#portlet-area').empty();
+    console.log($('#portlet-area').html());
     loadPage();
 
-    configurePortletArea();
 });
 
 function configureDashboardMain()
 {
     console.log("configuring dashbaord");
+
+    $('#container').parents().closest('div').css('padding-top', '0');
+    $('#container').parents().closest('labkey-wp-body').css('padding-top', '0', 'margin', '0');
+    $('#container').parents().closest('tr').css('padding-top', '0', 'margin', '0');
+    $('#container').parents().closest('td').css('padding-top', '0', 'margin', '0');
+    $('#container').parents().closest('tbody').css('padding-top', '0', 'margin', '0');
 
     $('#header').css
     ({
@@ -98,17 +105,18 @@ function addPortlet()
 function configurePortlet($portlet)
 {
     var $portlet_toggle = $portlet.find('.portlet-toggle');
+    /*
     if ($portlet.is(':visible'))
-    {
-        $portlet_toggle.removeClass('fa-plus').addClass('fa-minus');
-    }
-    else
     {
         $portlet_toggle.removeClass('fa-minus').addClass('fa-plus');
     }
+    else
+    {
+        $portlet_toggle.removeClass('fa-plus').addClass('fa-minus');
+    }
+    */
 
     console.log($portlet);
-
 
     // Add toggle event
     $portlet.find(".portlet-toggle").on('click', function()
@@ -118,7 +126,7 @@ function configurePortlet($portlet)
 
             if ($portlet_toggle.hasClass('fa-minus'))
             {
-                console.log("has minues");
+                console.log("has minus");
                 $portlet_toggle.removeClass('fa-minus').addClass('fa-plus');
             }
             else if ($portlet_toggle.hasClass('fa-plus'))
@@ -285,30 +293,22 @@ function loadPage()
             console.log("loading page html");
             console.log(html);
 
-            if (html === null)
+            if (html === null || html == "null")
             {
                 return;
             }
 
             $('#portlet-area').html(html);
 
-            configurePortletArea();
+            //configurePortletArea();
 
-            var portlets = $('#portlet');
-            var portlets = document.getElementsByClassName('portlet');
-            console.log("portlets");
-            console.log(portlets)
-            console.log(portlets.length);
-            if(portlets.length > 0)
+            console.log("configuring portlets");
+            $('.portlet').each(function()
             {
-                console.log("portlets to configure");
-                $('.portlet').each(function()
-                {
-                    console.log("configuring portlet");
-                    console.log($(this));
-                    configurePortlet($(this));
-                });
-            }
+                console.log("configuring portlet");
+                console.log($(this));
+                configurePortlet($(this));
+            });
 
             //displayData(html);
         },
