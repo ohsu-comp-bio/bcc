@@ -1,4 +1,13 @@
+portlet_data = {};
+
 $(document).ready(function()
+{
+
+    configurePortlets();
+
+});
+
+function configurePortlets()
 {
     $( ".column" ).sortable({
         connectWith: ".column",
@@ -20,22 +29,28 @@ $(document).ready(function()
         icon.toggleClass( "ui-icon-minusthick ui-icon-plusthick" );
         icon.closest( ".portlet" ).find( ".portlet-content" ).toggle();
     });
+}
+
+function serializePortlets()
+{
 
     $('#serialize').on('click', function()
     {
-        var sorted = $( ".column" ).sortable( "serialize", { key: "sort" } );
+        //var sorted = $( ".column" ).sortable( "serialize", { key: "sort" } );
         //console.log(sorted);
         var sortedIDs = $( ".column" ).sortable( "toArray" );
-        //console.log(sortedIDs);
-        var ids = $('.column').children('.portlet').map(function(index, item)
+        sortedIDs.each(function(index, item)
         {
-            return item.id;
+
         });
+        //console.log(sortedIDs);
+        //var ids = $('.column').children('.portlet').map(function(index, item)
+        //{//
+        //    return item.id;
+        //});
         console.log(ids);
     });
 
-});
-
-
+}
 
 //http://stackoverflow.com/questions/10441751/how-to-minimize-a-jquery-ui-portlet-by-default

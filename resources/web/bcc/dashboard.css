@@ -1,0 +1,71 @@
+body {
+    width: 100%;
+}
+
+#container {
+    width: 100%;
+}
+
+#header {
+    margin: 5em 0em 0em 0em;
+}
+
+.ui-widget-header {
+    padding: 0.2em 0.3em;
+    margin: "0 0 0 0";
+}
+
+.portlet-header {
+    padding: 0.2em 0.3em;
+    margin-bottom: 0;
+    position: relative;
+}
+
+.portlet-content {
+    padding: 0.4em;
+    display: none;
+}
+
+/*
+.portlet-placeholder {
+    border: 1px dotted black;
+    background-color: grey;
+    margin: 0 1em 1em 0;
+    height: 50px;
+}
+*/
+
+#serialize {
+    clear: both;
+    display: block;
+}
+
+.ui-icon {
+    float: right;
+}
+
+#dashboard-title {
+    display: inline;
+}
+
+#configure-dashboard {
+    float: left;
+    margin: auto 0 auto 0;
+}
+
+.hidden {
+    display: none
+}
+
+.portlet {
+    width: 100%
+}
+
+.column {
+    width: 100%;
+    float: left;
+}
+
+#editor {
+    width: 100%;
+}
