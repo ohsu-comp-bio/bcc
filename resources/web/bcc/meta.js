@@ -1,4 +1,7 @@
 /*jslint browser: true, white: true, indent: 4, maxerr: 999*/
+
+console.log("meta loaded");
+
 var colors = 
 [
     "#FAEBD7",
@@ -14,6 +17,13 @@ var colors =
     "#FFD700"
 ];
 
+
+// This is a keyed structure of tables including the name of the table,
+// how it should be displayed, and what fields it has. The type is either
+// "Event" for data that does not have a numerical value, so is plotted
+// on a timeline as opposed "Value" data that is plotted on a time series.
+
+
 var table_schema = 
 {
     DiagnosisTable:
@@ -23,19 +33,19 @@ var table_schema =
         DisplayName: "Diagnosis",
         Fields:
         [   {
-                FieldName: "date",
+                FieldName: "Date",
                 DisplayName: "Date"
             },
             {
-                FieldName: "initialdiagnosis",
-                DisplayName: "Initial Diagnosos"
+                FieldName: "InitialDiagnosis",
+                DisplayName: "Initial Diagnosis"
             },
             {
-                FieldName: "diagnosisfromhistologycode",
+                FieldName: "DiagnosisFromHistologyCode",
                 DisplayName: "Histology"
             },
             {
-                FieldName: "grade",
+                FieldName: "Grade",
                 DisplayName: "Grade"
             },
             {
@@ -53,11 +63,11 @@ var table_schema =
         Fields: 
         [
             {
-                FieldName: "date",
+                FieldName: "Date",
                 DisplayName: "Date"
             },
             {
-                FieldName: "type",
+                FieldName: "Type",
                 DisplayName: "Type"
             },
             {
@@ -75,11 +85,11 @@ var table_schema =
         Fields: 
         [
             {
-                FieldName: "date",
+                FieldName: "Date",
                 DisplayName: "Date"
             },
             {
-                FieldName: "type",
+                FieldName: "Type",
                 DisplayName: "Type"
             },
             {
@@ -97,7 +107,7 @@ var table_schema =
         Fields: 
         [
             {
-                FieldName:"date",
+                FieldName:"Date",
                 DisplayName: "Date"
             }, 
             {
@@ -115,15 +125,15 @@ var table_schema =
         Fields: 
         [
             {
-                FieldName: "date",
+                FieldName: "Date",
                 DisplayName: "Date"
             }, 
             {
-                FieldName: "sampleprimarytype",
+                FieldName: "SamplePrimaryType",
                 DisplayName: "SampleType"
             },
             {
-                FieldName: "samplematchedtype",
+                FieldName: "SampleMatchedType",
                 DisplayName: "Type"
             },
             {
@@ -141,11 +151,11 @@ var table_schema =
         Fields: 
         [
             {
-                FieldName: "date",
+                FieldName: "Date",
                 DisplayName: "Date"
             }, 
             {
-                FieldName: "type",
+                FieldName: "Type",
                 DisplayName: "Type"
             },
             {
@@ -164,11 +174,11 @@ var table_schema =
         Fields: 
         [
             {
-                FieldName: "date",
+                FieldName: "Date",
                 DisplayName: "Date"
             }, 
             {
-                FieldName: "ca199",
+                FieldName: "CA199",
                 DisplayName: "CA19-9",
                 Units: "U/ml"
             }
@@ -184,11 +194,11 @@ var table_schema =
         Fields:
         [
             {
-                FieldName: "date",
+                FieldName: "Date",
                 DisplayName: "Date"
             }, 
             {
-                FieldName: "sizeaxis1",
+                FieldName: "SizeAxis1",
                 DisplayName: "Tumor Size",
                 Units: "mm"
             }
@@ -204,11 +214,11 @@ var table_schema =
         Fields:
         [
             {
-                FieldName: "date",
+                FieldName: "Date",
                 DisplayName: "Date"
             }, 
             {
-                FieldName: "weight",
+                FieldName: "Weight",
                 DisplayName: "Weight",
                 Units: "kg"
             } 

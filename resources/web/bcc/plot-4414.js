@@ -86,7 +86,7 @@ function plot(selected_OPTR)
     		size: 36
     	},
     	height: 600,
-    	width: 800,
+    	width: 1200,
     	hovermode: 'closest',
     	xaxis:
     	{
@@ -375,7 +375,7 @@ function getText(annotation_maker, N)
 
 function makeMarkerColors(hue_start, hue_end, saturation, value, steps)
 {
-	var hue = 0;
+    var hue = 0;
   var i = 0;
   var color_text = "";
 

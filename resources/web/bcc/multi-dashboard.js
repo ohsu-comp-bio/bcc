@@ -124,6 +124,9 @@ function configurePortlet($portlet)
             console.log("portlet toggle clicked");
             $portlet_toggle = $(this);
 
+            $portlet_toggle.toggleClass("fa-minus fa-plus");
+
+            /*
             if ($portlet_toggle.hasClass('fa-minus'))
             {
                 console.log("has minus");
@@ -134,6 +137,7 @@ function configurePortlet($portlet)
                 console.log("has plus");
                 $portlet_toggle.removeClass('fa-plus').addClass('fa-minus');
             }
+            */
 
             $(this).closest(".portlet").find(".portlet-content").toggle();
         });
@@ -168,20 +172,19 @@ function configurePortlet($portlet)
                 .css('border','');
 
             // Make sure content is showing and minus sign is showing
-            if ($portlet_toggle.hasClass('fa-minus'))
-            {
-                $portlet_toggle.removeClass('fa-minus').addClass('fa-plus');
-            }
-            else if ($portlet_toggle.hasClass('fa-plus'))
+            if ($portlet_toggle.hasClass('fa-plus'))
             {
                 $portlet_toggle.removeClass('fa-plus').addClass('fa-minus');
             }
 
+            $portlet_content.show();
+
+            /*
             if (!$portlet_content.is(':visible'))
             {
                 $portlet_content.show();
             }
-
+*/
             // toggle pencil/floppy
             $portlet.find('.edit').toggleClass("fa-pencil fa-floppy-o");
             CKEDITOR.instances['editor'].destroy();
@@ -205,6 +208,16 @@ function configurePortlet($portlet)
             $portlet.find('.portlet-content').toggle();
             // Make sure content is showing and minus sign is showing
             // Make sure content is showing and minus sign is showing
+
+            // Make sure content is showing and minus sign is showing
+            if ($portlet_toggle.hasClass('fa-plus'))
+            {
+                $portlet_toggle.removeClass('fa-plus').addClass('fa-minus');
+            }
+
+            $portlet_content.show();
+
+            /*
             if ($portlet_toggle.hasClass('fa-plus'))
             {
                 $portlet_toggle.toggleClass("fa-plus fa-minus");
@@ -213,6 +226,8 @@ function configurePortlet($portlet)
             {
                 $portlet_content.show();
             }
+            */
+
             // Toggle the edit/save icons
             $portlet.find('.edit').toggleClass("fa-pencil fa-floppy-o");
             // Instantiate the editor

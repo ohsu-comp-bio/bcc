@@ -1,10 +1,25 @@
 /*jslint browser: true, white: true, sloppy: true, indent: 4, maxerr: 999*/
+
+// Generates the annotations used for hovers and popups. These are allowed
+// minimal html tags like <b> and <i>
+
+// @point_data -- structure passed to click event callback
+// @annotation_makers -- a structure of callback functions
+//  to make annotations that is indexed by table name.
+//
+// The annotation making process is fairly complicated, and can
+// be simplified. But it is challenging because the click event
+// is handled by a callback, but Plotly does not pass in all
+// the information we would like to use in the annotation. So I
+// created the list of annotation_makers which are are function
+// closures that carry data from outside the scope of the event
+// callback into the click event handler.
 function makeAnnotations(point_data, annotation_makers)
 {
     //console.log("in makeAnnotatoins");
     //console.log(annotation_makers);
     
-    var point = point_data.points[0];
+    var point = point_data.points[0]; // contains the x and y values of the point
     
     //console.log("point");
     //console.log(point);
@@ -16,6 +31,7 @@ function makeAnnotations(point_data, annotation_makers)
     
     var name = point.fullData.name;
     //console.log("name: " + name);
+    
     var annotationMaker = annotation_makers[name];
     //console.log("annotationMaker");
     //console.log(annotationMaker);

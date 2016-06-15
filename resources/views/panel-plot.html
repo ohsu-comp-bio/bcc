@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+    <script>
+        base_url = LABKEY.ActionURL.getContextPath();
+        console.log("base url: " + base_url);
+  </script>
+
+</head>
+
+<body>
+<h1>Summary Plot</h1>
+<div id="graph"></div>
+<script>
+
+    var tables_to_plot =
+    [
+        "DiagnosisTable",
+        "BloodDrawTable",
+        "TreatmentTable",
+        "OncoLogTreatmentTable",
+        //"ImagingTable",
+        "SampleTable",
+        "CA199Table",
+        "TumorSizeTable",
+        "WeightTable"
+    ];
+
+    plotOPTR(tables_to_plot, "4395")
+
+</script>
+</body>
+
+</html>

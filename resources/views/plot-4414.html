@@ -8,79 +8,12 @@
         console.log("base url: " + base_url);
   </script>
 
-  <!--script>
-  
-    var selected_OPTR = 4414;
-    
-    $(document).ready(function()
-    {
-      console.log("document is ready");
-
-      $.when
-      (
-        $.getScript("https://rawgit.com/abalter/d8aa93bae5158a68c95028e032bbc62b/raw/f3b552fbdbd940d1b2acc31ffd3519c1470ca0a6/all-data.js"),
-        $.getScript("https://cdn.plot.ly/plotly-latest.min.js"),
-        $.getScript(base_url + "/bcc/get-data-from-js.js"),
-        $.getScript(base_url + "/bcc/meta.js"),
-        $.getScript(base_url + "/bcc/make-annotations.js"),
-        $.getScript(base_url + "/bcc/annotation-makers.js"),
-        $.getScript(base_url + "/bcc/plot-4414.js")
-      )
-      .done(function(all_data, plotly, get_data, make_annotation, annotation_makers, meta, plot_main)
-      {
-        console.log("all scripts loaded");
-        console.log(data_sources);
-        console.log("e all_data");
-        console.log(all_data);
-        console.log("e plotly");
-        console.log(plotly);
-        console.log("e get_data");
-        console.log(get_data);
-        console.log("e make_annotation");
-        console.log(make_annotation);
-        console.log("e annotation_makers");
-        console.log(annotation_makers);
-        console.log("e meta");
-        console.log(meta);
-        console.log("e plot_main");
-        console.log(plot_main);
-        //throw "exit";
-        plot(4414);
-
-        var g = document.getElementById('graph');
-        
-        function replot(plot=g)
-        {
-            Plotly.redraw(plot);
-        }
-        
-      })
-      .fail(function(all_data, plotly, get_data, make_annotation, annotation_makers, meta, plot_main)
-      {
-        console.log("e all_data");
-        console.log(all_data);
-        console.log("e plotly");
-        console.log(plotly);
-        console.log("e get_data");
-        console.log(get_data);
-        console.log("e make_annotation");
-        console.log(make_annotation);
-        console.log("e annotation_makers");
-        console.log(annotation_makers);
-        console.log("e meta");
-        console.log(meta);
-        console.log("e plot_main");
-        console.log(plot_main);
-      });
-      
-    });
-  </script-->
 </head>
 
 <body>
   <h1>Summary Plot</h1>
   <div id="graph"></div>
-  <script>plot(4414)</script>
+  <script>plot(4395)</script>
 </body>
 
 </html>
