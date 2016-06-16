@@ -50,7 +50,7 @@ function plot(tables_to_plot, selected_OPTR)
     var series_axis_position = 0;
     var trace_mode;
     var event_axis_height_increment = 0.07;
-    var series_axis_position_increment = 0.07;
+    var series_axis_position_increment = 0.1;
     var ranges = {};
 
 
@@ -97,7 +97,7 @@ function plot(tables_to_plot, selected_OPTR)
 
     var base_layout =
     {
-    	title: "<b>Patient OPTR: " + selected_OPTR + "</b>",
+    	title: "<b>OPTR: " + selected_OPTR + "</b>",
     	titlefont:
     	{
     		size: 36
@@ -111,6 +111,7 @@ function plot(tables_to_plot, selected_OPTR)
     		position: 0,
     		domain: [series_axis_position_increment*(num_series-1), 1],
     		type: "date",
+    		tickmode: "auto",
     		showline: true,
     		nticks: 12,
     		tickangle: 45,
@@ -121,7 +122,7 @@ function plot(tables_to_plot, selected_OPTR)
     		},
     		titlefont:
     		{
-    			size: 18
+    			size: 14
     		}
     	}
     };
@@ -204,16 +205,16 @@ function plot(tables_to_plot, selected_OPTR)
 
             trace =
             {
-                x: plot_data.date,
+                x: plot_data.Date,
                 y: plot_data[y_key],
                 name: name,
                 text: getText(annotation_maker, plot_data.Date.length),
-                hoverinfo: "name+text",
+                hoverinfo: "text",
                 type: 'scatter',
                 mode: trace_mode,
                 marker:
                 {
-                    size: 14,
+                    size: 12,
                     color: marker_colors[plot_number - 1],
                     symbol: plot_number
                 },
@@ -237,13 +238,13 @@ function plot(tables_to_plot, selected_OPTR)
             {
                 titlefont:
                 {
-                    size: 18,
+                    size: 14,
                     color: marker_colors[plot_number - 1]
                 },
                 ticklength: 10,
                 tickfont:
                 {
-                    size: 18,
+                    size: 14,
                     color: marker_colors[plot_number - 1]
                 },
                 side: "left",

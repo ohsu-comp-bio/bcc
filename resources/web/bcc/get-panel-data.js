@@ -100,9 +100,9 @@ function getTraceData(table_name, fields)
 {
     console.log("in getTraceData");
     console.log("table_name " + table_name + " fields");
-    console.log(fields);
-    console.log("table_schema:");
-    console.log(table_schema);
+    //console.log(fields);
+    //console.log("table_schema:");
+    //console.log(table_schema);
 
     var selected_items = [];
 
@@ -118,8 +118,8 @@ function getTraceData(table_name, fields)
         console.log("no data in data_sources");
         return [];
     }
-    console.log("data_list");
-    console.log(data_list);
+    //console.log("data_list");
+    //console.log(data_list);
     selected_items = data_list;
 
     /*
@@ -156,9 +156,11 @@ function getTraceData(table_name, fields)
     //console.log("has date: " + has_date);
 
     // Convert string dates to date objects.
-    $.each(data_list, function(index, object)
+    $.each(selected_items, function(index, object)
     {
-        data_list[index][date_field] = formatDate(data_list[index][date_field]);
+        //console.log("data_list[index][date_field] " + selected_items[index][date_field]);
+        selected_items[index][date_field] = formatDate(selected_items[index][date_field]);
+        //selected_items[index][date_field] = new Date(selected_items[index][date_field]);
     });
 
     // Sort data by date
@@ -196,15 +198,15 @@ function getTraceData(table_name, fields)
 
     });
 
-    console.log("plot_data right now");
-    console.log(plot_data);
+    //console.log("plot_data right now");
+    //console.log(plot_data);
 
     if (plot_data.Date.length == 0)
     {
         plot_data = [];
     }
 
-    console.log("plot_data from getTraceData");
+    console.log("plot_data from getTraceData for table " + table_name);
     console.log(plot_data);
 
     return plot_data;
