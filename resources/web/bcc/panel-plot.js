@@ -323,7 +323,7 @@ function plot(tables_to_plot, selected_OPTR)
                 yaxis.range = [0,50];
                 console.log("tumor size table " + table_name);
                 yaxis.title = "<b>Tumor Size (mm)</b>";
-                yaxis.position = 0.1;
+                yaxis.position = 0.2;
                 console.log("setting layout yaxis12 to yaxis");
                 layout["yaxis12"] = yaxis;
                 layout["yaxis12"].overlaying = false;
@@ -339,10 +339,18 @@ function plot(tables_to_plot, selected_OPTR)
                 }
                 else
                 {
+                    layout["xaxis"].domain = [0.2, 1];
                     layout["yaxis" + yaxisname_modifier].overlaying = false;
                 }
 
+                if (table_name == "CA199Table")
+                {
+                    layout["yaxis" + yaxisname_modifier].position = 0.1;
+                    layout["yaxis" + yaxisname_modifier].overlaying = "y12";
+                }
+
             }
+
 
             //console.log("layout[" + yaxisname + "]");
             //console.log(layout[yaxisname]);
