@@ -1,8 +1,8 @@
 data_sources = {};
 
-console.log("get-panel-data.js loaded");
-console.log("table_schema:");
-console.log(table_schema);
+//console.log("get-panel-data.js loaded");
+//console.log("table_schema:");
+//console.log(table_schema);
 
 function onFailure(errorInfo, options, responseObj)
 {
@@ -62,17 +62,17 @@ function createMultiQuery(tables_to_plot, optr)
         ];
 
         var fields = [];
-        console.log("Getting fields for table " + table_name);
-        console.log("table schema:");
-        console.log(table_schema[table_name]);
+        //console.log("Getting fields for table " + table_name);
+        //console.log("table schema:");
+        //console.log(table_schema[table_name]);
         $.each(table_schema[table_name].Fields, function(index, item){
             //console.log("index: " + index + "item");
             //console.log(item);
             fields.push(item.FieldName);
         });
 
-        console.log("the fields are:");
-        console.log(fields);
+        //console.log("the fields are:");
+        //console.log(fields);
 
         var config =
         {
@@ -206,8 +206,8 @@ function getTraceData(table_name, fields)
         plot_data = [];
     }
 
-    console.log("plot_data from getTraceData for table " + table_name);
-    console.log(plot_data);
+    //console.log("plot_data from getTraceData for table " + table_name);
+    //console.log(plot_data);
 
     return plot_data;
 

@@ -151,10 +151,10 @@ function plot(tables_to_plot, selected_OPTR)
 
         //console.log(table_name + " schema");
         //console.log(schema);
-        console.log("getting fields for table " + table_name);
+        //console.log("getting fields for table " + table_name);
         fields = getFields(table_name);
-        console.log(table_name + " fields");
-        console.log(fields);
+        //console.log(table_name + " fields");
+        //console.log(fields);
 
         if (data_sources.hasOwnProperty(table_name))
         {
@@ -273,13 +273,13 @@ function plot(tables_to_plot, selected_OPTR)
             }
             else
             {
-                console.log("got event");
-                console.log("table name " + table_name);
+                //console.log("got event");
+                //console.log("table name " + table_name);
                 event_domain = [max_domain - event_axis_height_increment*0.9, max_domain];
                 max_domain -= event_axis_height_increment;
                 //console.log("max domain " + max_domain);
-                console.log("domain");
-                console.log(event_domain);
+                //console.log("domain");
+                //console.log(event_domain);
 
                 yaxis.autorange = "true";
                 yaxis.domain = event_domain;
@@ -309,20 +309,20 @@ function plot(tables_to_plot, selected_OPTR)
         else
         {
             console.log("data_sources DOES NOT have own property " + table_name);
-            console.log("data sources:");
-            console.log(data_sources);
+            //console.log("data sources:");
+            //console.log(data_sources);
         }
 
     }
 
 
     //delete layout.yaxis.overlaying
-    console.log("setting overlaying");
-    console.log(layout);
-    console.log("yaxisname_modifier " + yaxisname_modifier);
-    console.log("num_tables " + num_tables);
+    //console.log("setting overlaying");
+    //console.log(layout);
+    //console.log("yaxisname_modifier " + yaxisname_modifier);
+    //console.log("num_tables " + num_tables);
     num_tables_plotted = Object.keys(data_sources).length;
-    console.log("num_tables_plotted " + num_tables_plotted);
+    //console.log("num_tables_plotted " + num_tables_plotted);
     layout["yaxis" + yaxisname_modifier].overlaying = false;
 
     //console.log("setting layout")

@@ -9,18 +9,18 @@ function getAnnotationMaker(table_name, plot_data, OPTR)
     
     function getGenericAnnotationText(point_number)
     {
-        console.log("getGenericAnnotationText");
-        console.log("table_name " + table_name);
-        console.log("plot_data");
-        console.log(plot_data);
-        console.log("OPTR " + OPTR);
-        console.log("point_number " + point_number);
-        console.log("table_schema");
-        console.log(table_schema);
+        //console.log("getGenericAnnotationText");
+        //console.log("table_name " + table_name);
+        //console.log("plot_data");
+        //console.log(plot_data);
+        //console.log("OPTR " + OPTR);
+        //console.log("point_number " + point_number);
+        //console.log("table_schema");
+        //console.log(table_schema);
         var fields = table_schema[table_name].Fields;
         
-        console.log("fields");
-        console.log(fields);
+        //console.log("fields");
+        //console.log(fields);
         
         var annotation_text = '<b>Patient: </b>' + OPTR + '<br />';
         
@@ -30,8 +30,8 @@ function getAnnotationMaker(table_name, plot_data, OPTR)
         
         $.each(fields, function(index, field_data){
             
-            console.log("field_data");
-            console.log(field_data);
+            //console.log("field_data");
+            //console.log(field_data);
             var display_name = field_data.DisplayName;
             var field_name = field_data.FieldName;
             var units = ("Units" in field_data) ? " " + field_data.Units : "";
@@ -42,7 +42,7 @@ function getAnnotationMaker(table_name, plot_data, OPTR)
                     '<b>' + display_name + '</b>: ' + 
                     plot_data[field_name][point_number] + 
                     units + '<br />';
-                console.log("annotation text: " + annotation_text);
+                //console.log("annotation text: " + annotation_text);
             }
             
             

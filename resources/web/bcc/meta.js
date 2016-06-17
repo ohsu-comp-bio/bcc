@@ -130,10 +130,32 @@ var table_schema =
             }, 
             {
                 FieldName: "SamplePrimaryType",
-                DisplayName: "SampleType"
+                DisplayName: "Primary Type"
             },
             {
                 FieldName: "SampleMatchedType",
+                DisplayName: "Matched Type"
+            },
+            {
+                FieldName: "dummy",
+                DisplayName: "dummy"
+            }
+        ]
+    },
+
+    BiopsyTable:
+    {
+        Type: "Event",
+        TableName: "BiopsyTable",
+        DisplayName: "Biopsy Table",
+        Fields:
+        [
+            {
+                FieldName: "Date",
+                DisplayName: "Date"
+            },
+            {
+                FieldName: "Type",
                 DisplayName: "Type"
             },
             {
@@ -142,7 +164,7 @@ var table_schema =
             }
         ]
     },
-    
+
     ImagingTable:
     {
         Type: "Event",
@@ -184,19 +206,39 @@ var table_schema =
             }
         ]
     },
-    
+
     TumorSizeTable:
     {
         Type: "Series",
         TableName: "TumorSizeTable",
-        DisplayName: "Tumor Size",
+        DisplayName: "Primary Tumor",
         Units: "mm",
         Fields:
         [
             {
                 FieldName: "Date",
                 DisplayName: "Date"
-            }, 
+            },
+            {
+                FieldName: "SizeAxis1",
+                DisplayName: "Primary Tumor",
+                Units: "mm"
+            }
+        ]
+    },
+
+    Met1SizeTable:
+    {
+        Type: "Series",
+        TableName: "Met1SizeTable",
+        DisplayName: "peripancreatic lymph node",
+        Units: "mm",
+        Fields:
+        [
+            {
+                FieldName: "Date",
+                DisplayName: "Date"
+            },
             {
                 FieldName: "SizeAxis1",
                 DisplayName: "Tumor Size",
@@ -204,7 +246,27 @@ var table_schema =
             }
         ]
     },
-    
+
+    Met2SizeTable:
+    {
+        Type: "Series",
+        TableName: "Met2SizeTable",
+        DisplayName: "portocaval lymph node",
+        Units: "mm",
+        Fields:
+        [
+            {
+                FieldName: "Date",
+                DisplayName: "Date"
+            },
+            {
+                FieldName: "SizeAxis1",
+                DisplayName: "Tumor Size",
+                Units: "mm"
+            }
+        ]
+    },
+
     WeightTable:
     {
         Type: "Series",
