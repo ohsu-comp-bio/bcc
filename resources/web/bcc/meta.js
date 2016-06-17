@@ -207,7 +207,7 @@ var table_schema =
         ]
     },
 
-    TumorSizeTable:
+    PrimaryTumorSizeTable:
     {
         Type: "Series",
         TableName: "TumorSizeTable",

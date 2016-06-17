@@ -109,7 +109,8 @@ function plot(tables_to_plot, selected_OPTR)
     	{
     		title: "<b>Date</b>",
     		position: 0,
-    		domain: [series_axis_position_increment*(num_series-1), 1],
+    		//domain: [series_axis_position_increment*(num_series-1), 1],
+    		domain: [0.1, 1],
     		type: "date",
     		tickmode: "auto",
     		showline: true,
@@ -230,6 +231,18 @@ function plot(tables_to_plot, selected_OPTR)
             console.log("trace.yaxis");
             console.log(trace.yaxis);
             trace.yaxis = "y" + yaxisname_modifier;
+            if
+                (
+                    table_name == "PrimaryTumorSizeTable" ||
+                    table_name == "Met1SizeTable" ||
+                    table_name == "Met2SizeTable"
+                )
+            {
+                console.log("tumor size table " + table_name);
+                console.log("setting trace yaxis to y12");
+                trace.yaxis = "y12";
+            }
+
             console.log("trace.yaxis");
             console.log(trace.yaxis);
             traces.push(trace);
@@ -255,14 +268,18 @@ function plot(tables_to_plot, selected_OPTR)
 
             if (schema.Type == "Series")
             {
-                yaxis.position = series_axis_position;
+                //yaxis.position = series_axis_position;
+                yaxis.position = 0;
                 series_axis_position += series_axis_position_increment;
 
                 //console.log("trying to set range for yaxisname " + yaxisname);
                 //console.log(y_range);
                 yaxis.range = y_range;
-                yaxis.domain = series_domain;
-                yaxis.overlaying = "y" + num_tables;
+                //yaxis.domain = series_domain;
+                yaxis.domain = [0,0.9]
+                //yaxis.overlaying = "y" + num_tables;
+                //yaxis.overlaying = "y12";
+                yaxis.overlaying = false;
                 yaxis.title = "<b>" + schema.DisplayName + units + "</b>";
                 yaxis.nticks = 7;
                 yaxis.showgrid = false;
@@ -280,9 +297,11 @@ function plot(tables_to_plot, selected_OPTR)
                 //console.log("max domain " + max_domain);
                 //console.log("domain");
                 //console.log(event_domain);
+                yaxis.overlaying = false;
 
                 yaxis.autorange = "true";
-                yaxis.domain = event_domain;
+                //yaxis.domain = event_domain;
+                yaxis.domain = [0.9, 1];
                 yaxis.nticks = 0;
                 yaxis.showgrid = false;
                 yaxis.showline = false;
@@ -294,7 +313,37 @@ function plot(tables_to_plot, selected_OPTR)
 
             console.log("setting layout for axis " + "yaxis" + yaxisname_modifier);
             //var layout = base_layout;
-            layout["yaxis" + yaxisname_modifier] = yaxis;
+            if
+                (
+                    table_name == "PrimaryTumorSizeTable" ||
+                    table_name == "Met1SizeTable" ||
+                    table_name == "Met2SizeTable"
+                )
+            {
+                yaxis.range = [0,50];
+                console.log("tumor size table " + table_name);
+                yaxis.title = "<b>Tumor Size (mm)</b>";
+                yaxis.position = 0.1;
+                console.log("setting layout yaxis12 to yaxis");
+                layout["yaxis12"] = yaxis;
+                layout["yaxis12"].overlaying = false;
+            }
+            else
+            {
+                console.log("non tumor size table " + table_name);
+                console.log("setting yaxis " + yaxisname_modifier);
+                layout["yaxis" + yaxisname_modifier] = yaxis;
+                if (schema.Type == "Series")
+                {
+                    layout["yaxis" + yaxisname_modifier].overlaying = "y12";
+                }
+                else
+                {
+                    layout["yaxis" + yaxisname_modifier].overlaying = false;
+                }
+
+            }
+
             //console.log("layout[" + yaxisname + "]");
             //console.log(layout[yaxisname]);
             //console.log("layout");
@@ -323,7 +372,8 @@ function plot(tables_to_plot, selected_OPTR)
     //console.log("num_tables " + num_tables);
     num_tables_plotted = Object.keys(data_sources).length;
     //console.log("num_tables_plotted " + num_tables_plotted);
-    layout["yaxis" + yaxisname_modifier].overlaying = false;
+    //layout["yaxis" + yaxisname_modifier].overlaying = false;
+    //layout["yaxis10"].overlaying = false;
 
     //console.log("setting layout")
     //layout["yaxis" + yaxisname_modifier].overlaying = false;
