@@ -276,7 +276,7 @@ function plot(tables_to_plot, selected_OPTR)
                 //console.log(y_range);
                 yaxis.range = y_range;
                 //yaxis.domain = series_domain;
-                yaxis.domain = [0,0.9]
+                yaxis.domain = [0,0.84]
                 //yaxis.overlaying = "y" + num_tables;
                 //yaxis.overlaying = "y12";
                 yaxis.overlaying = false;
@@ -301,7 +301,7 @@ function plot(tables_to_plot, selected_OPTR)
 
                 yaxis.autorange = "true";
                 //yaxis.domain = event_domain;
-                yaxis.domain = [0.9, 1];
+                yaxis.domain = [0.86, 1];
                 yaxis.nticks = 0;
                 yaxis.showgrid = false;
                 yaxis.showline = false;
