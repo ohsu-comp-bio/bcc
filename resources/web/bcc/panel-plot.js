@@ -49,28 +49,31 @@ function plot(tables_to_plot, selected_OPTR)
     var num_series = 0;
     var series_axis_position = 0;
     var trace_mode;
-    var event_axis_height_increment = 0.07;
-    var series_axis_position_increment = 0.1;
+    var event_axis_height_increment = 0.14;
+    var series_axis_position_increment = 0.14;
     var ranges = {};
 
 
     $.each(tables_to_plot, function(index, table_name)
     {
-    	schema = table_schema[table_name];
-    	//console.log(schema);
-    	if (schema.Type == "Event")
+        if (data_sources.hasOwnProperty(table_name))
         {
-            num_events += 1;
-        }
-        else if (schema.Type == "Series")
-        {
-            num_series += 1;
+            schema = table_schema[table_name];
+            //console.log(schema);
+            if (schema.Type == "Event")
+            {
+                num_events += 1;
+            }
+            else if (schema.Type == "Series")
+            {
+                num_series += 1;
+            }
         }
     });
 
     var series_domain = [0, 1.0 - event_axis_height_increment*num_events];
-    //console.log("series_domain");
-    //console.log(series_domain);
+    console.log("series_domain");
+    console.log(series_domain);
 
     var num_markers = tables_to_plot.length;
     var marker_colors = makeMarkerColors(10, 350, 50, 50, num_markers);
@@ -131,34 +134,34 @@ function plot(tables_to_plot, selected_OPTR)
     var layout = base_layout;
 
     var table_name;
-    var plot_number;
+    var plot_number = 0;
     var num_tables = tables_to_plot.length;
 
     for (var i = 0 ; i < num_tables ; i ++)
     {
-    	plot_number = i + 1;
-    	console.log(plot_number);
     	table_name = tables_to_plot[i];
-
-        console.log("plotting table " + plot_number + ": " + table_name);
-        schema = table_schema[table_name];
-
-        var units = "";
-        if ("Units" in schema)
-        {
-        	units = " (" + schema.Units + ")";
-        }
-        var name = schema.DisplayName + units;
-
-        //console.log(table_name + " schema");
-        //console.log(schema);
-        //console.log("getting fields for table " + table_name);
-        fields = getFields(table_name);
-        //console.log(table_name + " fields");
-        //console.log(fields);
-
         if (data_sources.hasOwnProperty(table_name))
         {
+            plot_number++;
+            console.log(plot_number);
+
+            console.log("plotting table " + plot_number + ": " + table_name);
+            schema = table_schema[table_name];
+
+            var units = "";
+            if ("Units" in schema)
+            {
+                units = " (" + schema.Units + ")";
+            }
+            var name = schema.DisplayName + units;
+
+            //console.log(table_name + " schema");
+            //console.log(schema);
+            //console.log("getting fields for table " + table_name);
+            fields = getFields(table_name);
+            //console.log(table_name + " fields");
+            //console.log(fields);
+
             console.log("data_sources has own property " + table_name);
             plot_data = getTraceData
             (
@@ -275,8 +278,8 @@ function plot(tables_to_plot, selected_OPTR)
                 //console.log("trying to set range for yaxisname " + yaxisname);
                 //console.log(y_range);
                 yaxis.range = y_range;
-                //yaxis.domain = series_domain;
-                yaxis.domain = [0,0.84]
+                yaxis.domain = series_domain;
+                //yaxis.domain = [0,0.7]
                 //yaxis.overlaying = "y" + num_tables;
                 //yaxis.overlaying = "y12";
                 yaxis.overlaying = false;
@@ -292,7 +295,7 @@ function plot(tables_to_plot, selected_OPTR)
             {
                 //console.log("got event");
                 //console.log("table name " + table_name);
-                event_domain = [max_domain - event_axis_height_increment*0.9, max_domain];
+                event_domain = [max_domain - event_axis_height_increment, max_domain];
                 max_domain -= event_axis_height_increment;
                 //console.log("max domain " + max_domain);
                 //console.log("domain");
@@ -300,8 +303,8 @@ function plot(tables_to_plot, selected_OPTR)
                 yaxis.overlaying = false;
 
                 yaxis.autorange = "true";
-                //yaxis.domain = event_domain;
-                yaxis.domain = [0.86, 1];
+                yaxis.domain = event_domain;
+                //yaxis.domain = [0.86, 1];
                 yaxis.nticks = 0;
                 yaxis.showgrid = false;
                 yaxis.showline = false;
@@ -379,7 +382,7 @@ function plot(tables_to_plot, selected_OPTR)
     //console.log("yaxisname_modifier " + yaxisname_modifier);
     //console.log("num_tables " + num_tables);
     num_tables_plotted = Object.keys(data_sources).length;
-    //console.log("num_tables_plotted " + num_tables_plotted);
+    console.log("num_tables_plotted " + num_tables_plotted);
     //layout["yaxis" + yaxisname_modifier].overlaying = false;
     //layout["yaxis10"].overlaying = false;
 

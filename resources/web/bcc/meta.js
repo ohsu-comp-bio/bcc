@@ -147,7 +147,7 @@ var table_schema =
     {
         Type: "Event",
         TableName: "BiopsyTable",
-        DisplayName: "Biopsy Table",
+        DisplayName: "Samples and Procedures",
         Fields:
         [
             {

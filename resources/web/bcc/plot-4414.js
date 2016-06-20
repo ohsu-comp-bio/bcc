@@ -24,18 +24,18 @@ function plot(selected_OPTR)
     var series_axis_position_increment = 0.07;
     var ranges = {};
 
-    var tables_to_plot =
-    [
-     	"DiagnosisTable",
-     	"BloodDrawTable",
-     	"TreatmentTable",
-     	"OncoLogTreatmentTable",
-     	//"ImagingTable",
-     	"SampleTable",
-     	"CA199Table",
-     	"TumorSizeTable",
-     	"WeightTable"
-    ];
+    //var tables_to_plot =
+    //[
+    // 	"TreatmentTable",
+    // 	"BloodDrawTable",
+    // 	"DiagnosisTable",
+    // 	"OncoLogTreatmentTable",
+    // 	//"ImagingTable",
+    // 	"SampleTable",
+    // 	"CA199Table",
+    // 	"TumorSizeTable",
+    // 	"WeightTable"
+    //];
 
     $.each(tables_to_plot, function(index, table_name)
     {
