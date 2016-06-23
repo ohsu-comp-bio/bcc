@@ -281,6 +281,8 @@ function savePage()
         failure: function(data){console.log("save failure!"); console.log(data)}
     });
 
+    alert("Page Saved");d
+
     //$('#display').html(htmldata);
 
     //destroyEditor();

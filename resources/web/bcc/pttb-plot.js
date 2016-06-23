@@ -1,460 +1,255 @@
-function plot()
+class PlotlyPlot
 {
-    console.log("in plot-test-1.js");
+    /*
 
-    selected_OPTR = 4086;
+    Usage scenario:
+    _______________
 
-    var xy_temp;
-    xy_temp = getDataFromJS
-    (
-        "CA199Table",
-        {x: "date",y: "ca199"},
-        {key: "optr",value: selected_OPTR}
-    );
+    tables_we_are_plotting = [...];
+    schema = {};
 
-    var trace1 =
+    collectTheData(optr, callback=createOurPlot); // Main routine called by the UI after selecting the optr
+
+    createOurPlot(data)
     {
-        x: xy_temp.x,
-        y: xy_temp.y,
-        text: xy_temp.y,
-        hoverinfo:"x+y+name",
-        name: 'CA199',
-        type: 'scatter',
-        mode: 'lines+markers',
-        marker:
+        plot = new PlotlyPlot();
+
+        num_yaxes = assess how many different axes types we have
+        axes_positions = calculate axes positions
+        xaxis_domain = calculate xaxis_domain
+
+        plot.addX_Axis('Dates',
         {
-            size: 9,
-            color: "#FFA500"
-        }
-    };
-
-    var yaxis1 =
-    {
-        "title": "CA199",
-        "titlefont":
-        {
-            size: 12,
-            color: '#FFA500'
-        },
-        "domain": [0, 0.8],
-        "showgrid": true,
-        "side": "left",
-        "nticks": 7,
-        "showline": true
-    };
-
-    var layout1 =
-    {
-        yaxis1: yaxis1,
-        hovermode: "closest"
-    };
-
-    xy_temp = getDataFromJS
-    (
-        "WeightTable",
-        {x: "date",y: "weight"},
-        {key: "optr",value: selected_OPTR}
-    );
-
-    var trace2 =
-    {
-        x: xy_temp.x,
-        y: xy_temp.y,
-        text: xy_temp.y,
-        hoverinfo:"x+y+name",
-        name: 'Weight',
-        yaxis: 'y2',
-        type: 'scatter',
-        mode: "lines+markers",
-        marker:
-        {
-            size: 9,
-            color: "#808000"
-        }
-    };
-
-    var yaxis2 =
-    {
-        "title": 'Weight',
-        "titlefont":
-        {
-            size: 12,
-            color: '#808000'
-        },
-        "domain": [0, 0.8],
-        "showgrid": true,
-        "gridcolor":
-        {
-            color: 'rgb(148, 103, 189)'
-        },
-        "overlaying": 'y1',
-        "side": 'right',
-        "nticks": 7,
-        "showline": true
-    };
-
-    var layout2 =
-    {
-        yaxis2: yaxis2,
-        hovermode: "closest"
-    };
-
-    xy_temp = getDataFromJS
-    (
-        "TreatmentTable",
-        {
-            x: "date",
-            value: "type"
-        },
-        {
-            key: "optr",
-            value: selected_OPTR
-        }
-    );
-
-    console.log("treatment type");
-    console.log(xy_temp.value);
-
-    trace3 =
-    {
-        x: xy_temp.x,
-        y: xy_temp.y,
-        text: xy_temp.value,
-        hoverinfo: "x+text",
-        name: 'Treatment',
-        yaxis: 'y3',
-        type: 'scatter',
-        mode: "markers",
-        marker:
-        {
-            size: 9,
-            color: "#800000"
-        }
-    }
-
-    var yaxis3 =
-    {
-        "titlefont":
-        {
-            size: 12,
-            color: '#800000'
-        },
-        "domain": [0.85, 0.9],
-        "showgrid": false,
-        "overlaying": 'y2',
-        "showline": false,
-        "showticklabels": false,
-        "zeroline": true
-    };
-
-    var layout3 =
-    {
-        yaxis3: yaxis3,
-        hovermode: "closest"
-    };
-
-    xy_temp = getDataFromJS
-    (
-        "BloodDrawTable",
-        {
-            x: "date"
-        },
-        {
-            key: "optr",
-            value: selected_OPTR
-        }
-    );
-
-    trace4 = {
-        x: xy_temp.x,
-        y: xy_temp.y,
-        text: new Array(xy_temp.x.length).fill(""),
-        name: 'Blood Draw',
-        yaxis: 'y4',
-        type: 'scatter',
-        mode: "markers",
-        marker:
-        {
-            size: 9,
-            color: "#FDD017"
-        }
-    }
-
-    var yaxis4 = {
-        "titlefont":
-        {
-            size: 12,
-            color: '#FDD017'
-        },
-        "domain": [0.9, 0.95],
-        "showgrid": false,
-        "overlaying": 'y3',
-        "showline": false,
-        "showticklabels": false,
-        "zeroline": true,
-    };
-
-    var layout4 = {
-        yaxis4: yaxis4,
-        hovermode: "closest"
-    };
-
-    xy_temp = getDataFromJS("OncoLogTreatmentTable", {x:"date", value:"type"}, {key:"optr", value: selected_OPTR});
-
-    console.log("oncolog xy_temp");
-    console.log(xy_temp);
-
-    trace5 =
-    {
-        x: xy_temp.x,
-        y: xy_temp.y,
-        text: xy_temp.value,
-        //hoverinfo:"x+text",
-        name: 'OncoLog',
-        yaxis: 'y5',
-        type: 'scatter',
-        mode: "markers",
-        marker:{size: 9, color: "#800080"}
-    }
-
-    var yaxis5 =
-    {
-        "titlefont":
-        {
-          size: 12,
-          color: '#800080'
-        },
-        "domain": [0.95, 1],
-        "showgrid": false,
-        "overlaying": 'y4',
-        "showline": false,
-        "showticklabels": false,
-        "zeroline": true,
-    };
-
-    var layout5 =
-    {
-        yaxis5: yaxis5,
-        hovermode: "closest"
-    };
-
-    // start out with empty plot
-    Plotly.newPlot("graph", [],
-    {
-        title: "Multiple Y-Axis Plot",
-        height: 600
-    });
-
-    Plotly.relayout("graph", layout5);
-    Plotly.addTraces("graph", [trace5]);
-
-    Plotly.relayout("graph", layout4);
-    Plotly.addTraces("graph", [trace4]);
-
-    Plotly.relayout("graph", layout3);
-    Plotly.addTraces("graph", [trace3]);
-
-    Plotly.relayout("graph", layout1);
-    Plotly.addTraces("graph", [trace1]);
-
-    Plotly.relayout("graph", layout2);
-    Plotly.addTraces("graph", [trace2]);
-
-    myPlot = document.getElementById('graph');
-
-    myPlot.on('plotly_click', function(data)
-    {
-        //console.log(data);
-
-        var point = data.points[0];
-
-        console.log("point");
-        console.log(point);
-
-        console.log("point.pointNumber: " + point.pointNumber);
-        //console.log("x[point.pointNumber]: " + x[point.pointNumber]);
-
-        Object.keys(point).forEach(function(value, key)
-        {
-            console.log(key + ": " + value);
+            domain: xaxis_domain,
+            position: xaxis_position,
+            // other non-default properties
         });
 
-        console.log("point.x " + point.x);
-        console.log("point.y " + point.y);
-        var name = point.fullData.name;
-        console.log("name " + point.fullData.name);
-        console.log("point.xaxis.d2l(point.x) " + point.xaxis.d2l(point.x))
-
-        x_datetime = new Date(point.xaxis.d2l(point.x));
-        console.log("x_datetime: " + x_datetime);
-        x_datestring = x_datetime.toLocaleDateString('en-US');
-        console.log("x_datestring: " + x_datestring);
-
-        var yref = point.yaxis._id;
-        console.log("yref: " + yref);
-
-        text = point.fullData.text[point.pointNumber];
-        console.log("text " + text);
-
-        var newAnnotation =
+        for table_name in tables we are plotting
         {
-            x: point.x,
-            y: point.y,
-            yref: yref,
-            arrowhead: 8,
-            ax: 0,
-            ay: -80,
-            bgcolor: 'rgba(255, 255, 255, 0.9)',
-            arrowcolor: point.fullData.marker.color,
-            font:
+            var plot_data = getData(schema[table_name], data[table_name]); // basically what we already have
+
+            var units_type = schema[table_name].Units; // e.g. TumorSize, Weight, Concentration. Basically one axis per unit type
+
+            update range[units_type] based on current data;
+
+            if (list of y axes does not already have one for this units_type)
             {
-                size: 12
-            },
-            bordercolor: point.fullData.marker.color,
-            borderwidth: 3,
-            borderpad: 4,
-            text: '<b>Patient: </b>' + selected_OPTR + '<br>' + '<b>Date: </b>' +
-                x_datestring + '<br>' + '<b>' + name + ': </b>' + text + '<br>'
-        };
-
-        var divid = document.getElementById('graph');
-        var newIndex = (divid.layout.annotations || [])
-            .length;
-
-        // delete instead if clicked twice
-        if (newIndex)
-        {
-            var foundCopy = false;
-            divid.layout.annotations.forEach(function(ann, sameIndex)
+                plot.addAY_axis(units_type, {...various properties...});
+            }
+            else
             {
-                if (ann.text === newAnnotation.text)
-                {
-                    Plotly.relayout(
-                        'graph',
-                        'annotations[' + sameIndex + ']',
-                        'remove'
-                    );
-
-                    foundCopy = true;
-
-                }
-            });
-
-            if (foundCopy)
-            {
-                return;
+                update range for this units type
             }
 
+            var display_name = schema[table_name].DisplayName;
+
+            plot.addTrace(display_name, plot_data.x, plot_data.y, units_type, {...other propertie...}); // note: units_types give the yaxis name
+
+            *** Somehow add method for making hover and click annotaitons. Not sure how this will work ***
+
+            plot.updateLayout({...whatever needs to be added here such as title...});
+
+            plot.generatePlot();
+
         }
-
-        Plotly.relayout(
-            'graph',
-            'annotations[' + newIndex + ']',
-            newAnnotation
-        );
-
-    })
-    .on('plotly_clickannotation', function(event, data)
-    {
-        Plotly.relayout(
-            'graph',
-            'annotations[' + newIndex + ']',
-            newAnnotation
-        );
-    });
-
-}
-
-function getDataFromJS(table_name, fields, filter)
-{
-    console.log("in getEventDataFromJS");
-    console.log("table_name " + table_name + " fields");
-    console.log(fields);
-    console.log("filter");
-    console.log(filter);
-
-    var selected_items = [];
-    var xy_data = {
-        x: [],
-        y: [],
-        value: []
-    };
-    data_list = data_sources[table_name].objects;
-    //console.log("data_list");
-    //console.log(data_list);
-
-
-    $.each(data_list, function(index, item)
-    {
-        //console.log("tablename " + table_name + " index :" + index + " item: ");
-        //console.log(item);
-        //console.log("filter.key " + filter.key + " filter.value " + filter.value);
-        //console.log(item[filter.key] == filter.value);
-        //console.log(fields.x + " item[fields.x] " + item[fields.x] + " " + fields.y + " item[fields.y] " + item[fields.y]);
-        if (item[filter.key] == filter.value)
-        {
-            selected_items.push(item);
-            //xy_data.x.push(item[fields.x]);
-            //xy_data.y.push(item[fields.y]);
-        }
-    });
-
-    // Some data seems to have "Date" while other data hs "date".
-    // Normalize date attribute name.
-    var date_field = "";
-    var has_date = false;
-    if (fields.x == "date")
-    {
-        date_field = "date";
-        has_date = true;
-    }
-    if (fields.x == "Date")
-    {
-        date_field = "Date";
-        has_date = true;
     }
 
-    // Sort data by date
-    if (has_date)
+    Additional objects:
+        map from units to axis name and if already created
+
+    Additional functions:
+
+        getData() // basically what we already have. Extracts data for a given table from the collection returned by the multi query
+        calculate the range from the data
+
+    */
+
+    constructor()
     {
-        selected_items.sort(function(d1, d2)
+        this.yaxis_list = {};
+        this.xaxis_list = {};
+        this.traces_list = {};
+        this.max_axis_number;
+
+        this.traces = [];
+        this.layout = {};
+        this.updateLayout(
         {
-            return new Date(d1[date_field]) - new Date(d2[date_field]);
+            // default properties
         });
     }
 
-    console.log("selected_items");
-    console.log(selected_items);
-
-    $.each(selected_items, function(index, item)
+    set divID(divID)
     {
-        if ('x' in fields)
+        // Check to see if a div with that ID exists.
+        // Either report problem, or create one
+        this.divID = divID;
+    }
+
+    updateLayout(properties={})
+    {
+        this.layout =
         {
-            xy_data.x.push(item[fields.x]);
+            // default values
+        };
+
+        for (var key in properties)
+        {
+            this.layout[key] = properties[key];
+        }
+    }
+
+    addY_Axis(axis_name, properties={})
+    {
+        var new_yaxis =
+        {
+            // default properties
+        };
+
+        var yaxis_object =
+        {
+            yaxis_name: "yaxis" + this.max_yaxis_number,
+            yaxis_name_ref: "y" + this.max_yaxis_number,
+            yaxis_properties: new_yaxis
         }
 
-        if ('y' in fields)
+        this.max_yaxis_number += 1;
+
+        for (var key in properties)
         {
-            xy_data.y.push(item[fields.y]);
-        }
-        else
-        {
-            xy_data.y.push(0);
+            new_yaxis[key] = properties[key];
         }
 
-        if ('value' in fields)
+        this.yaxis_list[axis_name] = yaxis_object;
+
+    }
+
+    updateY_Axis(axis_name, properties={})
+    {
+        for (var key in properties)
         {
-            xy_data.value.push(item[fields.value]);
+            this.yaxis_list[axis_name][key] = properties[key];
         }
-        else
+    }
+
+    addX_Axis(axis_name, properties={})
+    {
+        var new_xaxis =
         {
-            xy_data.value.push(item[fields.y]);
+            // default properties
+        };
+
+        for (var key in properties)
+        {
+            new_xaxis[key] = properties[key];
         }
 
-    });
+        for (var key in properties)
+        {
+            new_xaxis[key] = properties[key];
+        }
 
-    console.log("xy_data");
-    console.log(xy_data);
+        var xaxis_object =
+        {
+            xaxis_name: "xaxis" + this.max_xaxis_number,
+            xaxis_name_ref: "x" + this.max_xaxis_number,
+            xaxis_properties: new_xaxis
+        }
 
-    return xy_data;
+        this.max_xaxis_number += 1;
+
+        this.xaxis_list[axis_name] = xaxis_object;
+
+    }
+
+    updateX_Axis(axis_name, properties={})
+    {
+        for (var key in properties)
+        {
+            this.xaxis_list[axis_name][key] = properties[key];
+        }
+    }
+
+    addTrace
+        (
+            name, // A name for the trace to allow easy removal or reconfiguration
+            x, // x values
+            y, // y values
+            yaxis, // Name of the associated Y-axis, e.g. "TumorSizes" or "Weight"
+            title, // The name as will appear in the legend.
+            properties={} // non-default properties such as marker, line, color, hover and click annotations
+        )
+    {
+
+        var yaxis_exists = Object.keys(yaxis_list).indexOf(yaxis) >= 0;
+        if (!yaxis_exists)
+        {
+            console.log("Invalid y-axis " + yaxis + ".");
+            console.log("Trace " + name + " not added.");
+
+            return false;
+        }
+
+        var new_trace =
+        {
+            x: x,
+            y: y,
+            title: title,
+            // other default properties
+        };
+
+        for (var key in properties)
+        {
+            new_trace[key] = properties[key];
+        }
+
+        new_trace.yaxis = this.yaxis_list[yaxis].yaxis_name_ref;
+
+        this.traces_list[name] = new_trace;
+    }
+
+    updateTrace(name, properties={})
+    {
+        for (var key in properties)
+        {
+            this.traces_list[name][key] = properties[key];
+        }
+    }
+
+    addAnnotations(schema, click=true, hover=true)
+    {
+
+    }
+
+    generateAnnotation(point)
+    {
+
+    }
+
+    generatePlot()
+    {
+        xaxis_list.forEach(function(object, name)
+        {
+            var axis_name = object.xaxis_name;
+            var properties = object.xaxis_properties;
+            this.layout[axis_name] = properties;
+        });
+
+        yaxis_list.forEach(function(object, name)
+        {
+            var axis_name = object.yaxis_name;
+            var properties = object.yaxis_properties;
+            this.layout[axis_name] = properties;
+        });
+
+        traces_list.forEach(function(object, name)
+        {
+            this.traces.push(object.trace_properties);
+        });
+
+        Plotly.newPlot(this.divID, this.traces, this.layout);
+    }
+
+
 }

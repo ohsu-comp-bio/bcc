@@ -213,6 +213,7 @@ function getTraceData(table_name, fields)
 
 }
 
+/*
 function formatDate(date)
 {
     var month_names =
@@ -228,4 +229,19 @@ function formatDate(date)
         + temp.getDate();
     return date_string;
 }
+*/
 
+function formatDate(UTCDateString)
+{
+    var convertdLocalTime = new Date(UTCDateString);
+    var hourOffset = convertdLocalTime.getTimezoneOffset() / 60;
+    convertdLocalTime.setHours( convertdLocalTime.getHours() + hourOffset );
+
+    var date_string = convertdLocalTime.getFullYear() + "-"
+            + (convertdLocalTime.getMonth() + 1) + "-"
+            + convertdLocalTime.getDate();
+
+    return date_string;
+}
+
+//http://stackoverflow.com/a/24027513/188963

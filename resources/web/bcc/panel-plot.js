@@ -30,7 +30,6 @@ function plot(tables_to_plot, selected_OPTR)
     console.log("data_sources");
     console.log(data_sources);
 
-
     var annotation_makers = {};
     var fields = [];
     var plot_data = {};
@@ -201,8 +200,8 @@ function plot(tables_to_plot, selected_OPTR)
 
             //console.log("y_key " + y_key);
 
-            //console.log("plot_data.date");
-            //console.log(plot_data.date);
+            console.log("plot_data.date");
+            console.log(plot_data.Date);
 
             //console.log("plot_data['ykey']");
             //console.log(plot_data[y_key]);
@@ -211,6 +210,8 @@ function plot(tables_to_plot, selected_OPTR)
             {
                 x: plot_data.Date,
                 y: plot_data[y_key],
+                autotick: false,
+                ticks: plot_data.Date,
                 name: name,
                 text: getText(annotation_maker, plot_data.Date.length),
                 hoverinfo: "text",

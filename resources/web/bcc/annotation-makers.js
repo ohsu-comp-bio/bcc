@@ -23,9 +23,8 @@ function getAnnotationMaker(table_name, plot_data, OPTR)
         //console.log(fields);
         
         var annotation_text = '<b>Patient: </b>' + OPTR + '<br />';
-        
-        var datetime = new Date(plot_data.Date[point_number]);
-        var date = datetime.toLocaleDateString('en-US');
+
+        var date = plot_data.Date[point_number];
         annotation_text += '<b>Date: </b>' + date + '<br />';
         
         $.each(fields, function(index, field_data){

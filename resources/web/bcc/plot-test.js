@@ -634,3 +634,87 @@ function randomizeDates(plot_data)
 
     return plot_data;
 }
+
+function getXAxis(title, type, domain, showline)
+{
+    var xaxis =
+    {
+        title: title,
+        position: 0,
+        domain: domain,
+        type: type,
+        tickmode: "auto",
+        showline: showline,
+        nticks: 12,
+        tickangle: 45,
+        linewidth: 2,
+        tickfont:
+        {
+            size: 14
+        },
+        titlefont:
+        {
+            size: 14
+        }
+    };
+
+    return xaxis;
+}
+
+function getBaseLayout(width, height, xaxis)
+{
+    var base_layout =
+    {
+        titlefont:
+        {
+            size: 36
+        },
+        height: 800,
+        width: 1200,
+        hovermode: 'closest',
+        xaxis: xaxis
+    };
+
+    return layout;
+}
+
+function getSeriesYAxis
+    (
+        series_type, // Events or timeseries
+        range, // range of values on y-axis
+        domain, // paper range [min, max] 0 < min,max < 1
+        schema, // metadata
+        color, // color for lines, markers, ticks, etc.
+        position, // single paper position between [0,1]
+        marker, // marker shape
+    )
+{
+    var units = schema.Units;
+    var title = "<b>" + schema.DisplayName + "(" + units + ")" + "</b>";
+    var overlaying = "";
+
+    var yaxis =
+    {
+        title: title,
+        titlefont:
+        {
+            size: 14,
+            color: color
+        },
+        ticklength: 10,
+        tickfont:
+        {
+            size: 14,
+            color: color
+        },
+        nticks: 7,
+        showgrid: true,
+        showticklabels: true,
+        gridcolor: color,
+        side: "left",
+        color: color,
+        linecolor: color,
+        showline: true,
+        overlaying ="",
+    };
+}
