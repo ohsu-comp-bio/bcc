@@ -19,11 +19,11 @@ function onFailure(errorInfo, options, responseObj)
 function onSuccess(data)
 {
     console.log("Success! " + data.rowCount + " rows returned.");
-    console.log(data);
+    //console.log(data);
     var table_name = data.queryName;
     var data_rows = [data.queryName] = data.rows;
-    console.log("just data rows as JSON");
-    console.log(JSON.stringify(data_rows));
+    //console.log("just data rows as JSON");
+    //console.log(JSON.stringify(data_rows));
     if (data_rows.length)
     {
         data_sources[table_name] = {};
@@ -33,7 +33,7 @@ function onSuccess(data)
     console.log("data_sources so far:");
     console.log(data_sources);
 
-    console.log(JSON.stringify(data_sources));
+    //console.log(JSON.stringify(data_sources));
 }
 
 function createMultiQuery(tables_to_plot, optr)
