@@ -42,10 +42,19 @@ public class BCCCustomizer extends AbstractTableCustomizer
         {
             ti.getColumn("OPTR").setRequired(true);
             UserSchema studySchema = QueryService.get().getUserSchema(ti.getUserSchema().getUser(), ti.getUserSchema().getContainer(), "study");
-            if (studySchema != null)
+            // CRP - Do NOT add "PatientDemographics" lookup in the "PatientDemographics" table.
+            if (studySchema != null && !(ti.getName().equals("PatientDemographics")))
             {
                 //this FK will reference PatientDemographics, specifically pointing to OPTR, which is not the true PK of that dataset
                 ti.getColumn("OPTR").setFk(new QueryForeignKey(studySchema, ti.getUserSchema().getContainer(), "PatientDemographics", "OPTR", "OPTR", true));
+            }
+            // CRP - This is the only way I was able to remove the "lookup to itself" in the PatientDemographics table.
+            // This should be cleaned up.
+            // Also note that the dataset names are changing in the new "Oregon Pancreatic Tumor Registry" project.
+            if (studySchema != null && ti.getName().equals("PatientDemographics"))
+            {
+                //this FK will reference PatientDemographics, specifically pointing to OPTR, which is not the true PK of that dataset
+                ti.getColumn("OPTR").setFk(new QueryForeignKey(studySchema, ti.getUserSchema().getContainer(), "FakeDataSet", "OPTR", "OPTR", true));
             }
         }
 
