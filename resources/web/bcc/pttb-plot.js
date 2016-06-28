@@ -63,6 +63,15 @@ class PlotlyPlot
         getData() // basically what we already have. Extracts data for a given table from the collection returned by the multi query
         calculate the range from the data
 
+    Useful References:
+        https://plot.ly/javascript/reference/
+
+        https://plot.ly/javascript-graphing-library/reference/
+
+        https://plot.ly/javascript/axes/
+
+        https://api.plot.ly/v2/plot-schema?sha1=%27%27
+
     */
 
     constructor()
@@ -283,6 +292,14 @@ class PlotlyPlot
         // than something hard-coded into the click handler.
     }
 
+    // At some point, calculations need to be done to create the lines
+    // for the event type data and set their heights etc. Also, to set
+    // the domains for the various y-axes and the xaxis for the event
+    // sub plot.
+    //
+    // This could all be done here. But perhaps it would be neater
+    // to have a configureAxes method called from inside
+    // generatePlot.
     generatePlot()
     {
         // The layout has a key/value pair for each of the
