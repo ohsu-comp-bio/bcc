@@ -29,6 +29,20 @@
                         <phi>PHI</phi>
                         <protected>true</protected>
                     </column>
+                    <column columnName="Gender">
+                        <fk>
+                            <fkDbSchema>lookups</fkDbSchema>
+                            <fkTable>gender</fkTable>
+                            <fkColumnName>value</fkColumnName>
+                        </fk>
+                    </column>
+                    <column columnName="Consent Status">
+                        <fk>
+                            <fkDbSchema>lookups</fkDbSchema>
+                            <fkTable>consent</fkTable>
+                            <fkColumnName>value</fkColumnName>
+                        </fk>
+                    </column>
                 </columns>
             </table>
         </tables>
