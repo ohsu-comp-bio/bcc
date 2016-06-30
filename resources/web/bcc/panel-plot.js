@@ -200,7 +200,7 @@ function plot(tables_to_plot, selected_OPTR)
 
             //console.log("y_key " + y_key);
 
-            console.log("plot_data.date");
+            console.log("plot_Date");
             console.log(plot_data.Date);
 
             //console.log("plot_data['ykey']");
@@ -212,8 +212,9 @@ function plot(tables_to_plot, selected_OPTR)
                 y: plot_data[y_key],
                 autotick: false,
                 ticks: plot_data.Date,
+                ticks: plot_data.Date,
                 name: name,
-                text: getText(annotation_maker, plot_data.Date.length),
+                text: getText(annotation_maker, plot_data["Date"].length),
                 hoverinfo: "text",
                 type: 'scatter',
                 mode: trace_mode,

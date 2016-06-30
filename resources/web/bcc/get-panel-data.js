@@ -76,7 +76,7 @@ function createMultiQuery(tables_to_plot, optr)
 
         var config =
         {
-            schemaName:"lists",
+            schemaName:"study",
             queryName:table_name,
             columns: fields,
             filterArray: filter_array,
@@ -166,11 +166,27 @@ function getTraceData(table_name, fields)
     // Sort data by date
     if (has_date)
     {
+        console.log("date field: " + date_field);
         //console.log("going to sort--date_field: " + date_field);
         selected_items.sort(function(d1, d2)
         {
             return new Date(d1[date_field]) - new Date(d2[date_field]);
         });
+
+        if (date_field == "date")
+        {
+            console.log("has lower case date field: " + date_field);
+            console.log(selected_items);
+            console.log("changing to Date");
+            selected_items.forEach(function(item)
+            {
+                console.log("selected item");
+                console.log(item);
+                Object.defineProperty(item, "Date",
+                    Object.getOwnPropertyDescriptor(item, "date"));
+                delete item["date"];
+            });
+        }
     }
 
     //console.log("selected_items");
@@ -201,7 +217,7 @@ function getTraceData(table_name, fields)
     //console.log("plot_data right now");
     //console.log(plot_data);
 
-    if (plot_data.Date.length == 0)
+    if (plot_data[date_field].length == 0)
     {
         plot_data = [];
     }
