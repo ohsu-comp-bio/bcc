@@ -4,6 +4,7 @@ import org.labkey.api.data.AbstractTableInfo;
 import org.labkey.api.data.ColumnInfo;
 import org.labkey.api.data.TableInfo;
 import org.labkey.api.data.WrappedColumn;
+import org.labkey.api.gwt.client.FacetingBehaviorType;
 import org.labkey.api.ldk.LDKService;
 import org.labkey.api.ldk.table.AbstractTableCustomizer;
 import org.labkey.api.query.QueryForeignKey;
@@ -19,7 +20,10 @@ public class BCCCustomizer extends AbstractTableCustomizer
     @Override
     public void customize(TableInfo ti)
     {
-        LDKService.get().getDefaultTableCustomizer().customize(ti);
+        if (!matches(ti, "study", "studyData"))
+        {
+            LDKService.get().getDefaultTableCustomizer().customize(ti);
+        }
 
         //this allows us to apply standard customization to any table configured to use this customizer
         if (ti instanceof AbstractTableInfo)
@@ -41,20 +45,24 @@ public class BCCCustomizer extends AbstractTableCustomizer
         if (ti.getColumn("OPTR") != null)
         {
             ti.getColumn("OPTR").setRequired(true);
-            UserSchema studySchema = QueryService.get().getUserSchema(ti.getUserSchema().getUser(), ti.getUserSchema().getContainer(), "study");
+
+            //this causes the data entry field to be a simple textbox, not a combo
+            ti.getColumn("OPTR").setFacetingBehaviorType(FacetingBehaviorType.ALWAYS_OFF);
+
+
             // CRP - Do NOT add "PatientDemographics" lookup in the "PatientDemographics" table.
-            if (studySchema != null && !(ti.getName().equals("PatientDemographics")))
+            if (matches(ti, "study", "PatientDemographics"))
             {
-                //this FK will reference PatientDemographics, specifically pointing to OPTR, which is not the true PK of that dataset
-                ti.getColumn("OPTR").setFk(new QueryForeignKey(studySchema, ti.getUserSchema().getContainer(), "PatientDemographics", "OPTR", "OPTR", true));
+                //
             }
-            // CRP - This is the only way I was able to remove the "lookup to itself" in the PatientDemographics table.
-            // This should be cleaned up.
-            // Also note that the dataset names are changing in the new "Oregon Pancreatic Tumor Registry" project.
-            if (studySchema != null && ti.getName().equals("PatientDemographics"))
+            else
             {
-                //this FK will reference PatientDemographics, specifically pointing to OPTR, which is not the true PK of that dataset
-                ti.getColumn("OPTR").setFk(new QueryForeignKey(studySchema, ti.getUserSchema().getContainer(), "FakeDataSet", "OPTR", "OPTR", true));
+                UserSchema studySchema = QueryService.get().getUserSchema(ti.getUserSchema().getUser(), ti.getUserSchema().getContainer(), "study");
+                if (studySchema != null)
+                {
+                    //this FK will reference PatientDemographics, specifically pointing to OPTR, which is not the true PK of that dataset
+                    ti.getColumn("OPTR").setFk(new QueryForeignKey(studySchema, ti.getUserSchema().getContainer(), "PatientDemographics", "OPTR", "OPTR", true));
+                }
             }
         }
 
@@ -76,7 +84,7 @@ public class BCCCustomizer extends AbstractTableCustomizer
 
         if (ti instanceof DatasetTable)
         {
-            customizeDataset((DatasetTable)ti);
+            customizeDataset((DatasetTable) ti);
         }
     }
 
