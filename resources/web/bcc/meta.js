@@ -55,15 +55,15 @@ var table_schema =
         ]
     },
 
-    TreatmentTable:
+    Treatments:
     {
         Type: "Event",
-        TableName: "TreatmentTable",
+        TableName: "Treatments",
         DisplayName: "Treatment",
         Fields:
         [
             {
-                FieldName: "Date",
+                FieldName: "date",
                 DisplayName: "Date"
             },
             {
@@ -267,16 +267,16 @@ var table_schema =
         ]
     },
 
-    WeightTable:
+    Weight:
     {
         Type: "Series",
-        TableName: "WeightTable",
+        TableName: "Weight",
         DisplayName: "Weight",
         Units: "kg",
         Fields:
         [
             {
-                FieldName: "Date",
+                FieldName: "date",
                 DisplayName: "Date"
             },
             {

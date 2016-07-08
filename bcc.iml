@@ -27,5 +27,16 @@
     <orderEntry type="module" module-name="internal" />
     <orderEntry type="module" module-name="api1" />
     <orderEntry type="module" module-name="LDK" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$APPLICATION_HOME_DIR$/redist/annotations-java8.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module" module-name="API" />
+    <orderEntry type="module" module-name="LDK-API" />
   </component>
 </module>
