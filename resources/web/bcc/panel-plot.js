@@ -1,17 +1,3 @@
-/*
-var tables_to_plot =
-[
-    "DiagnosisTable",
-    "BloodDrawTable",
-    "TreatmentTable",
-    "OncoLogTreatmentTable",
-    //"ImagingTable",
-    "SampleTable",
-    "CA199Table",
-    "TumorSizeTable",
-    "WeightTable"
-];
-*/
 
 var data_sources = {};
 
@@ -27,8 +13,8 @@ function plotOPTR(tables_to_plot, selected_OPTR)
 function plot(tables_to_plot, selected_OPTR)
 {
     console.log("in plot");
-    console.log("data_sources");
-    console.log(data_sources);
+    //console.log("data_sources");
+    //console.log(data_sources);
 
     var annotation_makers = {};
     var fields = [];
@@ -41,17 +27,21 @@ function plot(tables_to_plot, selected_OPTR)
     var schema = {};
     var annotation_maker;
     var y_key = "";
-    var event_domain = [];
-    var series_domain = [];
+    var event_yaxis_domain = [0.80, 1];
+    var series_yaxis_domain = [0, 0.80];
     var max_domain = 1.0;
+    var add_yaxis = false;
+    var yaxis_name = "";
+    var yaxis_name_suffix = "";
+    var yaxis_idx = 0;
+    var series_yaxis_idx = 0;
+    var first_event_yaxis_idx = 0;
+    var first_series_yaxis_idx = 0;
+    var tumor_yaxis_idx = 0;
     var num_events = 0;
-    var num_series = 0;
-    var series_axis_position = 0;
+    var event_idx = 0;
     var trace_mode;
-    var event_axis_height_increment = 0.14;
-    var series_axis_position_increment = 0.14;
-    var ranges = {};
-
+    var series_axis_position_increment = 0.075;
 
     $.each(tables_to_plot, function(index, table_name)
     {
@@ -63,39 +53,11 @@ function plot(tables_to_plot, selected_OPTR)
             {
                 num_events += 1;
             }
-            else if (schema.Type == "Series")
-            {
-                num_series += 1;
-            }
         }
     });
 
-    var series_domain = [0, 1.0 - event_axis_height_increment*num_events];
-    console.log("series_domain");
-    console.log(series_domain);
-
     var num_markers = tables_to_plot.length;
     var marker_colors = makeMarkerColors(10, 350, 50, 50, num_markers);
-    //console.log("marker colors");
-    //console.log(marker_colors);
-
-/*
-    // start out with empty plot
-    Plotly.newPlot("graph", [],
-    {
-        title: "Patient: " + selected_OPTR,
-        height: 800
-    });
-*/
-
-    //console.log("table_schema");
-    //console.log(table_schema);
-
-    //console.log("Object.keys(table_schema)");
-    //console.log(Object.keys(table_schema));
-    //table_names = Object.keys(table_schema);
-    //console.log("table_names");
-    //console.log(table_names);
 
     var base_layout =
     {
@@ -111,9 +73,9 @@ function plot(tables_to_plot, selected_OPTR)
     	{
     		title: "<b>Date</b>",
     		position: 0,
-    		//domain: [series_axis_position_increment*(num_series-1), 1],
+    		//domain: [0, 1],
     		domain: [0.1, 1],
-    		type: "date",
+    		type: "Date",
     		tickmode: "auto",
     		showline: true,
     		nticks: 12,
@@ -142,9 +104,9 @@ function plot(tables_to_plot, selected_OPTR)
         if (data_sources.hasOwnProperty(table_name))
         {
             plot_number++;
-            console.log(plot_number);
+            //console.log(plot_number);
 
-            console.log("plotting table " + plot_number + ": " + table_name);
+            //console.log("plotting table " + plot_number + ": " + table_name);
             schema = table_schema[table_name];
 
             var units = "";
@@ -161,7 +123,7 @@ function plot(tables_to_plot, selected_OPTR)
             //console.log(table_name + " fields");
             //console.log(fields);
 
-            console.log("data_sources has own property " + table_name);
+            //console.log("data_sources has own property " + table_name);
             plot_data = getTraceData
             (
                 table_name,
@@ -169,88 +131,23 @@ function plot(tables_to_plot, selected_OPTR)
             );
 
 
-            console.log("plot_data for " + table_name);
-            console.log(plot_data);
+            //console.log("plot_data for " + table_name);
+            //console.log(plot_data);
 
             var annotation_maker = getAnnotationMaker(table_name, plot_data, selected_OPTR);
             //console.log("name for annotation maker " + name);
             annotation_makers[name] = annotation_maker;
             //console.log(plot_data.date);
 
+            // We can name the y axes as we see fit, but we don't want to assume the order
+            // of tables as they are read in.  We will use event_idx and series_idx to keep
+            // track of which y axis we are working on for each data type (each index will
+            // start at 1).  So, the first y axis for series data will be "yaxis_Series1" and
+            // this will be the y axis to overlay additional series data on.  The first y
+            // axis for event data will be yaxis_Event1.  We still need to work out how to
+            // handle multiple event data types (maybe they can all use the same y axis?).
 
-            var yaxisname_modifier = plot_number>1 ? plot_number : "";
-
-            if (schema.Type == "Event")
-            {
-                y_key = "dummy";
-                trace_mode = "markers";
-            }
-            else
-            {
-                y_key = fields[1];
-                trace_mode = "lines+markers";
-
-                var y = plot_data[y_key].map(parseFloat);
-                y_range = getRange(y, 1);
-                ranges["yaxis" + yaxisname_modifier] = y_range;
-                //console.log("y_range");
-                //console.log(y_range);
-
-            }
-
-            //console.log("y_key " + y_key);
-
-            console.log("plot_Date");
-            console.log(plot_data.Date);
-
-            //console.log("plot_data['ykey']");
-            //console.log(plot_data[y_key]);
-
-            trace =
-            {
-                x: plot_data.Date,
-                y: plot_data[y_key],
-                autotick: false,
-                ticks: plot_data.Date,
-                ticks: plot_data.Date,
-                name: name,
-                text: getText(annotation_maker, plot_data["Date"].length),
-                hoverinfo: "text",
-                type: 'scatter',
-                mode: trace_mode,
-                marker:
-                {
-                    size: 12,
-                    color: marker_colors[plot_number - 1],
-                    symbol: plot_number
-                },
-                line:
-                {
-                    width: 3
-                },
-                yaxis: "y" + yaxisname_modifier
-            };
-
-            console.log("trace" + plot_number);
-            console.log(trace);
-            console.log("trace.yaxis");
-            console.log(trace.yaxis);
-            trace.yaxis = "y" + yaxisname_modifier;
-            if
-                (
-                    table_name == "PrimaryTumorSizeTable" ||
-                    table_name == "Met1SizeTable" ||
-                    table_name == "Met2SizeTable"
-                )
-            {
-                console.log("tumor size table " + table_name);
-                console.log("setting trace yaxis to y12");
-                trace.yaxis = "y12";
-            }
-
-            console.log("trace.yaxis");
-            console.log(trace.yaxis);
-            traces.push(trace);
+            add_yaxis = false;
 
             yaxis =
             {
@@ -268,55 +165,132 @@ function plot(tables_to_plot, selected_OPTR)
                 side: "left",
                 color: marker_colors[plot_number - 1],
                 linecolor: marker_colors[plot_number-1],
-                showline: true
+                showline: true,
+                zeroline: false,
+                overlaying: false
             };
 
-            if (schema.Type == "Series")
+            if (schema.Type == "Event")
             {
-                //yaxis.position = series_axis_position;
-                yaxis.position = 0;
-                series_axis_position += series_axis_position_increment;
+                event_idx++;
+                if (event_idx == 1)
+                {
+                    yaxis_idx++;
+                    first_event_yaxis_idx = yaxis_idx;
+                    trace_mode = "markers";
+                    yaxis.overlaying = false;
+                    yaxis.autorange = "true";
+                    yaxis.domain = event_yaxis_domain;
+                    yaxis.nticks = 0;
+                    yaxis.showgrid = false;
+                    yaxis.showline = false;
+                    yaxis.showticklabels = false;
+                    yaxis.range = [0.5, num_events + 0.5];
+                    add_yaxis = true;
+                }
+                y_key = "dummy";
+                for (var j = 0; j < plot_data[y_key].length; j++)
+                {
+                    plot_data[y_key][j] = num_events - event_idx + 1;
+                }
+                yaxis_name_suffix = first_event_yaxis_idx > 1 ? first_event_yaxis_idx:""
+                yaxis_name = "yaxis" + yaxis_name_suffix;
+            } else
+            {
+                yaxis_idx++;
+                series_yaxis_idx++;
+                if (first_series_yaxis_idx == 0)
+                {
+                  first_series_yaxis_idx = yaxis_idx;
+                } else
+                {
+                  yaxis.overlaying = "y" + (first_series_yaxis_idx > 1 ? first_series_yaxis_idx:"");
+                }
 
-                //console.log("trying to set range for yaxisname " + yaxisname);
-                //console.log(y_range);
-                yaxis.range = y_range;
-                yaxis.domain = series_domain;
-                //yaxis.domain = [0,0.7]
-                //yaxis.overlaying = "y" + num_tables;
-                //yaxis.overlaying = "y12";
-                yaxis.overlaying = false;
+                yaxis_name_suffix = yaxis_idx > 1 ? yaxis_idx:"";
+                yaxis_name = "yaxis" + yaxis_name_suffix;
+                y_key = fields[1];
+                trace_mode = "lines+markers";
+
+                var y = plot_data[y_key].map(parseFloat);
+                yaxis.position = 0;
+                yaxis.range = getRange(y, 0.02);
+                yaxis.domain = series_yaxis_domain;
                 yaxis.title = "<b>" + schema.DisplayName + units + "</b>";
                 yaxis.nticks = 7;
                 yaxis.showgrid = false;
                 yaxis.showline = true;
                 yaxis.showticklabels = true;
-                //yaxis.zeroline = true;
+                yaxis.position = (series_yaxis_idx - 1) * series_axis_position_increment;
                 yaxis.gridcolor = marker_colors[plot_number];
+                add_yaxis = true;
+                layout.xaxis.domain = [(series_yaxis_idx - 1) * series_axis_position_increment + 0.025, 1];
             }
-            else
+
+            console.log("add_yaxis " + add_yaxis);
+            console.log("yaxis_idx " + yaxis_idx);
+            console.log("yaxis_name " + yaxis_name);
+
+
+
+            console.log("y_key");
+            console.log(y_key);
+            console.log("plot_data[y_key]");
+            console.log(plot_data[y_key]);
+
+            //console.log("plot_data['ykey']");
+            //console.log(plot_data[y_key]);
+
+            trace =
             {
-                //console.log("got event");
-                //console.log("table name " + table_name);
-                event_domain = [max_domain - event_axis_height_increment, max_domain];
-                max_domain -= event_axis_height_increment;
-                //console.log("max domain " + max_domain);
-                //console.log("domain");
-                //console.log(event_domain);
-                yaxis.overlaying = false;
+                x: plot_data.date,
+                y: plot_data[y_key],
+                autotick: false,
+                ticks: plot_data.date,
+                ticks: plot_data.date,
+                name: name,
+                text: getText(annotation_maker, plot_data["date"].length),
+                hoverinfo: "text",
+                type: 'scatter',
+                mode: trace_mode,
+                marker:
+                {
+                    size: 12,
+                    color: marker_colors[plot_number - 1],
+                    symbol: plot_number
+                },
+                line:
+                {
+                    width: 3
+                },
+                yaxis: "y" + yaxis_name_suffix
+            };
 
-                yaxis.autorange = "true";
-                yaxis.domain = event_domain;
-                //yaxis.domain = [0.86, 1];
-                yaxis.nticks = 0;
-                yaxis.showgrid = false;
-                yaxis.showline = false;
-                yaxis.showticklabels = false;
-                yaxis.position = series_axis_position_increment*num_series;
-                delete yaxis.range;
-
+            //console.log("trace" + plot_number);
+            //console.log(trace);
+            //console.log("trace.yaxis");
+            //console.log(trace.yaxis);
+            //trace.yaxis = yaxis_name;
+            if
+                (
+                    table_name == "PrimaryTumorSizeTable" ||
+                    table_name == "Met1SizeTable" ||
+                    table_name == "Met2SizeTable"
+                )
+            {
+                //console.log("tumor size table " + table_name);
+                //console.log("setting trace yaxis to y12");
+                trace.yaxis = "y12";
             }
 
-            console.log("setting layout for axis " + "yaxis" + yaxisname_modifier);
+            if (add_yaxis == true)
+            {
+                layout[yaxis_name] = yaxis;
+            }
+
+            traces.push(trace);
+
+            //console.log("setting layout for axis " + yaxis_name);
             //var layout = base_layout;
             if
                 (
@@ -326,51 +300,27 @@ function plot(tables_to_plot, selected_OPTR)
                 )
             {
                 yaxis.range = [0,50];
-                console.log("tumor size table " + table_name);
+                //console.log("tumor size table " + table_name);
                 yaxis.title = "<b>Tumor Size (mm)</b>";
                 yaxis.position = 0.2;
-                console.log("setting layout yaxis12 to yaxis");
+                //console.log("setting layout yaxis12 to yaxis");
                 layout["yaxis12"] = yaxis;
                 layout["yaxis12"].overlaying = false;
             }
-            else
-            {
-                console.log("non tumor size table " + table_name);
-                console.log("setting yaxis " + yaxisname_modifier);
-                layout["yaxis" + yaxisname_modifier] = yaxis;
-                if (schema.Type == "Series")
-                {
-                    layout["yaxis" + yaxisname_modifier].overlaying = "y12";
-                }
-                else
-                {
-                    layout["xaxis"].domain = [0.2, 1];
-                    layout["yaxis" + yaxisname_modifier].overlaying = false;
-                }
 
-                if (table_name == "CA199Table")
-                {
-                    layout["yaxis" + yaxisname_modifier].position = 0.1;
-                    layout["yaxis" + yaxisname_modifier].overlaying = "y12";
-                }
-
-            }
-
-
-            //console.log("layout[" + yaxisname + "]");
-            //console.log(layout[yaxisname]);
+            //console.log("layout[" + yaxis_name + "]");
+            //console.log(layout[yaxis_name]);
             //console.log("layout");
             //console.log(layout);
-            //console.log("layout[yaxisname].range");
-            //console.log(layout[yaxisname].range);
+            //console.log("layout[yaxis_name].range");
+            //console.log(layout[yaxis_name].range);
 
             //Plotly.relayout('graph', layout);
             //Plotly.addTraces('graph', [trace]);
 
-        }
-        else
+        }  else
         {
-            console.log("data_sources DOES NOT have own property " + table_name);
+            //console.log("data_sources DOES NOT have own property " + table_name);
             //console.log("data sources:");
             //console.log(data_sources);
         }
@@ -381,28 +331,23 @@ function plot(tables_to_plot, selected_OPTR)
     //delete layout.yaxis.overlaying
     //console.log("setting overlaying");
     //console.log(layout);
-    //console.log("yaxisname_modifier " + yaxisname_modifier);
+    //console.log("yaxis_name " + yaxis_name);
     //console.log("num_tables " + num_tables);
     num_tables_plotted = Object.keys(data_sources).length;
-    console.log("num_tables_plotted " + num_tables_plotted);
-    //layout["yaxis" + yaxisname_modifier].overlaying = false;
+    //console.log("num_tables_plotted " + num_tables_plotted);
+    //layout[yaxis_name].overlaying = false;
     //layout["yaxis10"].overlaying = false;
 
     //console.log("setting layout")
-    //layout["yaxis" + yaxisname_modifier].overlaying = false;
-
-//    traces[0].yaxis="y";
-//    traces[1].yaxis="y2";
-//    console.log("traces[1].yaxis");
-//    console.log(traces[1].yaxis);
+    //layout[yaxis_name].overlaying = false;
 
     Plotly.newPlot("graph", traces, layout);
 
     g = document.getElementById('graph');
-    console.log("g.layout");
-    console.log(g.layout);
-    console.log("g.data");
-    console.log(g.data);
+    //console.log("g.layout");
+    //console.log(g.layout);
+    //console.log("g.data");
+    //console.log(g.data);
 
     a = 10;
 
@@ -410,20 +355,6 @@ function plot(tables_to_plot, selected_OPTR)
     {
         Plotly.redraw(plot);
     }
-
-
-    /*
-    console.log("ranges");
-    console.log(ranges);
-
-    for (var ax in ranges)
-    {
-    	console.log("setting range for axis " + ax + " to");
-    	console.log(ranges[ax]);
-
-    	g.layout[ax].range = ranges[ax];
-    }
-	*/
 
     myPlot = document.getElementById('graph');
 
@@ -446,7 +377,7 @@ function plot(tables_to_plot, selected_OPTR)
 
 function getFields(table_name)
 {
-    console.log("getting fields for table " + table_name);
+    //console.log("getting fields for table " + table_name);
 
     var fields = [];
 
@@ -526,5 +457,5 @@ function getRange(x, fudge)
 		}
 	}
 
-	return [min-fudge, max+fudge];
+	return [min - (fudge * (max - min)), max + (fudge * (max - min))];
 }

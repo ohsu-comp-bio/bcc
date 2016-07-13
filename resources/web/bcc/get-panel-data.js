@@ -38,6 +38,17 @@ function onSuccess(data)
 
 function createMultiQuery(tables_to_plot, optr)
 {
+    console.log("data_sources at start:");
+    console.log(data_sources);
+    for (var prop in data_sources)
+    {
+        if (data_sources.hasOwnProperty(prop))
+        {
+            delete data_sources[prop];
+        }
+    }
+    console.log("data_sources after delete:");
+    console.log(data_sources);
 
     var multi_request = new LABKEY.MultiRequest();
 
@@ -176,6 +187,7 @@ function getTraceData(table_name, fields)
         if (date_field == "date")
         {
             console.log("has lower case date field: " + date_field);
+            /*
             console.log(selected_items);
             console.log("changing to Date");
             selected_items.forEach(function(item)
@@ -186,11 +198,14 @@ function getTraceData(table_name, fields)
                     Object.getOwnPropertyDescriptor(item, "date"));
                 delete item["date"];
             });
+            */
         }
     }
 
-    //console.log("selected_items");
-    //console.log(selected_items);
+    console.log("selected_items");
+    console.log(selected_items);
+    console.log("fields");
+    console.log(fields);
 
     $.each(selected_items, function(index, item)
     {
@@ -214,8 +229,8 @@ function getTraceData(table_name, fields)
 
     });
 
-    //console.log("plot_data right now");
-    //console.log(plot_data);
+    console.log("plot_data right now");
+    console.log(plot_data);
 
     if (plot_data[date_field].length == 0)
     {
