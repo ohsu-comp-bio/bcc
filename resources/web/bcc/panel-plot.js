@@ -27,8 +27,8 @@ function plot(tables_to_plot, selected_OPTR)
     var schema = {};
     var annotation_maker;
     var y_key = "";
-    var event_yaxis_domain = [0.80, 1];
-    var series_yaxis_domain = [0, 0.80];
+    var event_yaxis_domain = [0.75, 1];
+    var series_yaxis_domain = [0, 0.75];
     var max_domain = 1.0;
     var add_yaxis = false;
     var yaxis_name = "";
@@ -139,14 +139,6 @@ function plot(tables_to_plot, selected_OPTR)
             annotation_makers[name] = annotation_maker;
             //console.log(plot_data.date);
 
-            // We can name the y axes as we see fit, but we don't want to assume the order
-            // of tables as they are read in.  We will use event_idx and series_idx to keep
-            // track of which y axis we are working on for each data type (each index will
-            // start at 1).  So, the first y axis for series data will be "yaxis_Series1" and
-            // this will be the y axis to overlay additional series data on.  The first y
-            // axis for event data will be yaxis_Event1.  We still need to work out how to
-            // handle multiple event data types (maybe they can all use the same y axis?).
-
             add_yaxis = false;
 
             yaxis =
@@ -195,7 +187,54 @@ function plot(tables_to_plot, selected_OPTR)
                 }
                 yaxis_name_suffix = first_event_yaxis_idx > 1 ? first_event_yaxis_idx:""
                 yaxis_name = "yaxis" + yaxis_name_suffix;
-            } else
+
+                // This worked except that the hovers for the ends of the lines interfered with
+                // the marker hovers.  This was even when the line hovers were off (set to 'none').
+                // The line hovers blocked the marker hovers when centered on the ends of the lines.
+                // Should be reported as a plotly bug.
+                // Add an additional trace for a line through events.
+                //console.log("plot_data.date: " + plot_data.date);
+                //trace =
+                //{
+                //    x: [plot_data.date[0], plot_data.date[plot_data.date.length - 1]],
+                //    y: [plot_data[y_key][0], plot_data[y_key][0]],
+                //    hoverinfo: 'none',
+                //    type: 'scatter',
+                //    mode: 'line',
+                //    line:
+                //    {
+                //        color: marker_colors[plot_number - 1]
+                //    },
+                //    yaxis: "y" + yaxis_name_suffix,
+                //    showlegend: false
+                //};
+                //traces.push(trace);
+
+                shape =
+                {
+                    type: 'line',
+                    // x-reference is assigned to the x-values
+                    xref: 'x',
+                    // y-reference is assigned to the plot paper [0,1]
+                    //yref: 'paper',
+                    yref: "y" + yaxis_name_suffix,
+                    x0: plot_data.date[0],
+                    y0: plot_data[y_key][0],
+                    x1: plot_data.date[plot_data.date.length - 1],
+                    y1: plot_data[y_key][0],
+                    //fillcolor: '#d3d3d3',
+                    opacity: 0.5,
+                    line: {
+                        width: 1,
+                        color: marker_colors[plot_number - 1]
+                    }
+                };
+                if (!layout.hasOwnProperty("shapes"))
+                {
+                    layout.shapes = [];
+                }
+                layout.shapes.push(shape);
+            } else // Series
             {
                 yaxis_idx++;
                 series_yaxis_idx++;
@@ -222,7 +261,7 @@ function plot(tables_to_plot, selected_OPTR)
                 yaxis.showline = true;
                 yaxis.showticklabels = true;
                 yaxis.position = (series_yaxis_idx - 1) * series_axis_position_increment;
-                yaxis.gridcolor = marker_colors[plot_number];
+                yaxis.gridcolor = marker_colors[plot_number - 1];
                 add_yaxis = true;
                 layout.xaxis.domain = [(series_yaxis_idx - 1) * series_axis_position_increment + 0.025, 1];
             }
@@ -247,10 +286,9 @@ function plot(tables_to_plot, selected_OPTR)
                 y: plot_data[y_key],
                 autotick: false,
                 ticks: plot_data.date,
-                ticks: plot_data.date,
                 name: name,
                 text: getText(annotation_maker, plot_data["date"].length),
-                hoverinfo: "text",
+                hoverinfo: 'text',
                 type: 'scatter',
                 mode: trace_mode,
                 marker:
@@ -410,35 +448,33 @@ function getText(annotation_maker, N)
 function makeMarkerColors(hue_start, hue_end, saturation, value, steps)
 {
     var hue = 0;
-  var i = 0;
-  var color_text = "";
+    var i = 0;
+    var color_text = "";
 
-  var color_texts = [];
+    var color_texts = [];
 
-  for (i = 0 ; i < steps ; i++)
-  {
-  	hue = hue_start + i*(hue_end - hue_start)/steps;
-    //console.log("hue: " + hue);
-  	color_text = "hsl(" +
-      hue + ", " +
-      saturation + "%, " +
-      value + "%)";
-    //console.log("color_text");
-    //console.log(color_text);
+    for (i = 0 ; i < steps ; i++)
+    {
+        hue = hue_start + i*(hue_end - hue_start)/steps;
+        //console.log("hue: " + hue);
+        color_text = "hsl(" +
+          hue + ", " +
+          saturation + "%, " +
+          value + "%)";
+        //console.log("color_text");
+        //console.log(color_text);
 
-    color_texts.push(color_text);
+        color_texts.push(color_text);
 
-	var el = $('<div></div>');
-   	el.attr('class', 'color-spot').attr('id', color_text);
-    el.css({"background-color": color_text, "height": "20px", "width": "20px"});
+        var el = $('<div></div>');
+        el.attr('class', 'color-spot').attr('id', color_text);
+        el.css({"background-color": color_text, "height": "20px", "width": "20px"});
 
-    el.appendTo('#color-spots');
-    //console.log(el[0].outerHTML);
+        el.appendTo('#color-spots');
+        //console.log(el[0].outerHTML);
+    }
 
-  }
-
-	return color_texts;
-
+    return color_texts;
 }
 
 function getRange(x, fudge)
