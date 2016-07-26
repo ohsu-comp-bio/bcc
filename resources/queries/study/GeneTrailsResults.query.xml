@@ -6,7 +6,9 @@
                 <!--if you include this on a table, it will apply standard configuration-->
                 <javaCustomizer>org.labkey.bcc.query.BCCCustomizer</javaCustomizer>
                 <columns>
-
+                    <column columnName="Date">
+                        <columnTitle>ImportDate</columnTitle>
+                    </column>
                 </columns>
             </table>
         </tables>
