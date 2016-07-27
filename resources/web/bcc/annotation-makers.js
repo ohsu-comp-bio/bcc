@@ -24,7 +24,7 @@ function getAnnotationMaker(table_name, plot_data, OPTR)
         
         var annotation_text = '<b>Patient: </b>' + OPTR + '<br />';
 
-        var date = plot_data.Date[point_number];
+        var date = plot_data.date[point_number];
         annotation_text += '<b>Date: </b>' + date + '<br />';
         
         $.each(fields, function(index, field_data){
@@ -35,7 +35,7 @@ function getAnnotationMaker(table_name, plot_data, OPTR)
             var field_name = field_data.FieldName;
             var units = ("Units" in field_data) ? " " + field_data.Units : "";
 
-            if (field_name != 'dummy' && field_name != 'Date')
+            if (field_name != 'dummy' && field_name != 'date')
             {                
                 annotation_text += '' + 
                     '<b>' + display_name + '</b>: ' + 

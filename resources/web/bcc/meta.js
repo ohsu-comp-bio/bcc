@@ -26,26 +26,26 @@ var colors =
 
 var table_schema =
 {
-    DiagnosisTable:
+    Diagnoses:
     {
         Type: "Event",
-        TableName: "DiagnosisTable",
-        DisplayName: "Diagnosis",
+        TableName: "Diagnoses",
+        DisplayName: "Diagnoses",
         Fields:
         [   {
-                FieldName: "Date",
+                FieldName: "date",
                 DisplayName: "Date"
             },
             {
-                FieldName: "InitialDiagnosis",
+                FieldName: "initialDiagnosis",
                 DisplayName: "Initial Diagnosis"
             },
             {
-                FieldName: "DiagnosisFromHistologyCode",
+                FieldName: "histologyDiagnosis",
                 DisplayName: "Histology"
             },
             {
-                FieldName: "Grade",
+                FieldName: "grade",
                 DisplayName: "Grade"
             },
             {
@@ -67,7 +67,7 @@ var table_schema =
                 DisplayName: "Date"
             },
             {
-                FieldName: "Type",
+                FieldName: "type",
                 DisplayName: "Type"
             },
             {
@@ -187,20 +187,21 @@ var table_schema =
         ]
     },
 
-    CA199Table:
+    // We need to add a filter on "test" to get just CA19-9 values.
+    LabResults:
     {
         Type: "Series",
-        TableName: "CA199Table",
+        TableName: "LabResults",
         DisplayName: "CA19-9",
         Units: "U/ml",
         Fields:
         [
             {
-                FieldName: "Date",
+                FieldName: "date",
                 DisplayName: "Date"
             },
             {
-                FieldName: "CA199",
+                FieldName: "result",
                 DisplayName: "CA19-9",
                 Units: "U/ml"
             }
@@ -280,7 +281,7 @@ var table_schema =
                 DisplayName: "Date"
             },
             {
-                FieldName: "Weight",
+                FieldName: "weight",
                 DisplayName: "Weight",
                 Units: "kg"
             }
