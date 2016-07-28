@@ -2,7 +2,7 @@
     <metadata>
         <tables xmlns="http://labkey.org/data/xml">
             <table tableName="GeneTrailsResults" tableDbType="TABLE">
-                <tableTitle>Gene Trails</tableTitle>
+                <tableTitle>Gene Trails Results</tableTitle>
                 <!--if you include this on a table, it will apply standard configuration-->
                 <javaCustomizer>org.labkey.bcc.query.BCCCustomizer</javaCustomizer>
                 <columns>
@@ -14,6 +14,10 @@
                         <protected>true</protected>
                     </column>
                     <column columnName="OHSUPathologyID">
+                        <phi>PHI</phi>
+                        <protected>true</protected>
+                    </column>
+                    <column columnName="OrderedTest">
                         <phi>PHI</phi>
                         <protected>true</protected>
                     </column>

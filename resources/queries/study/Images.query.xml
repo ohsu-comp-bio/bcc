@@ -12,6 +12,10 @@
                             <className>org.labkey.omerointegration.OmeroDisplayColumFactory</className>
                         </displayColumnFactory>
                     </column>
+                    <column columnName="OPTR">
+                        <phi>PHI</phi>
+                        <protected>true</protected>
+                    </column>
                 </columns>
             </table>
         </tables>

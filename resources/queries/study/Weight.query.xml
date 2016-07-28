@@ -9,6 +9,10 @@
                     <column columnName="weight">
                         <columnTitle>Weight (kg)</columnTitle>
                     </column>
+                    <column columnName="OPTR">
+                        <phi>PHI</phi>
+                        <protected>true</protected>
+                    </column>
                 </columns>
             </table>
         </tables>
