@@ -243,13 +243,37 @@ function plot(tables_to_plot, selected_OPTR)
                   first_series_yaxis_idx = yaxis_idx;
                 } else
                 {
+                  // Note that all 'series' data is displayed in the same region (x and y domain) on the
+                  // graph.  Therefore, each series yaxis has to 'overlap' the first one.  However, there
+                  // can be a new yaxis scale displayed for each series.
                   yaxis.overlaying = "y" + (first_series_yaxis_idx > 1 ? first_series_yaxis_idx:"");
                 }
 
                 yaxis_name_suffix = yaxis_idx > 1 ? yaxis_idx:"";
                 yaxis_name = "yaxis" + yaxis_name_suffix;
-                y_key = fields[1];
                 trace_mode = "lines+markers";
+
+                y_key = fields[1];
+                if (table_name == "TumorSize")
+                {
+                    plot_data["sizeAxisMax"] = [];
+                    y_key = "sizeAxisMax";
+                    for (var j = 0 ; j < plot_data["sizeAxis1"].length ; j++)
+                    {
+                        plot_data["sizeAxisMax"][j] = plot_data["sizeAxis1"][j];
+                        if (plot_data["sizeAxis2"][j] && (plot_data["sizeAxis2"][j] > plot_data["sizeAxisMax"][j]))
+                        {
+                            plot_data["sizeAxisMax"][j] = plot_data["sizeAxis2"][j];
+                        }
+                        if (plot_data["sizeAxis3"][j] && (plot_data["sizeAxis3"][j] > plot_data["sizeAxisMax"][j]))
+                        {
+                            plot_data["sizeAxisMax"][j] = plot_data["sizeAxis3"][j];
+                        }
+                    }
+                } else
+                {
+                    y_key = fields[1];
+                }
 
                 var y = plot_data[y_key].map(parseFloat);
                 yaxis.position = 0;
@@ -280,82 +304,83 @@ function plot(tables_to_plot, selected_OPTR)
             //console.log("plot_data['ykey']");
             //console.log(plot_data[y_key]);
 
-            trace =
-            {
-                x: plot_data.date,
-                y: plot_data[y_key],
-                autotick: false,
-                ticks: plot_data.date,
-                name: name,
-                text: getText(annotation_maker, plot_data["date"].length),
-                hoverinfo: 'text',
-                type: 'scatter',
-                mode: trace_mode,
-                marker:
-                {
-                    size: 12,
-                    color: marker_colors[plot_number - 1],
-                    symbol: plot_number
-                },
-                line:
-                {
-                    width: 3
-                },
-                yaxis: "y" + yaxis_name_suffix
-            };
-
-            //console.log("trace" + plot_number);
-            //console.log(trace);
-            //console.log("trace.yaxis");
-            //console.log(trace.yaxis);
-            //trace.yaxis = yaxis_name;
-            if
-                (
-                    table_name == "PrimaryTumorSizeTable" ||
-                    table_name == "Met1SizeTable" ||
-                    table_name == "Met2SizeTable"
-                )
-            {
-                //console.log("tumor size table " + table_name);
-                //console.log("setting trace yaxis to y12");
-                trace.yaxis = "y12";
-            }
-
             if (add_yaxis == true)
             {
                 layout[yaxis_name] = yaxis;
             }
 
-            traces.push(trace);
-
-            //console.log("setting layout for axis " + yaxis_name);
-            //var layout = base_layout;
-            if
-                (
-                    table_name == "PrimaryTumorSizeTable" ||
-                    table_name == "Met1SizeTable" ||
-                    table_name == "Met2SizeTable"
-                )
+            if (table_name == "TumorSize")
             {
-                yaxis.range = [0,50];
-                //console.log("tumor size table " + table_name);
-                yaxis.title = "<b>Tumor Size (mm)</b>";
-                yaxis.position = 0.2;
-                //console.log("setting layout yaxis12 to yaxis");
-                layout["yaxis12"] = yaxis;
-                layout["yaxis12"].overlaying = false;
+                // For TumorSize, we want a separate trace for each mass (tumorId) being tracked.
+                var uniqueIds = uniq(plot_data.tumorId);
+                $.each(uniqueIds, function(index1, item1){
+                    //console.log("uniqueIds: " + index1 + ": " + item1);
+                    var x = [];
+                    var y = [];
+                    var text = [];
+                    $.each(plot_data.tumorId, function(index2, item2){
+                        if (item2 == item1)
+                        {
+                            x.push(plot_data.date[index2]);
+                            y.push(plot_data[y_key][index2]);
+                            text.push(annotation_maker(index2));
+                        }
+                    });
+
+                    trace =
+                    {
+                        x: x,
+                        y: y,
+                        autotick: false,
+                        ticks: y,
+                        name: item1 + " (mm)",
+                        text: text,
+                        hoverinfo: 'text',
+                        type: 'scatter',
+                        mode: trace_mode,
+                        marker:
+                        {
+                            size: 12,
+                            color: marker_colors[plot_number - 1],
+                            symbol: plot_number
+                        },
+                        line:
+                        {
+                            width: 3
+                        },
+                        yaxis: "y" + yaxis_name_suffix
+                    };
+
+                    traces.push(trace);
+                });
+            } else
+            {
+                trace =
+                {
+                    x: plot_data.date,
+                    y: plot_data[y_key],
+                    autotick: false,
+                    ticks: plot_data.date,
+                    name: name,
+                    text: getText(annotation_maker, plot_data["date"].length),
+                    hoverinfo: 'text',
+                    type: 'scatter',
+                    mode: trace_mode,
+                    marker:
+                    {
+                        size: 12,
+                        color: marker_colors[plot_number - 1],
+                        symbol: plot_number
+                    },
+                    line:
+                    {
+                        width: 3
+                    },
+                    yaxis: "y" + yaxis_name_suffix
+                };
+
+                traces.push(trace);
             }
-
-            //console.log("layout[" + yaxis_name + "]");
-            //console.log(layout[yaxis_name]);
-            //console.log("layout");
-            //console.log(layout);
-            //console.log("layout[yaxis_name].range");
-            //console.log(layout[yaxis_name].range);
-
-            //Plotly.relayout('graph', layout);
-            //Plotly.addTraces('graph', [trace]);
-
         }  else
         {
             //console.log("data_sources DOES NOT have own property " + table_name);
@@ -494,4 +519,13 @@ function getRange(x, fudge)
 	}
 
 	return [min - (fudge * (max - min)), max + (fudge * (max - min))];
+}
+
+function uniq(a)
+{
+    var seen = {};
+    return a.filter(function(item)
+    {
+        return seen.hasOwnProperty(item) ? false : (seen[item] = true);
+    });
 }
