@@ -26,11 +26,11 @@ var colors =
 
 var table_schema =
 {
-    Diagnoses:
+    Diagnosis:
     {
         Type: "Event",
-        TableName: "Diagnoses",
-        DisplayName: "Diagnoses",
+        TableName: "Diagnosis",
+        DisplayName: "Diagnosis",
         Fields:
         [   {
                 FieldName: "date",
@@ -223,6 +223,40 @@ var table_schema =
             {
                 FieldName: "SizeAxis1",
                 DisplayName: "Primary Tumor",
+                Units: "mm"
+            }
+        ]
+    },
+
+    TumorSize:
+    {
+        Type: "Series",
+        TableName: "TumorSize",
+        DisplayName: "Mass Size",
+        Units: "mm",
+        Fields:
+        [
+            {
+                FieldName: "date",
+                DisplayName: "Date"
+            },
+            {
+                FieldName: "tumorId",
+                DisplayName: "Mass Name",
+            },
+            {
+                FieldName: "sizeAxis1",
+                DisplayName: "Tumor Axis 1",
+                Units: "mm"
+            },
+            {
+                FieldName: "sizeAxis2",
+                DisplayName: "Tumor Axis 2",
+                Units: "mm"
+            },
+            {
+                FieldName: "sizeAxis3",
+                DisplayName: "Tumor Axis 3",
                 Units: "mm"
             }
         ]
