@@ -38,12 +38,18 @@ function getAnnotationMaker(table_name, plot_data, OPTR)
             if (field_name != 'dummy' && field_name != 'date')
             {
                 var data = plot_data[field_name][point_number];
-                if (data != "" && data != "NaN")
+                console.log("Adding annotation text for field " + field_name + " " + data);
+                console.log("typefo data " + (typeof data));
+                console.log(data == "NaN");
+                console.log(data === "NaN");
+
+                if (data != "" && typeof data !== "undefined" && data != "NaN")
                 {
+                    console.log("not a nan " + data);
                     annotation_text += '' +
-                            '<b>' + display_name + '</b>: ' +
-                            plot_data[field_name][point_number] +
-                            units + '<br />';
+                        '<b>' + display_name + '</b>: ' +
+                        plot_data[field_name][point_number] +
+                        units + '<br />';
                     //console.log("annotation text: " + annotation_text);
                 }
             }
