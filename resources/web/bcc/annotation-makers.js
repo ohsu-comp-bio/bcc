@@ -36,12 +36,16 @@ function getAnnotationMaker(table_name, plot_data, OPTR)
             var units = ("Units" in field_data) ? " " + field_data.Units : "";
 
             if (field_name != 'dummy' && field_name != 'date')
-            {                
-                annotation_text += '' + 
-                    '<b>' + display_name + '</b>: ' + 
-                    plot_data[field_name][point_number] + 
-                    units + '<br />';
-                //console.log("annotation text: " + annotation_text);
+            {
+                var data = plot_data[field_name][point_number];
+                if (data != "" && data != "NaN")
+                {
+                    annotation_text += '' +
+                            '<b>' + display_name + '</b>: ' +
+                            plot_data[field_name][point_number] +
+                            units + '<br />';
+                    //console.log("annotation text: " + annotation_text);
+                }
             }
             
             
