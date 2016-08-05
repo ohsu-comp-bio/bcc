@@ -9,18 +9,18 @@ function getAnnotationMaker(table_name, plot_data, OPTR)
     
     function getGenericAnnotationText(point_number)
     {
-        //console.log("getGenericAnnotationText");
-        //console.log("table_name " + table_name);
+        console.log("getGenericAnnotationText");
+        console.log("table_name " + table_name);
         //console.log("plot_data");
         //console.log(plot_data);
         //console.log("OPTR " + OPTR);
         //console.log("point_number " + point_number);
-        //console.log("table_schema");
-        //console.log(table_schema);
+        console.log("table_schema");
+        console.log(table_schema);
         var fields = table_schema[table_name].Fields;
         
-        //console.log("fields");
-        //console.log(fields);
+        console.log("fields");
+        console.log(fields);
         
         //var annotation_text = '<b>Patient: </b>' + OPTR + '<br />';
         var annotation_text = "";
@@ -39,19 +39,18 @@ function getAnnotationMaker(table_name, plot_data, OPTR)
             if (field_name != 'dummy' && field_name != 'date')
             {
                 var data = plot_data[field_name][point_number];
-                console.log("Adding annotation text for field " + field_name + " " + data);
-                console.log("typefo data " + (typeof data));
-                console.log(data == "NaN");
-                console.log(data === "NaN");
+                console.log("data for field " + field_name + ": " + data);
 
-                if (data != "" && typeof data !== "undefined" && data != "NaN")
+                // Time to get sophisticated about checking whether to display
+
+                if (getShouldDisplayData(data))
                 {
-                    console.log("not a nan " + data);
+                    console.log("Adding annotation text for field " + field_name + " " + data);
                     annotation_text += '' +
                         '<b>' + display_name + '</b>: ' +
                         plot_data[field_name][point_number] +
                         units + '<br />';
-                    //console.log("annotation text: " + annotation_text);
+                    console.log("annotation text: " + annotation_text);
                 }
             }
             
@@ -67,3 +66,48 @@ function getAnnotationMaker(table_name, plot_data, OPTR)
 //annotation_makers['Diagnosis'] = getDiagnosisAnnotationText;
 
 
+function getShouldDisplayData(data)
+{
+    var isnull = (data === null);
+    var isnan = isNaN(data);
+    var type = typeof data;
+    var isnumber = (type == "Number");
+    var isstring = (type == "string");
+
+    var report = ""
+        + "isnull: " + isnull + "\n"
+        + "isnan: " + isnan + "\n"
+        + "type: " + type + "\n"
+        + "isnumber: " + isnumber + "\n"
+        + "isstring: " + isstring;
+
+    console.log(report);
+
+
+    if (isnan && !isstring)
+    {
+        console.log(data + " is NaN value");
+        return false;
+    }
+
+    if (isnull)
+    {
+        console.log("value is null -- probably missing or empty");
+        return false;
+    }
+
+    if (data == "")
+    {
+        console.log("data is an empty string");
+        return false;
+    }
+
+    if (data == "NA" || data == "Na" || data == "na")
+    {
+        console.log("got some sort of NA: " + data);
+        return false;
+    }
+
+    console.log("data checks out for display");
+    return true;
+}
