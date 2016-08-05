@@ -22,7 +22,7 @@ function getAnnotationMaker(table_name, plot_data, OPTR)
         //console.log("fields");
         //console.log(fields);
         
-        var annotation_text = '<b>Patient: </b>' + OPTR + '<br />';
+        //var annotation_text = '<b>Patient: </b>' + OPTR + '<br />';
 
         var date = plot_data.date[point_number];
         annotation_text += '<b>Date: </b>' + date + '<br />';
