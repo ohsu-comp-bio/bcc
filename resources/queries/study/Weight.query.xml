@@ -6,9 +6,18 @@
                 <!--if you include this on a table, it will apply standard configuration-->
                 <javaCustomizer>org.labkey.bcc.query.BCCCustomizer</javaCustomizer>
                 <columns>
-                    <column columnName="weight">
-                        <columnTitle>Weight (kg)</columnTitle>
+                    <column columnName="OPTR">
+                        <columnTitle>OPTR</columnTitle>
+                        <phi>PHI</phi>
+                        <protected>true</protected>
                     </column>
+                    <column columnName="Date">
+                        <columnTitle>Measurement Date</columnTitle>
+                        <phi>PHI</phi>
+                        <protected>true</protected>
+                    </column>
+                    <column columnName="Weight"></column>
+                    <column columnName="Units"></column>
                 </columns>
             </table>
         </tables>
