@@ -11,6 +11,7 @@
                         <phi>PHI</phi>
                         <protected>true</protected>
                     </column>
+<<<<<<< HEAD
                     <column columnName="Date">
                         <columnTitle>Measurement Date</columnTitle>
                         <phi>PHI</phi>
@@ -18,6 +19,12 @@
                     </column>
                     <column columnName="Weight"></column>
                     <column columnName="Units"></column>
+=======
+                    <column columnName="OPTR">
+                        <phi>PHI</phi>
+                        <protected>true</protected>
+                    </column>
+>>>>>>> 89a30b2ed2bb285761bba3fecee3730a2191b9d3
                 </columns>
             </table>
         </tables>

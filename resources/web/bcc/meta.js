@@ -26,27 +26,53 @@ var colors =
 
 var table_schema =
 {
-    Diagnoses:
+    Diagnosis:
     {
         Type: "Event",
-        TableName: "Diagnoses",
-        DisplayName: "Diagnoses",
+        TableName: "Diagnosis",
+        DisplayName: "Diagnosis",
         Fields:
-        [   {
+        [
+            {
                 FieldName: "date",
                 DisplayName: "Date"
             },
             {
-                FieldName: "initialDiagnosis",
+                FieldName: "InitialDiagnosis",
                 DisplayName: "Initial Diagnosis"
             },
             {
-                FieldName: "histologyDiagnosis",
-                DisplayName: "Histology"
+                FieldName: "HistologyDescription",
+                DisplayName: "Histology Description"
             },
             {
-                FieldName: "grade",
+                FieldName: "DagnosisFromHistologyCode",
+                DisplayName: "Diagnosis form Histology"
+            },
+            {
+                FieldName: "Grade",
                 DisplayName: "Grade"
+            },
+            {
+                FieldName: "TumorSize",
+                DisplayName: "Tumor Size",
+                Units: "mm"
+            },
+            {
+                FieldName: "LymphVascularInvasion",
+                DisplayName: "Lymph Vascular Invasion"
+            },
+            {
+                FieldName: "StageGroupingDominant",
+                DisplayName: "Stage Grouping Dominant"
+            },
+            {
+                FieldName: "PrimarySiteMajorGroupsForStaging",
+                DisplayName: "Primary Site Major Groups For Staging"
+            },
+            {
+                FieldName: "Margins",
+                DisplayName: "Margins"
             },
             {
                 FieldName: "dummy",
@@ -69,6 +95,14 @@ var table_schema =
             {
                 FieldName: "type",
                 DisplayName: "Type"
+            },
+            {
+                FieldName: "mostDefSurgicalResDate",
+                DisplayName: "Most Definitive Surgical Res Date"
+            },
+            {
+                FieldName: "comment",
+                DisplayName: "Comment"
             },
             {
                 FieldName: "dummy",
@@ -223,6 +257,40 @@ var table_schema =
             {
                 FieldName: "SizeAxis1",
                 DisplayName: "Primary Tumor",
+                Units: "mm"
+            }
+        ]
+    },
+
+    TumorSize:
+    {
+        Type: "Series",
+        TableName: "TumorSize",
+        DisplayName: "Mass Size",
+        Units: "mm",
+        Fields:
+        [
+            {
+                FieldName: "date",
+                DisplayName: "Date"
+            },
+            {
+                FieldName: "tumorId",
+                DisplayName: "Mass Name",
+            },
+            {
+                FieldName: "sizeAxis1",
+                DisplayName: "Tumor Axis 1",
+                Units: "mm"
+            },
+            {
+                FieldName: "sizeAxis2",
+                DisplayName: "Tumor Axis 2",
+                Units: "mm"
+            },
+            {
+                FieldName: "sizeAxis3",
+                DisplayName: "Tumor Axis 3",
                 Units: "mm"
             }
         ]

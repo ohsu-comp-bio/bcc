@@ -2,7 +2,7 @@
     <metadata>
         <tables xmlns="http://labkey.org/data/xml">
             <table tableName="" tableDbType="TABLE">
-                <tableTitle>Tumor Size</tableTitle>
+                <tableTitle>Diagnosis</tableTitle>
                 <!--if you include this on a table, it will apply standard configuration-->
                 <javaCustomizer>org.labkey.bcc.query.BCCCustomizer</javaCustomizer>
                 <columns>

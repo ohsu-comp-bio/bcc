@@ -1,18 +1,23 @@
 <query xmlns="http://labkey.org/data/xml/query">
     <metadata>
         <tables xmlns="http://labkey.org/data/xml">
-            <table tableName="" tableDbType="TABLE">
-                <tableTitle>Images</tableTitle>
+            <table tableName="GeneTrailsResults" tableDbType="TABLE">
+                <tableTitle>Gene Trails Results</tableTitle>
                 <!--if you include this on a table, it will apply standard configuration-->
                 <javaCustomizer>org.labkey.bcc.query.BCCCustomizer</javaCustomizer>
                 <columns>
-                    <column columnName="omeroId">
-                        <columnTitle>OMERO ID</columnTitle>
-                        <displayColumnFactory>
-                            <className>org.labkey.omerointegration.OmeroDisplayColumFactory</className>
-                        </displayColumnFactory>
+                    <column columnName="Date">
+                        <columnTitle>Import Date</columnTitle>
                     </column>
                     <column columnName="OPTR">
+                        <phi>PHI</phi>
+                        <protected>true</protected>
+                    </column>
+                    <column columnName="OHSUPathologyID">
+                        <phi>PHI</phi>
+                        <protected>true</protected>
+                    </column>
+                    <column columnName="OrderedTest">
                         <phi>PHI</phi>
                         <protected>true</protected>
                     </column>

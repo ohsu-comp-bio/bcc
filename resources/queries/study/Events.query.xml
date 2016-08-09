@@ -2,11 +2,14 @@
     <metadata>
         <tables xmlns="http://labkey.org/data/xml">
             <table tableName="" tableDbType="TABLE">
-                <tableTitle>Diagnoses</tableTitle>
+                <tableTitle>Events</tableTitle>
                 <!--if you include this on a table, it will apply standard configuration-->
                 <javaCustomizer>org.labkey.bcc.query.BCCCustomizer</javaCustomizer>
                 <columns>
-
+                    <column columnName="OPTR">
+                        <phi>PHI</phi>
+                        <protected>true</protected>
+                    </column>
                 </columns>
             </table>
         </tables>
