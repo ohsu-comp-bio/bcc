@@ -133,6 +133,29 @@ var table_schema =
         ]
     },
 
+    Procedures:
+    {
+        Type: "Event",
+        TableName: "Procedures",
+        DisplayName: "Procedures",
+        MultiLegendIdCol: "procedure", // When used, this should be one of the fields below.
+        Fields:
+        [
+            {
+                FieldName:"date",
+                DisplayName: "Date"
+            },
+            {
+                FieldName:"procedure",
+                DisplayName: "procedure"
+            },
+            {
+                FieldName: "dummy",
+                DisplayName: "dummy"
+            }
+        ]
+   },
+
     BloodDrawTable:
     {
         Type: "Event",
@@ -268,6 +291,7 @@ var table_schema =
         TableName: "TumorSize",
         DisplayName: "Mass Size",
         Units: "mm",
+        MultiLegendIdCol: "tumorId", // When used, this should be one of the fields below.
         Fields:
         [
             {

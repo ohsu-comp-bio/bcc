@@ -37,7 +37,6 @@ function plot(tables_to_plot, selected_OPTR)
     var series_yaxis_idx = 0;
     var first_event_yaxis_idx = 0;
     var first_series_yaxis_idx = 0;
-    var tumor_yaxis_idx = 0;
     var num_events = 0;
     var event_idx = 0;
     var trace_mode;
@@ -134,11 +133,6 @@ function plot(tables_to_plot, selected_OPTR)
             //console.log("plot_data for " + table_name);
             //console.log(plot_data);
 
-            var annotation_maker = getAnnotationMaker(table_name, plot_data, selected_OPTR);
-            //console.log("name for annotation maker " + name);
-            annotation_makers[name] = annotation_maker;
-            //console.log(plot_data.date);
-
             add_yaxis = false;
 
             yaxis =
@@ -169,7 +163,6 @@ function plot(tables_to_plot, selected_OPTR)
                 {
                     yaxis_idx++;
                     first_event_yaxis_idx = yaxis_idx;
-                    trace_mode = "markers";
                     yaxis.overlaying = false;
                     yaxis.autorange = "true";
                     yaxis.domain = event_yaxis_domain;
@@ -180,6 +173,7 @@ function plot(tables_to_plot, selected_OPTR)
                     yaxis.range = [0.5, num_events + 0.5];
                     add_yaxis = true;
                 }
+                trace_mode = "markers";
                 y_key = "dummy";
                 for (var j = 0; j < plot_data[y_key].length; j++)
                 {
@@ -218,6 +212,7 @@ function plot(tables_to_plot, selected_OPTR)
                     // y-reference is assigned to the plot paper [0,1]
                     //yref: 'paper',
                     yref: "y" + yaxis_name_suffix,
+                    // Ariel mentioned full length lines, this would require min and max dates here.
                     x0: plot_data.date[0],
                     y0: plot_data[y_key][0],
                     x1: plot_data.date[plot_data.date.length - 1],
@@ -253,6 +248,7 @@ function plot(tables_to_plot, selected_OPTR)
                 yaxis_name = "yaxis" + yaxis_name_suffix;
                 trace_mode = "lines+markers";
 
+                // Might be better to handle this in a view with a calculated column.
                 y_key = fields[1];
                 if (table_name == "TumorSize")
                 {
@@ -309,60 +305,61 @@ function plot(tables_to_plot, selected_OPTR)
                 layout[yaxis_name] = yaxis;
             }
 
-            if (table_name == "TumorSize")
+            var uniqueIds = [];
+            var doMultipleLegends = false;
+
+            // The "MultiLegendIdCol" property of the table_schema tells us to group the data from a table
+            // based on the specified column and create legend for each group.  Also, when graphing series
+            // data this attribute tells us to make a separate line for each group.
+            if (table_schema[table_name].hasOwnProperty("MultiLegendIdCol") &&
+                plot_data.hasOwnProperty(table_schema[table_name].MultiLegendIdCol))
             {
-                // For TumorSize, we want a separate trace for each mass (tumorId) being tracked.
-                var uniqueIds = uniq(plot_data.tumorId);
-                $.each(uniqueIds, function(index1, item1){
-                    //console.log("uniqueIds: " + index1 + ": " + item1);
-                    var x = [];
-                    var y = [];
-                    var text = [];
-                    $.each(plot_data.tumorId, function(index2, item2){
-                        if (item2 == item1)
+                // We want a separate symbol and legend (and trace if a series) for each unique ID in the specified column.
+                doMultipleLegends = true;
+                uniqueIds = uniq(plot_data[table_schema[table_name].MultiLegendIdCol]);
+            } else
+            {
+                uniqueIds[0] = name;
+            }
+
+            var annotation_maker = getAnnotationMaker(table_name, plot_data, selected_OPTR);
+
+            $.each(uniqueIds, function(index1, legendText)
+            {
+                var x = [];
+                var y = [];
+                var hoverText = [];
+                if (doMultipleLegends)
+                {
+                    $.each(plot_data[table_schema[table_name].MultiLegendIdCol], function(index2, item2)
+                    {
+                        if (item2 == legendText)
                         {
                             x.push(plot_data.date[index2]);
                             y.push(plot_data[y_key][index2]);
-                            text.push(annotation_maker(index2));
+                            hoverText.push(annotation_maker(index2));
                         }
                     });
+                    legendText = legendText + units;
+                } else
+                {
+                    x = plot_data.date;
+                    y = plot_data[y_key];
+                    hoverText = getText(annotation_maker, plot_data["date"].length)
+                }
 
-                    trace =
-                    {
-                        x: x,
-                        y: y,
-                        autotick: false,
-                        ticks: y,
-                        name: item1 + " (mm)",
-                        text: text,
-                        hoverinfo: 'text',
-                        type: 'scatter',
-                        mode: trace_mode,
-                        marker:
-                        {
-                            size: 12,
-                            color: marker_colors[plot_number - 1],
-                            symbol: plot_number
-                        },
-                        line:
-                        {
-                            width: 3
-                        },
-                        yaxis: "y" + yaxis_name_suffix
-                    };
+                //console.log("name for annotation maker " + legendText);
+                annotation_makers[legendText] = annotation_maker;
+                //console.log(plot_data.date);
 
-                    traces.push(trace);
-                });
-            } else
-            {
                 trace =
                 {
-                    x: plot_data.date,
-                    y: plot_data[y_key],
+                    x: x,
+                    y: y,
                     autotick: false,
-                    ticks: plot_data.date,
-                    name: name,
-                    text: getText(annotation_maker, plot_data["date"].length),
+                    ticks: y,
+                    name: legendText,
+                    text: hoverText,
                     hoverinfo: 'text',
                     type: 'scatter',
                     mode: trace_mode,
@@ -380,7 +377,7 @@ function plot(tables_to_plot, selected_OPTR)
                 };
 
                 traces.push(trace);
-            }
+            });
         }  else
         {
             //console.log("data_sources DOES NOT have own property " + table_name);
