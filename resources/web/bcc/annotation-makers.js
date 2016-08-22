@@ -36,7 +36,7 @@ function getAnnotationMaker(table_name, plot_data, OPTR)
             var field_name = field_data.FieldName;
             var units = ("Units" in field_data) ? " " + field_data.Units : "";
 
-            if (field_name != 'dummy' && field_name != 'date')
+            if (field_name != 'date')
             {
                 var data = plot_data[field_name][point_number];
                 console.log("data for field " + field_name + ": " + data);

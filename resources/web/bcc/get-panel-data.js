@@ -216,12 +216,7 @@ function getTraceData(table_name, fields)
             if (item.hasOwnProperty(field))
             {
                 plot_data[field].push(item[field]);
-            }
-            else if (field == "dummy")
-            {
-                plot_data['dummy'].push(0);
-            }
-            else
+            } else
             {
                 plot_data[field].push(NaN);
             }

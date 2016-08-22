@@ -73,10 +73,6 @@ var table_schema =
             {
                 FieldName: "Margins",
                 DisplayName: "Margins"
-            },
-            {
-                FieldName: "dummy",
-                DisplayName: "dummy"
             }
         ]
     },
@@ -103,10 +99,6 @@ var table_schema =
             {
                 FieldName: "comment",
                 DisplayName: "Comment"
-            },
-            {
-                FieldName: "dummy",
-                DisplayName: "dummy"
             }
         ]
     },
@@ -125,10 +117,6 @@ var table_schema =
             {
                 FieldName: "Type",
                 DisplayName: "Type"
-            },
-            {
-                FieldName: "dummy",
-                DisplayName: "dummy"
             }
         ]
     },
@@ -138,7 +126,48 @@ var table_schema =
         Type: "Event",
         TableName: "Procedures",
         DisplayName: "Procedures",
+        Marker:
+        {
+            symbol: "triangle-down",
+            color: "#FAEBD7",
+            size: 12
+        },
+        Line:
+        {
+            color: "black",
+            width: 1
+        },
         MultiLegendIdCol: "procedure", // When used, this should be one of the fields below.
+        MultiLegendMarkers: // Used with MultiLegendIdCol to define specific markers for each legend ID.
+        [
+            {
+                ID: "Blood draw",
+                Marker:
+                {
+                    symbol: "circle",
+                    color: "purple",
+                    size: 12
+                }
+            },
+            {
+                ID: "CT",
+                Marker:
+                {
+                    symbol: "circle-open",
+                    color: "black",
+                    size: 12
+                }
+            },
+            {
+                ID: "Biopsy",
+                Marker:
+                {
+                    symbol: "square",
+                    color: "orange",
+                    size: 12
+                }
+            }
+        ],
         Fields:
         [
             {
@@ -148,10 +177,6 @@ var table_schema =
             {
                 FieldName:"procedure",
                 DisplayName: "procedure"
-            },
-            {
-                FieldName: "dummy",
-                DisplayName: "dummy"
             }
         ]
    },
@@ -166,10 +191,6 @@ var table_schema =
             {
                 FieldName:"Date",
                 DisplayName: "Date"
-            },
-            {
-                FieldName: "dummy",
-                DisplayName: "dummy"
             }
         ]
     },
@@ -192,10 +213,6 @@ var table_schema =
             {
                 FieldName: "SampleMatchedType",
                 DisplayName: "Matched Type"
-            },
-            {
-                FieldName: "dummy",
-                DisplayName: "dummy"
             }
         ]
     },
@@ -214,10 +231,6 @@ var table_schema =
             {
                 FieldName: "Type",
                 DisplayName: "Type"
-            },
-            {
-                FieldName: "dummy",
-                DisplayName: "dummy"
             }
         ]
     },
@@ -236,10 +249,6 @@ var table_schema =
             {
                 FieldName: "Type",
                 DisplayName: "Type"
-            },
-            {
-                FieldName: "dummy",
-                DisplayName: "dummy"
             }
         ]
     },
@@ -251,6 +260,7 @@ var table_schema =
         TableName: "LabResults",
         DisplayName: "CA19-9",
         Units: "U/ml",
+        yValueCol: "result", // When used, this should be one of the fields below.
         Fields:
         [
             {
@@ -292,6 +302,7 @@ var table_schema =
         DisplayName: "Mass Size",
         Units: "mm",
         MultiLegendIdCol: "tumorId", // When used, this should be one of the fields below.
+        MultiLegendColorCycle: ["red", "green", "blue"],
         Fields:
         [
             {
@@ -320,45 +331,6 @@ var table_schema =
         ]
     },
 
-    Met1SizeTable:
-    {
-        Type: "Series",
-        TableName: "Met1SizeTable",
-        DisplayName: "peripancreatic lymph node",
-        Units: "mm",
-        Fields:
-        [
-            {
-                FieldName: "Date",
-                DisplayName: "Date"
-            },
-            {
-                FieldName: "SizeAxis1",
-                DisplayName: "Tumor Size",
-                Units: "mm"
-            }
-        ]
-    },
-
-    Met2SizeTable:
-    {
-        Type: "Series",
-        TableName: "Met2SizeTable",
-        DisplayName: "portocaval lymph node",
-        Units: "mm",
-        Fields:
-        [
-            {
-                FieldName: "Date",
-                DisplayName: "Date"
-            },
-            {
-                FieldName: "SizeAxis1",
-                DisplayName: "Tumor Size",
-                Units: "mm"
-            }
-        ]
-    },
 
     Weight:
     {
@@ -366,6 +338,7 @@ var table_schema =
         TableName: "Weight",
         DisplayName: "Weight",
         Units: "kg",
+        yValueCol: "weight", // When used, this should be one of the fields below.
         Fields:
         [
             {
