@@ -26,6 +26,40 @@ var colors =
 
 var table_schema =
 {
+    Demographics:
+    {
+        Type: "Demographics",
+        TableName: "Demographics",
+        DisplayName: "Demographics",
+        Fields:
+        [
+            {
+                FieldName: "date",
+                DisplayName: "Date"
+            },
+            {
+                FieldName: "Date Of Birth",
+                DisplayName: "Date Of Birth"
+            },
+            {
+                FieldName: "Gender",
+                DisplayName: "Gender"
+            },
+            {
+                FieldName: "Date Of Death",
+                DisplayName: "Date Of Death"
+            },
+            {
+                FieldName: "First Name",
+                DisplayName: "First Name"
+            },
+            {
+                FieldName: "Last Name",
+                DisplayName: "Last Name"
+            }
+        ]
+    },
+
     Diagnosis:
     {
         Type: "Event",
@@ -302,7 +336,7 @@ var table_schema =
         DisplayName: "Mass Size",
         Units: "mm",
         MultiLegendIdCol: "tumorId", // When used, this should be one of the fields below.
-        MultiLegendColorCycle: ["red", "green", "blue"],
+        MultiLegendColorCycle: ["red", "green", "blue", "purple", "orange", "yellow", "brown", "violet"],
         Fields:
         [
             {

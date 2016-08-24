@@ -21,10 +21,9 @@ function plot(tables_to_plot, selected_OPTR)
     var plot_data = {};
     var trace = {};
     var traces = [];
-    var layouts = [];
     var yaxis = {};
-    var layout = {};
     var schema = {};
+    var annotation = {};
     var annotation_maker;
     var event_yaxis_domain = [0.75, 1];
     var series_yaxis_domain = [0, 0.75];
@@ -91,6 +90,75 @@ function plot(tables_to_plot, selected_OPTR)
 
     var layout = base_layout;
 
+    if (data_sources.hasOwnProperty("Demographics"))
+    {
+        fields = getFields("Demographics");
+
+        plot_data = getTraceData
+        (
+            "Demographics",
+            fields
+        );
+
+        if (plot_data.hasOwnProperty("Date Of Death"))
+        {
+            if (plot_data["Date Of Death"] != null)
+            {
+                shape =
+                {
+                    type: 'line',
+                    // x-reference is assigned to the x-values
+                    xref: 'x',
+                    // y-reference is assigned to the plot paper [0,1]
+                    //yref: 'paper',
+                    yref: 'paper',
+                    // Ariel mentioned full length lines, this would require min and max dates here.
+                    x0: formatDate(plot_data["Date Of Death"]),
+                    y0: 0,
+                    x1: formatDate(plot_data["Date Of Death"]),
+                    y1: 1,
+                    //fillcolor: '#d3d3d3',
+                    opacity: 0.5,
+                    layer: "below",
+                    line:
+                    {
+                        color: "red",
+                        width: 1,
+                        dash: 'dot'
+                    }
+                };
+                if (!layout.hasOwnProperty("shapes"))
+                {
+                    layout.shapes = [];
+                }
+                layout.shapes.push(shape);
+
+                annotation =
+                {
+                    xref: 'x',
+                    yref: 'paper',
+                    x: formatDate(plot_data["Date Of Death"]),
+                    y: 0.5,
+                    textposition: 'top left',
+                    textangle: -90,
+                    showarrow: false,
+                    font: {
+                        family: 'sans serif',
+                        size: 24,
+                        color: 'red'
+                    },
+                    text: "Deceased"
+                };
+
+                if (!layout.hasOwnProperty("annotations"))
+                {
+                    layout.annotations = [];
+                }
+                layout.annotations.push(annotation);
+            }
+        }
+    }
+
     var table_name;
     var plot_number = 0;
     var num_tables = tables_to_plot.length;
@@ -137,7 +205,7 @@ function plot(tables_to_plot, selected_OPTR)
                     {
                         color: marker_colors[plot_number - 1],
                         width: 3
-                     };
+                    };
                 }
 
                 //console.log(table_name + " schema");
@@ -313,12 +381,6 @@ function plot(tables_to_plot, selected_OPTR)
                 console.log("yaxis_idx " + yaxis_idx);
                 console.log("yaxis_name " + yaxis_name);
 
-
-
-                console.log("plot_data.y_value");
-                console.log(plot_data.y_value);
-
-
                 if (add_yaxis == true)
                 {
                     layout[yaxis_name] = yaxis;
@@ -349,7 +411,8 @@ function plot(tables_to_plot, selected_OPTR)
                     var x = [];
                     var y = [];
                     var hoverText = [];
-                    var LegendMarker = Marker;
+                    var LegendMarker = JSON.parse(JSON.stringify(Marker));
+                    var LegendLine = JSON.parse(JSON.stringify(Line));
                     if (doMultipleLegends)
                     {
                         // Get just the points matching each legend.
@@ -374,7 +437,13 @@ function plot(tables_to_plot, selected_OPTR)
                                 if (legendEntry.ID == legendText)
                                 {
                                     LegendMarker = legendEntry.Marker;
+                                    LegendLine.color = LegendMarker.color;
                                     bMarkerFound = true;
+                                    if (add_yaxis == true)
+                                    {
+                                        layout[yaxis_name].titlefont.color =  LegendMarker.color;
+                                        add_yaxis = false;
+                                    }
                                 }
                             });
                         }
@@ -384,6 +453,12 @@ function plot(tables_to_plot, selected_OPTR)
                         {
                             console.log("MultiLegendColorCycle " + schema.MultiLegendColorCycle[MultiLegendColorCycleIdx]);
                             LegendMarker.color = schema.MultiLegendColorCycle[MultiLegendColorCycleIdx];
+                            LegendLine.color = LegendMarker.color;
+                            if (add_yaxis == true)
+                            {
+                                layout[yaxis_name].titlefont.color =  LegendMarker.color;
+                                add_yaxis = false;
+                            }
                             MultiLegendColorCycleIdx += 1;
                             if (MultiLegendColorCycleIdx >= schema.MultiLegendColorCycle.length)
                             {
@@ -401,8 +476,6 @@ function plot(tables_to_plot, selected_OPTR)
                     annotation_makers[legendText] = annotation_maker;
                     //console.log(plot_data.date);
 
-console.log("LegendMarker " + LegendMarker);
-
                     trace =
                     {
                         x: x,
@@ -415,7 +488,7 @@ console.log("LegendMarker " + LegendMarker);
                         type: 'scatter',
                         mode: trace_mode,
                         marker: LegendMarker,
-                        line: Line,
+                        line: LegendLine,
                         yaxis: "y" + yaxis_name_suffix
                     };
 
@@ -564,6 +637,23 @@ function getRange(x, fudge)
 	}
 
 	return [min - (fudge * (max - min)), max + (fudge * (max - min))];
+}
+
+function staggerMarkers(date, y)
+{
+    var y2 = [];
+
+    $.each(x, function(idx, x)
+    {
+        if (item2 == legendText)
+        {
+            x.push(plot_data.date[index2]);
+            y.push(plot_data.y_value[index2]);
+            hoverText.push(annotation_maker(index2));
+        }
+    });
+
+	return y2;
 }
 
 function uniq(a)
