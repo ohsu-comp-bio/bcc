@@ -269,7 +269,7 @@ function plot(tables_to_plot, selected_OPTR)
                         yaxis.range = [0.5, num_events + 0.5];
                         add_yaxis = true;
                     }
-                    trace_mode = "markers";
+                    trace_mode = "lines+markers";
                     for (var j = 0; j < plot_data.date.length; j++)
                     {
                         plot_data.y_value[j] = num_events - event_idx + 1;
@@ -299,29 +299,32 @@ function plot(tables_to_plot, selected_OPTR)
                     //};
                     //traces.push(trace);
 
-                    shape =
-                    {
-                        type: 'line',
-                        // x-reference is assigned to the x-values
-                        xref: 'x',
-                        // y-reference is assigned to the plot paper [0,1]
-                        //yref: 'paper',
-                        yref: "y" + yaxis_name_suffix,
-                        // Ariel mentioned full length lines, this would require min and max dates here.
-                        x0: plot_data.date[0],
-                        y0: plot_data.y_value[0],
-                        x1: plot_data.date[plot_data.date.length - 1],
-                        y1: plot_data.y_value[0],
-                        //fillcolor: '#d3d3d3',
-                        opacity: 0.5,
-                        layer: "below",
-                        line: Line
-                    };
-                    if (!layout.hasOwnProperty("shapes"))
-                    {
-                        layout.shapes = [];
-                    }
-                    layout.shapes.push(shape);
+                    // This works, but just using "trace_mode = 'lines+markers'" above is much simpler.
+                    // Plus, the 'lines+markers' method has the behavior of removing the line when the legend is
+                    // clicked to remove the markers (this is the behavior desired by Patrick).
+                    //shape =
+                    //{
+                    //    type: 'line',
+                    //    // x-reference is assigned to the x-values
+                    //    xref: 'x',
+                    //    // y-reference is assigned to the plot paper [0,1]
+                    //    //yref: 'paper',
+                    //    yref: "y" + yaxis_name_suffix,
+                    //    // Ariel mentioned full length lines, this would require min and max dates here.
+                    //    x0: plot_data.date[0],
+                    //    y0: plot_data.y_value[0],
+                    //    x1: plot_data.date[plot_data.date.length - 1],
+                    //    y1: plot_data.y_value[0],
+                    //    //fillcolor: '#d3d3d3',
+                    //    opacity: 0.5,
+                    //    layer: "below",
+                    //    line: Line
+                    //};
+                    //if (!layout.hasOwnProperty("shapes"))
+                    //{
+                    //    layout.shapes = [];
+                    //}
+                    //layout.shapes.push(shape);
                 } else if (schema.Type == "Series")
                 {
                     yaxis_idx++;
@@ -444,6 +447,9 @@ function plot(tables_to_plot, selected_OPTR)
                                     if (add_yaxis == true)
                                     {
                                         layout[yaxis_name].titlefont.color =  LegendMarker.color;
+                                        layout[yaxis_name].tickfont.color =  LegendMarker.color;
+                                        layout[yaxis_name].color =  LegendMarker.color;
+                                        layout[yaxis_name].linecolor =  LegendMarker.color;
                                         add_yaxis = false;
                                     }
                                 }
@@ -459,6 +465,9 @@ function plot(tables_to_plot, selected_OPTR)
                             if (add_yaxis == true)
                             {
                                 layout[yaxis_name].titlefont.color =  LegendMarker.color;
+                                layout[yaxis_name].tickfont.color =  LegendMarker.color;
+                                layout[yaxis_name].color =  LegendMarker.color;
+                                layout[yaxis_name].linecolor =  LegendMarker.color;
                                 add_yaxis = false;
                             }
                             MultiLegendColorCycleIdx += 1;
