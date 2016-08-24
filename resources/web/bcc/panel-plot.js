@@ -102,7 +102,9 @@ function plot(tables_to_plot, selected_OPTR)
 
         if (plot_data.hasOwnProperty("Date Of Death"))
         {
-            if (plot_data["Date Of Death"] != null)
+        console.log("plot_data['Date Of Death'] " + plot_data["Date Of Death"]);
+
+            if (plot_data["Date Of Death"] != "" && plot_data["Date Of Death"] != null)
             {
                 shape =
                 {
