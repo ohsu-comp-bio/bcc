@@ -6,10 +6,10 @@
                 <!--if you include this on a table, it will apply standard configuration-->
                 <javaCustomizer>org.labkey.bcc.query.BCCCustomizer</javaCustomizer>
                 <columns>
-                    <column columnName="OPTR">
+<!--                    <column columnName="OPTR">
                         <phi>PHI</phi>
                         <protected>true</protected>
-                    </column>
+                    </column>-->
                 </columns>
             </table>
         </tables>
