@@ -1,5 +1,4 @@
-
-<view xmlns="http://labkey.org/data/xml/view" title="Test Webpart" frame="portal">
+<view xmlns="http://labkey.org/data/xml/view" title="TTB Plots Sampler" frame="portal">
     <dependencies>
         <dependency path="bcc/Ext4ClientApi" />
         <dependency path="bcc/plotly-latest.min.js"/>
@@ -10,4 +9,3 @@
         <dependency path="bcc/panel-plot.js" />
     </dependencies>
 </view>
-
