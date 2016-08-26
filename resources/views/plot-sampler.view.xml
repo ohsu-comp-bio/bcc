@@ -1,6 +1,6 @@
 <view xmlns="http://labkey.org/data/xml/view" title="TTB Plots Sampler" frame="portal">
     <dependencies>
-        <dependency path="Ext4ClientApi" />
+        <dependency path="bcc/Ext4ClientApi" />
         <dependency path="bcc/plotly-latest.min.js"/>
         <dependency path="bcc/meta.js" />
         <dependency path="bcc/get-panel-data.js" />

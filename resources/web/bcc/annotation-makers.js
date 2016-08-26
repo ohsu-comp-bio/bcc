@@ -1,6 +1,6 @@
 /*jslint browser: true, white: true, nomen: true, sloppy: true, vars: true, indent: 4, maxerr: 999*/
 
-function getAnnotationMaker(table_name, plot_data, OPTR)
+function getAnnotationMaker(table_name, plot_data, OPTR, graph_div_id)
 {
     //console.log("getAnnotationMaker");
     //console.log("table_name " + table_name);

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+    <script>
+        base_url = LABKEY.ActionURL.getContextPath();
+        console.log("base url: " + base_url);
+    </script>
+</head>
+<body>
+    <h1>Hello</h1>
+
+    <div id="4225"></div>
+    <div id="4411"></div>
+    <div id="4482"></div>
+    <div id="3024"></div>
+    <div id="4346"></div>
+    <div id="4487"></div>
+
+    <script>
+        alert("in script tag");
+        var tables_to_plot =
+            [
+                "Demographics",
+                "Diagnosis",
+                "Procedures",
+                //"BloodDrawTable",
+                "Treatments",
+                //"OncoLogTreatmentTable",
+                //"BiopsyTable",
+                //"SampleTable",
+                "LabResults",
+                "TumorSize",
+                //"PrimaryTumorSizeTable",
+                "Weight"
+            ];
+
+        plotOPTR(tables_to_plot, 4225, "4225");
+        plotOPTR(tables_to_plot, 4411, "4411");
+        plotOPTR(tables_to_plot, 4482, "4482");
+        plotOPTR(tables_to_plot, 3024, "3024");
+        plotOPTR(tables_to_plot, 4346, "4346");
+        plotOPTR(tables_to_plot, 4487, "4487");
+    </script>
+
+    <body>
+</html>

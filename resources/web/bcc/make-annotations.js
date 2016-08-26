@@ -14,7 +14,7 @@
 // created the list of annotation_makers which are are function
 // closures that carry data from outside the scope of the event
 // callback into the click event handler.
-function makeAnnotations(point_data, annotation_makers)
+function makeAnnotations(point_data, annotation_makers, graph_div_id)
 {
     //console.log("in makeAnnotatoins");
     //console.log(annotation_makers);
@@ -60,7 +60,7 @@ function makeAnnotations(point_data, annotation_makers)
         text: annotation_text
     };
     
-    var divid = document.getElementById('graph');
+    var divid = document.getElementById(graph_div_id);
     var newIndex = (divid.layout.annotations || []).length;
     
     // delete instead if clicked twice
@@ -73,7 +73,7 @@ function makeAnnotations(point_data, annotation_makers)
             {
                 Plotly.relayout
                 (
-                    'graph',
+                    graph_div_id,
                     'annotations[' + sameIndex + ']',
                     'remove'
                 );
@@ -92,7 +92,7 @@ function makeAnnotations(point_data, annotation_makers)
     
     Plotly.relayout
     (
-        'graph',
+        graph_div_id,
         'annotations[' + newIndex + ']',
         newAnnotation
     );

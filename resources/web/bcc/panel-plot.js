@@ -1,16 +1,16 @@
 
 var data_sources = {};
 
-function plotOPTR(tables_to_plot, selected_OPTR, graph_div="graph")
+function plotOPTR(tables_to_plot, selected_OPTR, graph_div_id="graph")
 {
     multi_query = createMultiQuery(tables_to_plot, selected_OPTR);
     multi_query.send(function()
     {
-        plot(tables_to_plot, selected_OPTR);
+        plot(tables_to_plot, selected_OPTR, graph_div_id);
     });
 }
 
-function plot(tables_to_plot, selected_OPTR)
+function plot(tables_to_plot, selected_OPTR, graph_div_id="graph")
 {
     console.log("in plot");
     //console.log("data_sources");
@@ -533,9 +533,9 @@ function plot(tables_to_plot, selected_OPTR)
     //console.log("setting layout")
     //layout[yaxis_name].overlaying = false;
 
-    Plotly.newPlot(graph_div, traces, layout);
+    Plotly.newPlot(graph_div_id, traces, layout);
 
-    g = document.getElementById(graph_div);
+    g = document.getElementById(graph_div_id);
     //console.log("g.layout");
     //console.log(g.layout);
     //console.log("g.data");
@@ -548,18 +548,18 @@ function plot(tables_to_plot, selected_OPTR)
         Plotly.redraw(plot);
     }
 
-    myPlot = document.getElementById(graph_div);
+    myPlot = document.getElementById(graph_div_id);
 
     myPlot
 	    .on('plotly_click', function(data)
 	    {
-	        makeAnnotations(data, annotation_makers);
+	        makeAnnotations(data, annotation_makers, graph_div_id);
 	    })
 	    .on('plotly_clickannotation', function(event, data)
 	    {
 	        Plotly.relayout
 	        (
-	            graph_div,
+	            graph_div_id,
 	            'annotations[' + newIndex + ']',
 	            newAnnotation
 	        );
