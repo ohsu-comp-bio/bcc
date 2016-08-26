@@ -8,15 +8,21 @@
         base_url = LABKEY.ActionURL.getContextPath();
         console.log("base url: " + base_url);
     </script>
+    <style>
+        .ttb-plot{
+            padding: 3em 0 3em 3em;
+            background-color: #F0F0F0;
+        }
+    </style>
 </head>
 <body>
 
-    <div id="4225"></div>
-    <div id="4411"></div>
-    <div id="4482"></div>
-    <div id="3024"></div>
-    <div id="4346"></div>
-    <div id="4487"></div>
+    <div id="4225" class="ttb-plot"></div>
+    <div id="4411" class="ttb-plot"></div>
+    <div id="4482" class="ttb-plot"></div>
+    <div id="3024" class="ttb-plot"></div>
+    <div id="4346" class="ttb-plot"></div>
+    <div id="4487" class="ttb-plot"></div>
 
     <script>
         var tables_to_plot =
@@ -37,7 +43,7 @@
 
         setTimeout(function(){plotOPTR(tables_to_plot, 4225, "4225");}, 2000);
         setTimeout(function(){plotOPTR(tables_to_plot, 4411, "4411");}, 4000);
-        setTimeout(function(){plotOPTR(tables_to_plot, 4482, "4482");}, 6000);      
+        setTimeout(function(){plotOPTR(tables_to_plot, 4482, "4482");}, 6000);
         setTimeout(function(){plotOPTR(tables_to_plot, 3024, "3024");}, 8000);
         setTimeout(function(){plotOPTR(tables_to_plot, 4346, "4346");}, 10000);
         setTimeout(function(){plotOPTR(tables_to_plot, 4487, "4487");}, 12000);
