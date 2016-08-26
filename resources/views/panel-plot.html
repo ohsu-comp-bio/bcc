@@ -13,118 +13,90 @@
 <body>
 <h1>Summary Plot</h1>
 
-<form name="ParameterSelection_TTBplotA">
-    <table cellspacing="0" cellpadding="5" border="0">
-        <td valign="top">
-            <table cellspacing="0" cellpadding="5" border="0">
-                <tr>
-                    <td valign="top"><strong>Select patient by OPTR:</strong></td>
-                    <td valign="top">enter</td>
-                    <td valign="top"><input id="OPTR1_TTBplotA" onchange="optrEntryMade()" type="text" name="OPTR1" value="" size="10"></td>
-                    <td valign="top">or select</td>
-                    <td valign="top"><select id="OPTR2_TTBplotA" onchange="optrSelectionMade()" name="OPTR2"> <option></option> </select></td>
-                    <td valign="top"> <input value='Update' type='button' onclick='submitRequest_TTBplotA()'></td>
-                </tr>
-            </table>
-
-            <!--<table cellspacing="0" cellpadding="5" border="0">
-                <tr>
-                    <td valign="top"> <input type="radio" name="PlotType" value="TTB" checked> Time Line </td>
-                    <td valign="top"> <input type="radio" name="PlotType" value="SizeVsGrade"> Tumor Size vs Grade </td>
-                    <td valign="top"> <input value='Update' type='button' onclick='submitRequest_TTBplotA()'></td>
-                </tr>
-            </table>-->
-        </td>
-    </table>
-</form>
+<h3>Select patient by OPTR:</h3>
+<div id="optr-entry-form">
+    <input id="optr-list-box" list="optr-datalist" class="input">
+    <datalist id="optr-datalist" class="input"></datalist>
+    <button id="submit-button">Create Plot</button>
+</div>
 
 <div id="graph"></div>
-<script>
 
-    var OPTR = LABKEY.ActionURL.getParameter("OPTR");
+    <script>
 
-    //alert("Just checking!");
-    var tables_to_plot =
-    [
-        "Demographics",
-        "Diagnosis",
-        "Procedures",
-        //"BloodDrawTable",
-        "Treatments",
-        //"OncoLogTreatmentTable",
-        //"BiopsyTable",
-        //"SampleTable",
-        "LabResults",
-        "TumorSize",
-        //"PrimaryTumorSizeTable",
-        "Weight"
-    ];
+        var tables_to_plot =
+        [
+            "Demographics",
+            "Diagnosis",
+            "Procedures",
+            //"BloodDrawTable",
+            "Treatments",
+            //"OncoLogTreatmentTable",
+            //"BiopsyTable",
+            //"SampleTable",
+            "LabResults",
+            "TumorSize",
+            //"PrimaryTumorSizeTable",
+            "Weight"
+        ];
 
-    // Ensure that page dependencies are loaded
-    LABKEY.requiresExt3ClientAPI(true, function() {
-        Ext.onReady(init_TTBplotA);
-    });
-
-    function populateOPTRvalues_TTBplotA(data)
-    {
-    console.log("data.rows.length");
-    console.log(data.rows.length);
-        var el = document.getElementById("OPTR2_TTBplotA");
-        el.options[0].text = "<Select OPTR>";
-        for (var i = 0; i < data.rows.length; i++)
+        $(function()
         {
-            var opt = document.createElement("option");
-            opt.text = data.rows[i].OPTR;
-            opt.value = data.rows[i].OPTR;
-           if (OPTR && OPTR == opt.value)
-             opt.selected = true;
-            el.options[el.options.length] = opt;
+
+            $('#optr-list-box').focus();
+            populateOPTRvalues();
+            configureSubmitButton();
+
+        });
+
+        function populateOPTRvalues(data)
+        {
+            LABKEY.Query.selectRows
+            (
+                {
+                    schemaName: 'study',
+                    queryName: 'Demographics',
+                    columns: 'optr',
+                    success: function(data)
+                    {
+                        console.log("query success");
+                        var list_of_optrs = data.rows.map(function(row){return row['OPTR'];}); // returns list of optrs
+                        console.log(list_of_optrs);
+                        createDatalistOptions(list_of_optrs)
+                    },
+                    failure: function()
+                    {
+                        console.log("query failure");
+                    }
+                }
+            );
         }
-    }
 
-    function optrSelectionMade()
-    {
-      document.ParameterSelection_TTBplotA.OPTR1.value = document.ParameterSelection_TTBplotA.OPTR2.value;
-    }
+        function createDatalistOptions(list_of_optrs)
+        {
+            list_of_optrs.forEach(function(optr, index)
+            {
+                //console.log("optr: " + optr);
+                $('#optr-datalist').append("<option value=" + optr + "/>");
+            });
+        }
 
-    function optrEntryMade()
-    {
-      var el = document.getElementById("OPTR2_TTBplotA");
-      el.options[0].selected = true;
-    }
+        function configureSubmitButton()
+        {
 
-    function refreshChart_TTBplotA()
-    {
-      // Select the OPTR to use based on the two entry options.
-      var selected_OPTR = "4086";
-      if (document.ParameterSelection_TTBplotA.OPTR1.value != "")
-      {
-        selected_OPTR = document.ParameterSelection_TTBplotA.OPTR1.value;
-      } else
-      {
-        selected_OPTR = document.ParameterSelection_TTBplotA.OPTR2.value;
-      }
+            $('#submit-button').on('click', function (e)
+            {
+                //e.preventDefault();
+                var selected_optr = $('#optr-list-box').val();
+                console.log("selected optr: " + selected_optr);
+                if (selected_optr)
+                {
+                    plotOPTR(tables_to_plot, selected_optr, "graph");
+                }
+            });
+        }
 
-      plotOPTR(tables_to_plot, selected_OPTR)
-    }
-
-    function init_TTBplotA()
-    {
-       LABKEY.Query.selectRows({
-                                schemaName: 'study',
-                                queryName: 'Demographics',
-                                success: populateOPTRvalues_TTBplotA
-                               });
-    }
-
-    // Enter form data into list.
-    function submitRequest_TTBplotA()
-    {
-        // Insert form data into the list.
-        refreshChart_TTBplotA();
-    }
-
-</script>
+    </script>
 </body>
 
 </html>
