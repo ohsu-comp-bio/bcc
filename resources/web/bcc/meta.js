@@ -295,6 +295,17 @@ var table_schema =
         DisplayName: "CA19-9",
         Units: "U/ml",
         yValueCol: "result", // When used, this should be one of the fields below.
+        Marker:
+        {
+            symbol: "diamond",
+            color: "lightgreen",
+            size: 12
+        },
+        Line:
+        {
+            color: "lightgreen",
+            width: 1
+        },
         Fields:
         [
             {
@@ -335,8 +346,20 @@ var table_schema =
         TableName: "TumorSize",
         DisplayName: "Mass Size",
         Units: "mm",
+        Marker:
+        {
+            symbol: "circle",
+            color: "red",
+            size: 12
+        },
+        Line:
+        {
+            color: "red",
+            width: 1
+        },
         MultiLegendIdCol: "tumorId", // When used, this should be one of the fields below.
-        MultiLegendColorCycle: ["red", "green", "blue", "purple", "orange", "yellow", "brown", "violet"],
+        //MultiLegendColorCycle: ["red", "green", "blue", "purple", "orange", "yellow", "brown", "violet"],
+        MultiLegendSymbolCycle: ["circle", "square", "triangle-up", "diamond", "star-triangle-up", "hexagram", "bowtie", "hash"],
         Fields:
         [
             {
@@ -373,6 +396,17 @@ var table_schema =
         DisplayName: "Weight",
         Units: "kg",
         yValueCol: "weight", // When used, this should be one of the fields below.
+        Marker:
+        {
+            symbol: "circle",
+            color: "lightblue",
+            size: 12
+        },
+        Line:
+        {
+            color: "lightblue",
+            width: 1
+        },
         Fields:
         [
             {

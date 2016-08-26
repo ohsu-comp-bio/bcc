@@ -409,7 +409,7 @@ function plot(tables_to_plot, selected_OPTR)
                 }
 
                 var annotation_maker = getAnnotationMaker(table_name, plot_data, selected_OPTR);
-                var MultiLegendColorCycleIdx = 0;
+                var MultiLegendCycleIdx = 0;
 
                 $.each(uniqueIds, function(index1, legendText)
                 {
@@ -456,24 +456,36 @@ function plot(tables_to_plot, selected_OPTR)
                             });
                         }
 
-                        // If marker not found above, check for color cycle.
-                        if (!bMarkerFound && schema.hasOwnProperty("MultiLegendColorCycle"))
+                        // If marker not found above, check for color or symbol cycle.
+                        if (!bMarkerFound)
                         {
-                            console.log("MultiLegendColorCycle " + schema.MultiLegendColorCycle[MultiLegendColorCycleIdx]);
-                            LegendMarker.color = schema.MultiLegendColorCycle[MultiLegendColorCycleIdx];
-                            LegendLine.color = LegendMarker.color;
-                            if (add_yaxis == true)
+                            if (schema.hasOwnProperty("MultiLegendColorCycle"))
                             {
-                                layout[yaxis_name].titlefont.color =  LegendMarker.color;
-                                layout[yaxis_name].tickfont.color =  LegendMarker.color;
-                                layout[yaxis_name].color =  LegendMarker.color;
-                                layout[yaxis_name].linecolor =  LegendMarker.color;
-                                add_yaxis = false;
-                            }
-                            MultiLegendColorCycleIdx += 1;
-                            if (MultiLegendColorCycleIdx >= schema.MultiLegendColorCycle.length)
+                                //console.log("MultiLegendColorCycle " + schema.MultiLegendColorCycle[MultiLegendCycleIdx]);
+                                LegendMarker.color = schema.MultiLegendColorCycle[MultiLegendCycleIdx];
+                                LegendLine.color = LegendMarker.color;
+                                if (add_yaxis == true)
+                                {
+                                    layout[yaxis_name].titlefont.color =  LegendMarker.color;
+                                    layout[yaxis_name].tickfont.color =  LegendMarker.color;
+                                    layout[yaxis_name].color =  LegendMarker.color;
+                                    layout[yaxis_name].linecolor =  LegendMarker.color;
+                                    add_yaxis = false;
+                                }
+                                MultiLegendCycleIdx += 1;
+                                if (MultiLegendCycleIdx >= schema.MultiLegendColorCycle.length)
+                                {
+                                    MultiLegendCycleIdx = 0;
+                                }
+                            } else if (schema.hasOwnProperty("MultiLegendSymbolCycle"))
                             {
-                                MultiLegendColorCycleIdx = 0;
+                                //console.log("MultiLegendSymbolCycle " + schema.MultiLegendSymbolCycle[MultiLegendCycleIdx]);
+                                LegendMarker.symbol = schema.MultiLegendSymbolCycle[MultiLegendCycleIdx];
+                                MultiLegendCycleIdx += 1;
+                                if (MultiLegendCycleIdx >= schema.MultiLegendSymbolCycle.length)
+                                {
+                                    MultiLegendCycleIdx = 0;
+                                }
                             }
                         }
                     } else
