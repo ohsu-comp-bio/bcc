@@ -1,7 +1,7 @@
 
 var data_sources = {};
 
-function plotOPTR(tables_to_plot, selected_OPTR)
+function plotOPTR(tables_to_plot, selected_OPTR, graph_div="graph")
 {
     multi_query = createMultiQuery(tables_to_plot, selected_OPTR);
     multi_query.send(function()
@@ -533,9 +533,9 @@ function plot(tables_to_plot, selected_OPTR)
     //console.log("setting layout")
     //layout[yaxis_name].overlaying = false;
 
-    Plotly.newPlot("graph", traces, layout);
+    Plotly.newPlot(graph_div, traces, layout);
 
-    g = document.getElementById('graph');
+    g = document.getElementById(graph_div);
     //console.log("g.layout");
     //console.log(g.layout);
     //console.log("g.data");
@@ -548,7 +548,7 @@ function plot(tables_to_plot, selected_OPTR)
         Plotly.redraw(plot);
     }
 
-    myPlot = document.getElementById('graph');
+    myPlot = document.getElementById(graph_div);
 
     myPlot
 	    .on('plotly_click', function(data)
@@ -559,7 +559,7 @@ function plot(tables_to_plot, selected_OPTR)
 	    {
 	        Plotly.relayout
 	        (
-	            'graph',
+	            graph_div,
 	            'annotations[' + newIndex + ']',
 	            newAnnotation
 	        );
