@@ -1,16 +1,15 @@
-
-var data_sources = {};
-
 function plotOPTR(tables_to_plot, selected_OPTR, graph_div_id="graph")
 {
-    multi_query = createMultiQuery(tables_to_plot, selected_OPTR);
+    var data_sources = {};
+
+    multi_query = createMultiQuery(tables_to_plot, data_sources, selected_OPTR);
     multi_query.send(function()
     {
-        plot(tables_to_plot, selected_OPTR, graph_div_id);
+        plot(tables_to_plot, selected_OPTR, data_sources, graph_div_id);
     });
 }
 
-function plot(tables_to_plot, selected_OPTR, graph_div_id="graph")
+function plot(tables_to_plot, selected_OPTR, data_sources, graph_div_id="graph")
 {
     console.log("in plot");
     //console.log("data_sources");
@@ -94,11 +93,7 @@ function plot(tables_to_plot, selected_OPTR, graph_div_id="graph")
     {
         fields = getFields("Demographics");
 
-        plot_data = getTraceData
-        (
-            "Demographics",
-            fields
-        );
+        plot_data = getTraceData("Demographics", fields, data_sources);
 
         if (plot_data.hasOwnProperty("Date Of Death"))
         {
@@ -218,11 +213,7 @@ function plot(tables_to_plot, selected_OPTR, graph_div_id="graph")
                 //console.log(fields);
 
                 //console.log("data_sources has own property " + table_name);
-                plot_data = getTraceData
-                (
-                    table_name,
-                    fields
-                );
+                plot_data = getTraceData(table_name, fields, data_sources);
                 plot_data.y_value = [];
 
 
