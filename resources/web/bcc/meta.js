@@ -534,6 +534,13 @@ var table_schema =
                 FieldName: "weight",
                 DisplayName: "Weight",
                 Units: "kg"
+            },
+            // Weight units are displayed as "kg" on the graph regardless of what is set in this column.
+            // This column is only used so that we know when pounds should be converted to kilograms.
+            // The getAnnotationMaker() function ignores this FieldName value.
+            {
+                FieldName: "units",
+                DisplayName: "Units",
             }
         ]
     }

@@ -391,6 +391,20 @@ function plot(tables_to_plot, selected_OPTR, data_sources, graph_div_id="graph")
                         }
                     }
 
+                    // Might be better to handle this in a view with a calculated column.
+                    if (table_name == "Weight")
+                    {
+                        // If weight is entered as lbs, convert kg since the graph is assuming kg.
+                        for (var j = 0 ; j < plot_data["weight"].length ; j++)
+                        {
+                            if (plot_data["units"][j] == "lbs")
+                            {
+                              var w = plot_data.y_value[j] / 2.2046;
+                              plot_data.y_value[j] = w.toFixed(1);
+                            }
+                        }
+                    }
+
                     var y = plot_data.y_value.map(parseFloat);
                     yaxis.position = 0;
                     yaxis.range = getRange(y, 0.02);
@@ -686,22 +700,16 @@ function getRange(x, fudge)
 	return [min - (fudge * (max - min)), max + (fudge * (max - min))];
 }
 
-function staggerMarkers(date, y)
-{
-    var y2 = [];
-
-    $.each(x, function(idx, x)
-    {
-        if (item2 == legendText)
-        {
-            x.push(plot_data.date[index2]);
-            y.push(plot_data.y_value[index2]);
-            hoverText.push(annotation_maker(index2));
-        }
-    });
-
-	return y2;
-}
+// This is not going to be easy to implement because we don't know the size of the
+// elements we need to stagger until the whole graph is scaled.  And there is no
+// way to know how the graph will be scaled until all elements are added.  Also,
+// the user may zoom in or out at any time.
+//function staggerMarkers(date, y)
+//{
+//    var y2 = [];
+//
+//	return y2;
+//}
 
 function uniq(a)
 {
