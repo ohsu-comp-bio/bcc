@@ -54,7 +54,7 @@ function plot(tables_to_plot, selected_OPTR, data_sources, graph_div_id="graph")
     var num_markers = tables_to_plot.length;
     var marker_colors = makeMarkerColors(10, 350, 50, 50, num_markers);
 
-    var base_layout =
+    var layout =
     {
     	title: "<b>OPTR: " + selected_OPTR + "</b>",
     	titlefont:
@@ -87,8 +87,6 @@ function plot(tables_to_plot, selected_OPTR, data_sources, graph_div_id="graph")
     	}
     };
 
-    var layout = base_layout;
-
     if (data_sources.hasOwnProperty("Demographics"))
     {
         fields = getFields("Demographics");
@@ -97,10 +95,27 @@ function plot(tables_to_plot, selected_OPTR, data_sources, graph_div_id="graph")
 
         if (plot_data.hasOwnProperty("Date Of Death"))
         {
-        console.log("plot_data['Date Of Death'] " + plot_data["Date Of Death"]);
+            console.log("plot_data['Date Of Death'] " + plot_data["Date Of Death"]);
 
             if (plot_data["Date Of Death"] != "" && plot_data["Date Of Death"] != null)
             {
+                if (plot_data.hasOwnProperty("Date Of Birth"))
+                {
+                    //var targetDate = new Date();
+                    var age = calculateAge(plot_data["Date Of Birth"], new Date(plot_data["Date Of Death"]));
+                    //console.log("Age at death = " + age);
+                    if (plot_data.hasOwnProperty("Gender") && plot_data["Gender"] == "M")
+                    {
+                        layout.title = "<b>Male deceased at age " + age + " (OPTR: " + selected_OPTR + ")</b>";
+                    } else if (plot_data.hasOwnProperty("Gender") && plot_data["Gender"] == "F")
+                    {
+                        layout.title = "<b>Female deceased at age " + age + " (OPTR: " + selected_OPTR + ")</b>";
+                    } else
+                    {
+                        layout.title = "<b>Patient deceased at age " + age + " (OPTR: " + selected_OPTR + ")</b>";
+                    }
+                }
+
                 shape =
                 {
                     type: 'line',
@@ -152,6 +167,24 @@ function plot(tables_to_plot, selected_OPTR, data_sources, graph_div_id="graph")
                     layout.annotations = [];
                 }
                 layout.annotations.push(annotation);
+            } else
+            {
+                if (plot_data.hasOwnProperty("Date Of Birth"))
+                {
+                    //var targetDate = new Date();
+                    var age = calculateAge(plot_data["Date Of Birth"], new Date());
+                    //console.log("Current age = " + age);
+                    if (plot_data.hasOwnProperty("Gender") && plot_data["Gender"] == "M")
+                    {
+                        layout.title = "<b>Male age " + age + " (OPTR: " + selected_OPTR + ")</b>";
+                    } else if (plot_data.hasOwnProperty("Gender") && plot_data["Gender"] == "F")
+                    {
+                        layout.title = "<b>Female age " + age + " (OPTR: " + selected_OPTR + ")</b>";
+                    } else
+                    {
+                        layout.title = "<b>Patient age " + age + " (OPTR: " + selected_OPTR + ")</b>";
+                    }
+                }
             }
         }
     }
@@ -678,3 +711,26 @@ function uniq(a)
         return seen.hasOwnProperty(item) ? false : (seen[item] = true);
     });
 }
+
+function calculateAge(DOBstring, targetDate) {
+
+    var dateOfBirth = new Date(DOBstring);
+
+    var targetYear = targetDate.getFullYear();
+    var targetMonth = targetDate.getMonth();
+    var targetDay = targetDate.getDate();
+
+    var birthYear = dateOfBirth.getFullYear();
+    var birthMonth = dateOfBirth.getMonth();
+    var birthDay = dateOfBirth.getDate();
+
+    var age = targetYear - birthYear;
+    var ageMonth = targetMonth - birthMonth;
+    var ageDay = targetDay - birthDay;
+
+    if (ageMonth < 0 || (ageMonth == 0 && ageDay < 0)) {
+        age = parseInt(age) - 1;
+    }
+    return age;
+}
+

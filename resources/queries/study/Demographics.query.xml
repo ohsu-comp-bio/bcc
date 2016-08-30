@@ -6,26 +6,27 @@
                 <!--if you include this on a table, it will apply standard configuration-->
                 <javaCustomizer>org.labkey.bcc.query.BCCCustomizer</javaCustomizer>
                 <columns>
-                    <column columnName="mrn">
+                    <column columnName="MRN">
                         <columnTitle>MRN</columnTitle>
                         <phi>PHI</phi>
                         <protected>true</protected>
                     </column>
-                    <column columnName="firstName">
+                    <column columnName="First Name">
                         <columnTitle>First Name</columnTitle>
                         <phi>PHI</phi>
                         <protected>true</protected>
                     </column>
-                    <column columnName="lastName">
+                    <column columnName="Last Name">
                         <columnTitle>Last Name</columnTitle>
                         <phi>PHI</phi>
                         <protected>true</protected>
                     </column>
-                    <column columnName="birth">
+                    <!--We may NOT want these dates flagged as PHI since dates are shifted when published?-->
+                    <column columnName="Date Of Birth">
                         <phi>PHI</phi>
                         <protected>true</protected>
                     </column>
-                    <column columnName="death">
+                    <column columnName="Date Of Death">
                         <phi>PHI</phi>
                         <protected>true</protected>
                     </column>
