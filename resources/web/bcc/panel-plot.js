@@ -397,7 +397,8 @@ function plot(tables_to_plot, selected_OPTR, data_sources, graph_div_id="graph")
                         // If weight is entered as lbs, convert kg since the graph is assuming kg.
                         for (var j = 0 ; j < plot_data["weight"].length ; j++)
                         {
-                            if (plot_data["units"][j] == "lbs")
+                            //if (plot_data["units"][j] == "lbs")
+                            if (plot_data["units"][j].match("[lL][bB]"))
                             {
                               var w = plot_data.y_value[j] / 2.2046;
                               plot_data.y_value[j] = w.toFixed(1);
