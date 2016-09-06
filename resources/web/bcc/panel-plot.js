@@ -93,97 +93,97 @@ function plot(tables_to_plot, selected_OPTR, data_sources, graph_div_id="graph")
 
         plot_data = getTraceData("Demographics", fields, data_sources);
 
-        if (plot_data.hasOwnProperty("Date Of Death"))
+        if (plot_data.hasOwnProperty("Date Of Death") &&
+            plot_data["Date Of Death"] != "" &&
+            plot_data["Date Of Death"] != null)
         {
-            console.log("plot_data['Date Of Death'] " + plot_data["Date Of Death"]);
-
-            if (plot_data["Date Of Death"] != "" && plot_data["Date Of Death"] != null)
+            if (plot_data.hasOwnProperty("Date Of Birth") &&
+                plot_data["Date Of Birth"] != "" &&
+                plot_data["Date Of Birth"] != null)
             {
-                if (plot_data.hasOwnProperty("Date Of Birth"))
+                //var targetDate = new Date();
+                var age = calculateAge(plot_data["Date Of Birth"], new Date(plot_data["Date Of Death"]));
+                //console.log("Age at death = " + age);
+                if (plot_data.hasOwnProperty("Gender") && plot_data["Gender"] == "M")
                 {
-                    //var targetDate = new Date();
-                    var age = calculateAge(plot_data["Date Of Birth"], new Date(plot_data["Date Of Death"]));
-                    //console.log("Age at death = " + age);
-                    if (plot_data.hasOwnProperty("Gender") && plot_data["Gender"] == "M")
-                    {
-                        layout.title = "<b>Male deceased at age " + age + " (OPTR: " + selected_OPTR + ")</b>";
-                    } else if (plot_data.hasOwnProperty("Gender") && plot_data["Gender"] == "F")
-                    {
-                        layout.title = "<b>Female deceased at age " + age + " (OPTR: " + selected_OPTR + ")</b>";
-                    } else
-                    {
-                        layout.title = "<b>Patient deceased at age " + age + " (OPTR: " + selected_OPTR + ")</b>";
-                    }
+                    layout.title = "<b>Male deceased at age " + age + " (OPTR: " + selected_OPTR + ")</b>";
+                } else if (plot_data.hasOwnProperty("Gender") && plot_data["Gender"] == "F")
+                {
+                    layout.title = "<b>Female deceased at age " + age + " (OPTR: " + selected_OPTR + ")</b>";
+                } else
+                {
+                    layout.title = "<b>Patient deceased at age " + age + " (OPTR: " + selected_OPTR + ")</b>";
                 }
+            }
 
-                shape =
-                {
-                    type: 'line',
-                    // x-reference is assigned to the x-values
-                    xref: 'x',
-                    // y-reference is assigned to the plot paper [0,1]
-                    //yref: 'paper',
-                    yref: 'paper',
-                    // Ariel mentioned full length lines, this would require min and max dates here.
-                    x0: formatDate(plot_data["Date Of Death"]),
-                    y0: 0,
-                    x1: formatDate(plot_data["Date Of Death"]),
-                    y1: 1,
-                    //fillcolor: '#d3d3d3',
-                    opacity: 0.5,
-                    layer: "below",
-                    line:
-                    {
-                        color: "red",
-                        width: 1,
-                        dash: 'dot'
-                    }
-                };
-                if (!layout.hasOwnProperty("shapes"))
-                {
-                    layout.shapes = [];
-                }
-                layout.shapes.push(shape);
-
-                annotation =
-                {
-                    xref: 'x',
-                    yref: 'paper',
-                    x: formatDate(plot_data["Date Of Death"]),
-                    y: 0.5,
-                    textposition: 'top left',
-                    textangle: -90,
-                    showarrow: false,
-                    font: {
-                        family: 'sans serif',
-                        size: 24,
-                        color: 'red'
-                    },
-                    text: "Deceased"
-                };
-
-                if (!layout.hasOwnProperty("annotations"))
-                {
-                    layout.annotations = [];
-                }
-                layout.annotations.push(annotation);
-            } else
+            shape =
             {
-                if (plot_data.hasOwnProperty("Date Of Birth"))
+                type: 'line',
+                // x-reference is assigned to the x-values
+                xref: 'x',
+                // y-reference is assigned to the plot paper [0,1]
+                //yref: 'paper',
+                yref: 'paper',
+                x0: formatDate(plot_data["Date Of Death"]),
+                y0: 0,
+                x1: formatDate(plot_data["Date Of Death"]),
+                y1: 1,
+                //fillcolor: '#d3d3d3',
+                opacity: 0.5,
+                layer: "below",
+                line:
                 {
-                    //var targetDate = new Date();
-                    var age = calculateAge(plot_data["Date Of Birth"], new Date());
-                    //console.log("Current age = " + age);
-                    if (plot_data.hasOwnProperty("Gender") && plot_data["Gender"] == "M")
-                    {
-                        layout.title = "<b>Male age " + age + " (OPTR: " + selected_OPTR + ")</b>";
-                    } else if (plot_data.hasOwnProperty("Gender") && plot_data["Gender"] == "F")
-                    {
-                        layout.title = "<b>Female age " + age + " (OPTR: " + selected_OPTR + ")</b>";
-                    } else
-                    {
-                        layout.title = "<b>Patient age " + age + " (OPTR: " + selected_OPTR + ")</b>";
-                    }
+                    color: "red",
+                    width: 1,
+                    dash: 'dot'
+                }
+            };
+            if (!layout.hasOwnProperty("shapes"))
+            {
+                layout.shapes = [];
+            }
+            layout.shapes.push(shape);
+
+            annotation =
+            {
+                xref: 'x',
+                yref: 'paper',
+                x: formatDate(plot_data["Date Of Death"]),
+                y: 0.5,
+                textposition: 'top left',
+                textangle: -90,
+                showarrow: false,
+                font: {
+                    family: 'sans serif',
+                    size: 24,
+                    color: 'red'
+                },
+                text: "Deceased"
+            };
+
+            if (!layout.hasOwnProperty("annotations"))
+            {
+                layout.annotations = [];
+            }
+            layout.annotations.push(annotation);
+        } else
+        {
+            if (plot_data.hasOwnProperty("Date Of Birth") &&
+                plot_data["Date Of Birth"] != "" &&
+                plot_data["Date Of Birth"] != null)
+            {
+                //var targetDate = new Date();
+                var age = calculateAge(plot_data["Date Of Birth"], new Date());
+                //console.log("Current age = " + age);
+                if (plot_data.hasOwnProperty("Gender") && plot_data["Gender"] == "M")
+                {
+                    layout.title = "<b>Male age " + age + " (OPTR: " + selected_OPTR + ")</b>";
+                } else if (plot_data.hasOwnProperty("Gender") && plot_data["Gender"] == "F")
+                {
+                    layout.title = "<b>Female age " + age + " (OPTR: " + selected_OPTR + ")</b>";
+                } else
+                {
+                    layout.title = "<b>Patient age " + age + " (OPTR: " + selected_OPTR + ")</b>";
                 }
             }
         }
@@ -394,7 +394,7 @@ function plot(tables_to_plot, selected_OPTR, data_sources, graph_div_id="graph")
                     // Might be better to handle this in a view with a calculated column.
                     if (table_name == "Weight")
                     {
-                        // If weight is entered as lbs, convert kg since the graph is assuming kg.
+                        // If weight is entered as lbs, convert to kg since the graph is assuming kg.
                         for (var j = 0 ; j < plot_data["weight"].length ; j++)
                         {
                             //if (plot_data["units"][j] == "lbs")
