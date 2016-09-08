@@ -93,16 +93,23 @@ function plot(tables_to_plot, selected_OPTR, data_sources, graph_div_id="graph")
 
         plot_data = getTraceData("Demographics", fields, data_sources);
 
-        if (plot_data.hasOwnProperty("Date Of Death") &&
-            plot_data["Date Of Death"] != "" &&
-            plot_data["Date Of Death"] != null)
+        var DOB = 'Invalid Date';
+        var DOD = 'Invalid Date';
+        if (plot_data.hasOwnProperty("Date Of Birth"))
         {
-            if (plot_data.hasOwnProperty("Date Of Birth") &&
-                plot_data["Date Of Birth"] != "" &&
-                plot_data["Date Of Birth"] != null)
+          DOB = new Date(plot_data["Date Of Birth"]);
+        }
+        if (plot_data.hasOwnProperty("Date Of Death"))
+        {
+          DOD = new Date(plot_data["Date Of Death"]);
+        }
+
+        if (DOD != 'Invalid Date')
+        {
+            if (DOB != 'Invalid Date')
             {
                 //var targetDate = new Date();
-                var age = calculateAge(plot_data["Date Of Birth"], new Date(plot_data["Date Of Death"]));
+                var age = calculateAge(DOB, DOD);
                 //console.log("Age at death = " + age);
                 if (plot_data.hasOwnProperty("Gender") && plot_data["Gender"] == "M")
                 {
@@ -124,9 +131,9 @@ function plot(tables_to_plot, selected_OPTR, data_sources, graph_div_id="graph")
                 // y-reference is assigned to the plot paper [0,1]
                 //yref: 'paper',
                 yref: 'paper',
-                x0: formatDate(plot_data["Date Of Death"]),
+                x0: formatDate(DOD),
                 y0: 0,
-                x1: formatDate(plot_data["Date Of Death"]),
+                x1: formatDate(DOD),
                 y1: 1,
                 //fillcolor: '#d3d3d3',
                 opacity: 0.5,
@@ -148,7 +155,7 @@ function plot(tables_to_plot, selected_OPTR, data_sources, graph_div_id="graph")
             {
                 xref: 'x',
                 yref: 'paper',
-                x: formatDate(plot_data["Date Of Death"]),
+                x: formatDate(DOD),
                 y: 0.5,
                 textposition: 'top left',
                 textangle: -90,
@@ -168,12 +175,10 @@ function plot(tables_to_plot, selected_OPTR, data_sources, graph_div_id="graph")
             layout.annotations.push(annotation);
         } else
         {
-            if (plot_data.hasOwnProperty("Date Of Birth") &&
-                plot_data["Date Of Birth"] != "" &&
-                plot_data["Date Of Birth"] != null)
+            if (DOB != 'Invalid Date')
             {
                 //var targetDate = new Date();
-                var age = calculateAge(plot_data["Date Of Birth"], new Date());
+                var age = calculateAge(DOB, new Date());
                 //console.log("Current age = " + age);
                 if (plot_data.hasOwnProperty("Gender") && plot_data["Gender"] == "M")
                 {
@@ -192,6 +197,8 @@ function plot(tables_to_plot, selected_OPTR, data_sources, graph_div_id="graph")
     var table_name;
     var plot_number = 0;
     var num_tables = tables_to_plot.length;
+
+    console.log("num_tables = " + num_tables);
 
     for (var i = 0 ; i < num_tables ; i ++)
     {
@@ -583,6 +590,16 @@ function plot(tables_to_plot, selected_OPTR, data_sources, graph_div_id="graph")
 
     //console.log("setting layout")
     //layout[yaxis_name].overlaying = false;
+
+    // Change title if there is nothing to plot.  If OPTR exists there will be at least
+    // one table plotted due to the Demographics table.  So there should be 2 or more tables plotted.
+    if (num_tables_plotted == 0) // OPTR not found.
+    {
+        layout.title = "<b>OPTR: " + selected_OPTR + " not found.</b>";
+    } else if (num_tables_plotted == 1) // OPTR found, but nothing to plot.
+    {
+        layout.title = "<b>No data to plot for OPTR: " + selected_OPTR + ".</b>";
+    }
 
     Plotly.newPlot(graph_div_id, traces, layout);
 
