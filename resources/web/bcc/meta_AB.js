@@ -55,8 +55,6 @@ var table_schema =
                 InPlot: "True",
                 InAnnotation: "True"
                 Type: "Text",
-                InPlot: "True",
-                InAnnotation: "True",
                 SpecialMarkerShape: ""
             },
             {
