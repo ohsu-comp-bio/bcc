@@ -1,16 +1,15 @@
-
-var data_sources = {};
-
 function plotOPTR(tables_to_plot, selected_OPTR, graph_div_id="graph")
 {
-    multi_query = createMultiQuery(tables_to_plot, selected_OPTR);
+    var data_sources = {};
+
+    multi_query = createMultiQuery(tables_to_plot, data_sources, selected_OPTR);
     multi_query.send(function()
     {
-        plot(tables_to_plot, selected_OPTR, graph_div_id);
+        plot(tables_to_plot, selected_OPTR, data_sources, graph_div_id);
     });
 }
 
-function plot(tables_to_plot, selected_OPTR, graph_div_id="graph")
+function plot(tables_to_plot, selected_OPTR, data_sources, graph_div_id="graph")
 {
     console.log("in plot");
     //console.log("data_sources");
@@ -55,7 +54,7 @@ function plot(tables_to_plot, selected_OPTR, graph_div_id="graph")
     var num_markers = tables_to_plot.length;
     var marker_colors = makeMarkerColors(10, 350, 50, 50, num_markers);
 
-    var base_layout =
+    var layout =
     {
     	title: "<b>OPTR: " + selected_OPTR + "</b>",
     	titlefont:
@@ -88,75 +87,109 @@ function plot(tables_to_plot, selected_OPTR, graph_div_id="graph")
     	}
     };
 
-    var layout = base_layout;
-
     if (data_sources.hasOwnProperty("Demographics"))
     {
         fields = getFields("Demographics");
 
-        plot_data = getTraceData
-        (
-            "Demographics",
-            fields
-        );
+        plot_data = getTraceData("Demographics", fields, data_sources);
 
+        var DOB = 'Invalid Date';
+        var DOD = 'Invalid Date';
+        if (plot_data.hasOwnProperty("Date Of Birth"))
+        {
+          DOB = new Date(plot_data["Date Of Birth"]);
+        }
         if (plot_data.hasOwnProperty("Date Of Death"))
         {
-        console.log("plot_data['Date Of Death'] " + plot_data["Date Of Death"]);
+          DOD = new Date(plot_data["Date Of Death"]);
+        }
 
-            if (plot_data["Date Of Death"] != "" && plot_data["Date Of Death"] != null)
+        if (DOD != 'Invalid Date')
+        {
+            if (DOB != 'Invalid Date')
             {
-                shape =
+                //var targetDate = new Date();
+                var age = calculateAge(DOB, DOD);
+                //console.log("Age at death = " + age);
+                if (plot_data.hasOwnProperty("Gender") && plot_data["Gender"] == "M")
                 {
-                    type: 'line',
-                    // x-reference is assigned to the x-values
-                    xref: 'x',
-                    // y-reference is assigned to the plot paper [0,1]
-                    //yref: 'paper',
-                    yref: 'paper',
-                    // Ariel mentioned full length lines, this would require min and max dates here.
-                    x0: formatDate(plot_data["Date Of Death"]),
-                    y0: 0,
-                    x1: formatDate(plot_data["Date Of Death"]),
-                    y1: 1,
-                    //fillcolor: '#d3d3d3',
-                    opacity: 0.5,
-                    layer: "below",
-                    line:
-                    {
-                        color: "red",
-                        width: 1,
-                        dash: 'dot'
-                    }
-                };
-                if (!layout.hasOwnProperty("shapes"))
+                    layout.title = "<b>Male deceased at age " + age + " (OPTR: " + selected_OPTR + ")</b>";
+                } else if (plot_data.hasOwnProperty("Gender") && plot_data["Gender"] == "F")
                 {
-                    layout.shapes = [];
+                    layout.title = "<b>Female deceased at age " + age + " (OPTR: " + selected_OPTR + ")</b>";
+                } else
+                {
+                    layout.title = "<b>Patient deceased at age " + age + " (OPTR: " + selected_OPTR + ")</b>";
                 }
-                layout.shapes.push(shape);
+            }
 
-                annotation =
+            shape =
+            {
+                type: 'line',
+                // x-reference is assigned to the x-values
+                xref: 'x',
+                // y-reference is assigned to the plot paper [0,1]
+                //yref: 'paper',
+                yref: 'paper',
+                x0: formatDate(DOD),
+                y0: 0,
+                x1: formatDate(DOD),
+                y1: 1,
+                //fillcolor: '#d3d3d3',
+                opacity: 0.5,
+                layer: "below",
+                line:
                 {
-                    xref: 'x',
-                    yref: 'paper',
-                    x: formatDate(plot_data["Date Of Death"]),
-                    y: 0.5,
-                    textposition: 'top left',
-                    textangle: -90,
-                    showarrow: false,
-                    font: {
-                        family: 'sans serif',
-                        size: 24,
-                        color: 'red'
-                    },
-                    text: "Deceased"
-                };
-
-                if (!layout.hasOwnProperty("annotations"))
-                {
-                    layout.annotations = [];
+                    color: "red",
+                    width: 1,
+                    dash: 'dot'
                 }
-                layout.annotations.push(annotation);
+            };
+            if (!layout.hasOwnProperty("shapes"))
+            {
+                layout.shapes = [];
+            }
+            layout.shapes.push(shape);
+
+            annotation =
+            {
+                xref: 'x',
+                yref: 'paper',
+                x: formatDate(DOD),
+                y: 0.5,
+                textposition: 'top left',
+                textangle: -90,
+                showarrow: false,
+                font: {
+                    family: 'sans serif',
+                    size: 24,
+                    color: 'red'
+                },
+                text: "Deceased"
+            };
+
+            if (!layout.hasOwnProperty("annotations"))
+            {
+                layout.annotations = [];
+            }
+            layout.annotations.push(annotation);
+        } else
+        {
+            if (DOB != 'Invalid Date')
+            {
+                //var targetDate = new Date();
+                var age = calculateAge(DOB, new Date());
+                //console.log("Current age = " + age);
+                if (plot_data.hasOwnProperty("Gender") && plot_data["Gender"] == "M")
+                {
+                    layout.title = "<b>Male age " + age + " (OPTR: " + selected_OPTR + ")</b>";
+                } else if (plot_data.hasOwnProperty("Gender") && plot_data["Gender"] == "F")
+                {
+                    layout.title = "<b>Female age " + age + " (OPTR: " + selected_OPTR + ")</b>";
+                } else
+                {
+                    layout.title = "<b>Patient age " + age + " (OPTR: " + selected_OPTR + ")</b>";
+                }
             }
         }
     }
@@ -164,6 +197,8 @@ function plot(tables_to_plot, selected_OPTR, graph_div_id="graph")
     var table_name;
     var plot_number = 0;
     var num_tables = tables_to_plot.length;
+
+    console.log("num_tables = " + num_tables);
 
     for (var i = 0 ; i < num_tables ; i ++)
     {
@@ -218,11 +253,7 @@ function plot(tables_to_plot, selected_OPTR, graph_div_id="graph")
                 //console.log(fields);
 
                 //console.log("data_sources has own property " + table_name);
-                plot_data = getTraceData
-                (
-                    table_name,
-                    fields
-                );
+                plot_data = getTraceData(table_name, fields, data_sources);
                 plot_data.y_value = [];
 
 
@@ -363,6 +394,21 @@ function plot(tables_to_plot, selected_OPTR, graph_div_id="graph")
                             if (plot_data["sizeAxis3"][j] && (plot_data["sizeAxis3"][j] > plot_data.y_value[j]))
                             {
                                 plot_data.y_value[j] = plot_data["sizeAxis3"][j];
+                            }
+                        }
+                    }
+
+                    // Might be better to handle this in a view with a calculated column.
+                    if (table_name == "Weight")
+                    {
+                        // If weight is entered as lbs, convert to kg since the graph is assuming kg.
+                        for (var j = 0 ; j < plot_data["weight"].length ; j++)
+                        {
+                            //if (plot_data["units"][j] == "lbs")
+                            if (plot_data["units"][j].match("[lL][bB]"))
+                            {
+                              var w = plot_data.y_value[j] / 2.2046;
+                              plot_data.y_value[j] = w.toFixed(1);
                             }
                         }
                     }
@@ -545,6 +591,16 @@ function plot(tables_to_plot, selected_OPTR, graph_div_id="graph")
     //console.log("setting layout")
     //layout[yaxis_name].overlaying = false;
 
+    // Change title if there is nothing to plot.  If OPTR exists there will be at least
+    // one table plotted due to the Demographics table.  So there should be 2 or more tables plotted.
+    if (num_tables_plotted == 0) // OPTR not found.
+    {
+        layout.title = "<b>OPTR: " + selected_OPTR + " not found.</b>";
+    } else if (num_tables_plotted == 1) // OPTR found, but nothing to plot.
+    {
+        layout.title = "<b>No data to plot for OPTR: " + selected_OPTR + ".</b>";
+    }
+
     Plotly.newPlot(graph_div_id, traces, layout);
 
     g = document.getElementById(graph_div_id);
@@ -662,22 +718,16 @@ function getRange(x, fudge)
 	return [min - (fudge * (max - min)), max + (fudge * (max - min))];
 }
 
-function staggerMarkers(date, y)
-{
-    var y2 = [];
-
-    $.each(x, function(idx, x)
-    {
-        if (item2 == legendText)
-        {
-            x.push(plot_data.date[index2]);
-            y.push(plot_data.y_value[index2]);
-            hoverText.push(annotation_maker(index2));
-        }
-    });
-
-	return y2;
-}
+// This is not going to be easy to implement because we don't know the size of the
+// elements we need to stagger until the whole graph is scaled.  And there is no
+// way to know how the graph will be scaled until all elements are added.  Also,
+// the user may zoom in or out at any time.
+//function staggerMarkers(date, y)
+//{
+//    var y2 = [];
+//
+//	return y2;
+//}
 
 function uniq(a)
 {
@@ -687,3 +737,26 @@ function uniq(a)
         return seen.hasOwnProperty(item) ? false : (seen[item] = true);
     });
 }
+
+function calculateAge(DOBstring, targetDate) {
+
+    var dateOfBirth = new Date(DOBstring);
+
+    var targetYear = targetDate.getFullYear();
+    var targetMonth = targetDate.getMonth();
+    var targetDay = targetDate.getDate();
+
+    var birthYear = dateOfBirth.getFullYear();
+    var birthMonth = dateOfBirth.getMonth();
+    var birthDay = dateOfBirth.getDate();
+
+    var age = targetYear - birthYear;
+    var ageMonth = targetMonth - birthMonth;
+    var ageDay = targetDay - birthDay;
+
+    if (ageMonth < 0 || (ageMonth == 0 && ageDay < 0)) {
+        age = parseInt(age) - 1;
+    }
+    return age;
+}
+

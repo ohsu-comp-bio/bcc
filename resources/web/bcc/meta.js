@@ -65,24 +65,36 @@ var table_schema =
         Type: "Event",
         TableName: "Diagnosis",
         DisplayName: "Diagnosis",
+        Marker:
+        {
+            symbol: "diamond-open-dot",
+            color: "green",
+            size: 12
+        },
+        Line:
+        {
+            color: "green",
+            width: 1
+        },
         Fields:
         [
             {
                 FieldName: "date",
                 DisplayName: "Date"
             },
-            {
-                FieldName: "InitialDiagnosis",
-                DisplayName: "Initial Diagnosis"
-            },
+            // Hover and pickets are not working due to number of fields here.
+            //{
+            //    FieldName: "InitialDiagnosis",
+            //    DisplayName: "Initial Diagnosis"
+            //},
             {
                 FieldName: "HistologyDescription",
                 DisplayName: "Histology Description"
             },
-            {
-                FieldName: "DagnosisFromHistologyCode",
-                DisplayName: "Diagnosis form Histology"
-            },
+            //{
+            //    FieldName: "DagnosisFromHistologyCode",
+            //    DisplayName: "Diagnosis From Histology Code"
+            //},
             {
                 FieldName: "Grade",
                 DisplayName: "Grade"
@@ -92,21 +104,21 @@ var table_schema =
                 DisplayName: "Tumor Size",
                 Units: "mm"
             },
-            {
-                FieldName: "LymphVascularInvasion",
-                DisplayName: "Lymph Vascular Invasion"
-            },
-            {
-                FieldName: "StageGroupingDominant",
-                DisplayName: "Stage Grouping Dominant"
-            },
+            //{
+            //    FieldName: "LymphVascularInvasion",
+            //    DisplayName: "Lymph Vascular Invasion"
+            //},
+            //{
+            //    FieldName: "StageGroupingDominant",
+            //    DisplayName: "Stage Grouping Dominant"
+            //},
             {
                 FieldName: "PrimarySiteMajorGroupsForStaging",
                 DisplayName: "Primary Site Major Groups For Staging"
-            },
-            {
-                FieldName: "Margins",
-                DisplayName: "Margins"
+            //},
+            //{
+            //    FieldName: "Margins",
+            //    DisplayName: "Margins"
             }
         ]
     },
@@ -116,6 +128,20 @@ var table_schema =
         Type: "Event",
         TableName: "Treatments",
         DisplayName: "Treatment",
+        Marker:
+        {
+            symbol: "triangle-down",
+            color: "green",
+            size: 12
+        },
+        Line:
+        {
+            color: "black",
+            width: 1
+        },
+        MultiLegendIdCol: "type", // When used, this should be one of the fields below.
+        MultiLegendColorCycle: ["green", "blue", "purple", "orange", "yellow", "brown", "violet"],
+        //MultiLegendSymbolCycle: ["circle", "square", "triangle-up", "diamond", "star-triangle-up", "hexagram", "bowtie", "hash"],
         Fields:
         [
             {
@@ -213,17 +239,28 @@ var table_schema =
                 DisplayName: "procedure"
             }
         ]
-   },
+    },
 
-    BloodDrawTable:
+    BloodDraw:
     {
         Type: "Event",
-        TableName: "BloodDrawTable",
+        TableName: "BloodDraw",
         DisplayName: "Blood Draw",
+        Marker:
+        {
+            symbol: "circle",
+            color: "purple",
+            size: 12
+        },
+        Line:
+        {
+            color: "black",
+            width: 1
+        },
         Fields:
         [
             {
-                FieldName:"Date",
+                FieldName:"date",
                 DisplayName: "Date"
             }
         ]
@@ -237,7 +274,7 @@ var table_schema =
         Fields:
         [
             {
-                FieldName: "Date",
+                FieldName: "date",
                 DisplayName: "Date"
             },
             {
@@ -251,20 +288,64 @@ var table_schema =
         ]
     },
 
-    BiopsyTable:
+    Biopsy:
     {
         Type: "Event",
-        TableName: "BiopsyTable",
-        DisplayName: "Samples and Procedures",
+        TableName: "Biopsy",
+        DisplayName: "Biopsy",
+        Marker:
+        {
+            symbol: "star",
+            color: "green",
+            size: 12
+        },
+        Line:
+        {
+            color: "black",
+            width: 1
+        },
         Fields:
         [
             {
-                FieldName: "Date",
+                FieldName: "date",
                 DisplayName: "Date"
             },
             {
                 FieldName: "Type",
                 DisplayName: "Type"
+            }
+        ]
+    },
+
+    Imaging:
+    {
+        Type: "Event",
+        TableName: "Imaging",
+        DisplayName: "Imaging",
+        Marker:
+        {
+            symbol: "circle-open",
+            color: "black",
+            size: 12
+        },
+        Line:
+        {
+            color: "black",
+            width: 1
+        },
+        Fields:
+        [
+            {
+                FieldName: "date",
+                DisplayName: "Date"
+            },
+            {
+                FieldName: "Type",
+                DisplayName: "Type"
+            },
+            {
+                FieldName: "Comment",
+                DisplayName: "Comment"
             }
         ]
     },
@@ -320,6 +401,38 @@ var table_schema =
         ]
     },
 
+    CA199:
+    {
+        Type: "Series",
+        TableName: "CA199",
+        DisplayName: "CA19-9",
+        Units: "U/ml",
+        yValueCol: "CA199", // When used, this should be one of the fields below.
+        Marker:
+        {
+            symbol: "circle",
+            color: "blue",
+            size: 12
+        },
+        Line:
+        {
+            color: "blue",
+            width: 1
+        },
+        Fields:
+        [
+            {
+                FieldName: "date",
+                DisplayName: "Date"
+            },
+            {
+                FieldName: "CA199",
+                DisplayName: "CA19-9",
+                Units: "U/ml"
+            }
+        ]
+    },
+
     PrimaryTumorSizeTable:
     {
         Type: "Series",
@@ -355,7 +468,7 @@ var table_schema =
         Line:
         {
             color: "red",
-            width: 1
+            width: 3
         },
         MultiLegendIdCol: "tumorId", // When used, this should be one of the fields below.
         //MultiLegendColorCycle: ["red", "green", "blue", "purple", "orange", "yellow", "brown", "violet"],
@@ -384,6 +497,10 @@ var table_schema =
                 FieldName: "sizeAxis3",
                 DisplayName: "Tumor Axis 3",
                 Units: "mm"
+            },
+            {
+                FieldName: "Comment",
+                DisplayName: "Comment",
             }
         ]
     },
@@ -399,12 +516,12 @@ var table_schema =
         Marker:
         {
             symbol: "circle",
-            color: "lightblue",
-            size: 12
+            color: "black",
+            size: 8
         },
         Line:
         {
-            color: "lightblue",
+            color: "black",
             width: 1
         },
         Fields:
@@ -417,6 +534,13 @@ var table_schema =
                 FieldName: "weight",
                 DisplayName: "Weight",
                 Units: "kg"
+            },
+            // Weight units are displayed as "kg" on the graph regardless of what is set in this column.
+            // This column is only used so that we know when pounds should be converted to kilograms.
+            // The getAnnotationMaker() function ignores this FieldName value.
+            {
+                FieldName: "units",
+                DisplayName: "Units",
             }
         ]
     }

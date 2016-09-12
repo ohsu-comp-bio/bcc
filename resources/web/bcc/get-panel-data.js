@@ -1,5 +1,3 @@
-data_sources = {};
-
 //console.log("get-panel-data.js loaded");
 //console.log("table_schema:");
 //console.log(table_schema);
@@ -16,27 +14,55 @@ function onFailure(errorInfo, options, responseObj)
     }
 }
 
-function onSuccess(data)
+function onSuccessWithData(data_sources)
 {
-    console.log("Success! " + data.rowCount + " rows returned.");
-    //console.log(data);
-    var table_name = data.queryName;
-    var data_rows = [data.queryName] = data.rows;
-    //console.log("just data rows as JSON");
-    //console.log(JSON.stringify(data_rows));
-    if (data_rows.length)
+    //console.log("data_sources");
+    //console.log(data_sources);
+
+    function onSuccess(data)
     {
-        data_sources[table_name] = {};
-        data_sources[table_name]["objects"] = data_rows;
+        console.log("Success! " + data.rowCount + " rows returned.");
+        //console.log(data);
+        var table_name = data.queryName;
+        var data_rows = [data.queryName] = data.rows;
+        //console.log("just data rows as JSON");
+        //console.log(JSON.stringify(data_rows));
+        if (data_rows.length)
+        {
+            data_sources[table_name] = {};
+            data_sources[table_name]["objects"] = data_rows;
+        }
+
+        console.log("data_sources so far:");
+        console.log(data_sources);
+
+        //console.log(JSON.stringify(data_sources));
     }
 
-    console.log("data_sources so far:");
-    console.log(data_sources);
-
-    //console.log(JSON.stringify(data_sources));
+    return onSuccess;
 }
 
-function createMultiQuery(tables_to_plot, optr)
+//function onSuccess(data)
+//{
+//    console.log("Success! " + data.rowCount + " rows returned.");
+//    //console.log(data);
+//    var table_name = data.queryName;
+//    var data_rows = [data.queryName] = data.rows;
+//    //console.log("just data rows as JSON");
+//    //console.log(JSON.stringify(data_rows));
+//    if (data_rows.length)
+//    {
+//        data.data_sources[table_name] = {};
+//        data.data_sources[table_name]["objects"] = data_rows;
+//    }
+//
+//    console.log("data.data_sources so far:");
+//    console.log(data.data_sources);
+//
+//    //console.log(JSON.stringify(data_sources));
+//}
+
+function createMultiQuery(tables_to_plot, data_sources, optr)
 {
     console.log("data_sources at start:");
     console.log(data_sources);
@@ -49,6 +75,8 @@ function createMultiQuery(tables_to_plot, optr)
     }
     console.log("data_sources after delete:");
     console.log(data_sources);
+
+    var onSuccess = onSuccessWithData(data_sources);
 
     var multi_request = new LABKEY.MultiRequest();
 
@@ -107,7 +135,7 @@ function createMultiQuery(tables_to_plot, optr)
 }
 
 
-function getTraceData(table_name, fields)
+function getTraceData(table_name, fields, data_sources)
 {
     console.log("in getTraceData");
     console.log("table_name " + table_name + " fields");
