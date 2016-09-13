@@ -429,6 +429,10 @@ var table_schema =
                 FieldName: "CA199",
                 DisplayName: "CA19-9",
                 Units: "U/ml"
+            },
+            {
+                FieldName: "Comment",
+                DisplayName: "Comment",
             }
         ]
     },
