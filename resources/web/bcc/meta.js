@@ -476,7 +476,8 @@ var table_schema =
         },
         MultiLegendIdCol: "tumorId", // When used, this should be one of the fields below.
         //MultiLegendColorCycle: ["red", "green", "blue", "purple", "orange", "yellow", "brown", "violet"],
-        MultiLegendSymbolCycle: ["circle", "square", "triangle-up", "diamond", "star-triangle-up", "hexagram", "bowtie", "hash"],
+        MultiLegendSymbolCycle: ["circle", "square", "triangle-up", "diamond", "star-triangle-up", "star",
+                                 "circle-open", "square-open", "triangle-up-open", "diamond-open", "star-triangle-up-open", "star-open"],
         Fields:
         [
             {
