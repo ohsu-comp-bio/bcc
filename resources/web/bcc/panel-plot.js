@@ -59,14 +59,14 @@ function plot(tables_to_plot, selected_OPTR, data_sources, graph_div_id="graph")
     	title: "<b>OPTR: " + selected_OPTR + "</b>",
     	titlefont:
     	{
-    		size: 36
+    		size: 20
     	},
     	height: 600,
-    	width: 1200,
+    	//width: 1200,
     	hovermode: 'closest',
     	xaxis:
     	{
-    		title: "<b>Date</b>",
+    		//title: "<b>Date</b>",
     		position: 0,
     		//domain: [0, 1],
     		domain: [0.1, 1],
@@ -74,15 +74,15 @@ function plot(tables_to_plot, selected_OPTR, data_sources, graph_div_id="graph")
     		tickmode: "auto",
     		showline: true,
     		nticks: 12,
-    		tickangle: 45,
+    		//tickangle: 45,
     		linewidth: 2,
     		tickfont:
     		{
-    			size: 14
+    			size: 10
     		},
     		titlefont:
     		{
-    			size: 14
+    			size: 10
     		}
     	}
     };

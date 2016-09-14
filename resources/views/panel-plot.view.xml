@@ -1,4 +1,4 @@
-<view xmlns="http://labkey.org/data/xml/view" title="Panel Plot" frame="portal">
+<view xmlns="http://labkey.org/data/xml/view" title="Panel Plot" frame="none">
     <dependencies>
         <dependency path="Ext4ClientApi" />
         <dependency path="bcc/plotly-latest.min.js"/>

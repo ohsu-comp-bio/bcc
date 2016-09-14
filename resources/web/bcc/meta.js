@@ -472,7 +472,7 @@ var table_schema =
         Line:
         {
             color: "red",
-            width: 3
+            width: 1
         },
         MultiLegendIdCol: "tumorId", // When used, this should be one of the fields below.
         //MultiLegendColorCycle: ["red", "green", "blue", "purple", "orange", "yellow", "brown", "violet"],
