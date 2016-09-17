@@ -163,6 +163,86 @@ var table_schema =
         ]
     },
 
+    OtherTreatments:
+    {
+        Type: "Event",
+        TableName: "OtherTreatments",
+        DisplayName: "OtherTreatments",
+        Marker:
+        {
+            symbol: "diamond",
+            color: "green",
+            size: 12
+        },
+        Line:
+        {
+            color: "black",
+            width: 1
+        },
+        MultiLegendIdCol: "type", // When used, this should be one of the fields below.
+        MultiLegendColorCycle: ["green", "blue", "purple", "orange", "yellow", "brown", "violet"],
+        //MultiLegendSymbolCycle: ["circle", "square", "triangle-up", "diamond", "star-triangle-up", "hexagram", "bowtie", "hash"],
+        Fields:
+        [
+            {
+                FieldName: "date",
+                DisplayName: "Date"
+            },
+            {
+                FieldName: "type",
+                DisplayName: "Type"
+            },
+            {
+                FieldName: "mostDefSurgicalResDate",
+                DisplayName: "Most Definitive Surgical Res Date"
+            },
+            {
+                FieldName: "comment",
+                DisplayName: "Comment"
+            }
+        ]
+    },
+
+    Radiotherapy:
+    {
+        Type: "Event",
+        TableName: "Radiotherapy",
+        DisplayName: "Radiotherapy",
+        Marker:
+        {
+            symbol: "square",
+            color: "green",
+            size: 12
+        },
+        Line:
+        {
+            color: "black",
+            width: 1
+        },
+        MultiLegendIdCol: "type", // When used, this should be one of the fields below.
+        MultiLegendColorCycle: ["green", "blue", "purple", "orange", "yellow", "brown", "violet"],
+        //MultiLegendSymbolCycle: ["circle", "square", "triangle-up", "diamond", "star-triangle-up", "hexagram", "bowtie", "hash"],
+        Fields:
+        [
+            {
+                FieldName: "date",
+                DisplayName: "Date"
+            },
+            {
+                FieldName: "type",
+                DisplayName: "Type"
+            },
+            {
+                FieldName: "mostDefSurgicalResDate",
+                DisplayName: "Most Definitive Surgical Res Date"
+            },
+            {
+                FieldName: "comment",
+                DisplayName: "Comment"
+            }
+        ]
+    },
+
     OncoLogTreatmentTable:
     {
         Type: "Event",
