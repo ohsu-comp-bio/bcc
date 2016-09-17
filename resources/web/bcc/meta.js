@@ -170,7 +170,7 @@ var table_schema =
         DisplayName: "OtherTreatments",
         Marker:
         {
-            symbol: "diamond",
+            symbol: "diamond-tall-open",
             color: "green",
             size: 12
         },
@@ -210,7 +210,7 @@ var table_schema =
         DisplayName: "Radiotherapy",
         Marker:
         {
-            symbol: "square",
+            symbol: "triangle-up",
             color: "green",
             size: 12
         },
