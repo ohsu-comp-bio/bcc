@@ -15,7 +15,6 @@ function plot(tables_to_plot, selected_OPTR, data_sources, graph_div_id="graph")
     //console.log("data_sources");
     //console.log(data_sources);
 
-    var annotation_makers = {};
     var fields = [];
     var plot_data = {};
     var trace = {};
@@ -23,7 +22,6 @@ function plot(tables_to_plot, selected_OPTR, data_sources, graph_div_id="graph")
     var yaxis = {};
     var schema = {};
     var annotation = {};
-    var annotation_maker;
     var event_yaxis_domain = [0.75, 1];
     var series_yaxis_domain = [0, 0.75];
     var max_domain = 1.0;
@@ -454,7 +452,6 @@ function plot(tables_to_plot, selected_OPTR, data_sources, graph_div_id="graph")
                     uniqueIds[0] = name;
                 }
 
-                var annotation_maker = getAnnotationMaker(table_name, plot_data, selected_OPTR);
                 var MultiLegendCycleIdx = 0;
 
                 $.each(uniqueIds, function(index1, legendText)
@@ -473,7 +470,7 @@ function plot(tables_to_plot, selected_OPTR, data_sources, graph_div_id="graph")
                             {
                                 x.push(plot_data.date[index2]);
                                 y.push(plot_data.y_value[index2]);
-                                hoverText.push(annotation_maker(index2));
+                                hoverText.push(getGenericAnnotationText(table_name, plot_data, index2));
                             }
                         });
                         legendText = legendText + units;
@@ -538,11 +535,12 @@ function plot(tables_to_plot, selected_OPTR, data_sources, graph_div_id="graph")
                     {
                         x = plot_data.date;
                         y = plot_data.y_value;
-                        hoverText = getText(annotation_maker, plot_data["date"].length)
+                        for (var j = 0; j < plot_data.date.length; j++)
+                        {
+                            hoverText.push(getGenericAnnotationText(table_name, plot_data, j));
+                        }
                     }
 
-                    //console.log("name for annotation maker " + legendText);
-                    annotation_makers[legendText] = annotation_maker;
                     //console.log(plot_data.date);
 
                     trace =
@@ -621,7 +619,7 @@ function plot(tables_to_plot, selected_OPTR, data_sources, graph_div_id="graph")
     myPlot
 	    .on('plotly_click', function(data)
 	    {
-	        makeAnnotations(data, annotation_makers, graph_div_id);
+	        makeAnnotations(data, graph_div_id);
 	    })
 	    .on('plotly_clickannotation', function(event, data)
 	    {
@@ -652,19 +650,6 @@ function getFields(table_name)
     //console.log(fields);
 
     return fields;
-}
-
-function getText(annotation_maker, N)
-{
-    var text = [];
-
-    var i;
-    for (i = 0 ; i < N ; i++)
-    {
-        text.push(annotation_maker(i));
-    }
-
-    return text;
 }
 
 function makeMarkerColors(hue_start, hue_end, saturation, value, steps)
