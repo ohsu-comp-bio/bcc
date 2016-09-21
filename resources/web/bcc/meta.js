@@ -71,11 +71,11 @@ var table_schema =
             color: "green",
             size: 12
         },
-        Line:
-        {
-            color: "green",
-            width: 1
-        },
+        //Line:
+        //{
+        //    color: "green",
+        //    width: 1
+        //},
         Fields:
         [
             {
@@ -134,11 +134,11 @@ var table_schema =
             color: "green",
             size: 12
         },
-        Line:
-        {
-            color: "black",
-            width: 1
-        },
+        //Line:
+        //{
+        //    color: "black",
+        //    width: 1
+        //},
         MultiLegendIdCol: "type", // When used, this should be one of the fields below.
         MultiLegendColorCycle: ["green", "blue", "purple", "orange", "yellow", "brown", "violet"],
         //MultiLegendSymbolCycle: ["circle", "square", "triangle-up", "diamond", "star-triangle-up", "hexagram", "bowtie", "hash"],
@@ -174,11 +174,11 @@ var table_schema =
             color: "green",
             size: 12
         },
-        Line:
-        {
-            color: "black",
-            width: 1
-        },
+        //Line:
+        //{
+        //    color: "black",
+        //    width: 1
+        //},
         MultiLegendIdCol: "type", // When used, this should be one of the fields below.
         MultiLegendColorCycle: ["green", "blue", "purple", "orange", "yellow", "brown", "violet"],
         //MultiLegendSymbolCycle: ["circle", "square", "triangle-up", "diamond", "star-triangle-up", "hexagram", "bowtie", "hash"],
@@ -214,11 +214,11 @@ var table_schema =
             color: "green",
             size: 12
         },
-        Line:
-        {
-            color: "black",
-            width: 1
-        },
+        //Line:
+        //{
+        //    color: "black",
+        //    width: 1
+        //},
         MultiLegendIdCol: "type", // When used, this should be one of the fields below.
         MultiLegendColorCycle: ["green", "blue", "purple", "orange", "yellow", "brown", "violet"],
         //MultiLegendSymbolCycle: ["circle", "square", "triangle-up", "diamond", "star-triangle-up", "hexagram", "bowtie", "hash"],
@@ -272,11 +272,11 @@ var table_schema =
             color: "#FAEBD7",
             size: 12
         },
-        Line:
-        {
-            color: "black",
-            width: 1
-        },
+        //Line:
+        //{
+        //    color: "black",
+        //    width: 1
+        //},
         MultiLegendIdCol: "procedure", // When used, this should be one of the fields below.
         MultiLegendMarkers: // Used with MultiLegendIdCol to define specific markers for each legend ID.
         [
@@ -332,11 +332,11 @@ var table_schema =
             color: "purple",
             size: 12
         },
-        Line:
-        {
-            color: "black",
-            width: 1
-        },
+        //Line:
+        //{
+        //    color: "black",
+        //    width: 1
+        //},
         Fields:
         [
             {
@@ -379,11 +379,11 @@ var table_schema =
             color: "green",
             size: 12
         },
-        Line:
-        {
-            color: "black",
-            width: 1
-        },
+        //Line:
+        //{
+        //    color: "black",
+        //    width: 1
+        //},
         Fields:
         [
             {
@@ -408,11 +408,11 @@ var table_schema =
             color: "black",
             size: 12
         },
-        Line:
-        {
-            color: "black",
-            width: 1
-        },
+        //Line:
+        //{
+        //    color: "black",
+        //    width: 1
+        //},
         Fields:
         [
             {
@@ -462,11 +462,11 @@ var table_schema =
             color: "lightgreen",
             size: 12
         },
-        Line:
-        {
-            color: "lightgreen",
-            width: 1
-        },
+        //Line:
+        //{
+        //    color: "lightgreen",
+        //    width: 1
+        //},
         Fields:
         [
             {

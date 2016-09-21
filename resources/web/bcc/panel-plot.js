@@ -26,6 +26,7 @@ function plot(tables_to_plot, selected_OPTR, data_sources, graph_div_id="graph")
     var series_yaxis_domain = [0, 0.75];
     var max_domain = 1.0;
     var add_yaxis = false;
+    var schema_defines_line = false;
     var yaxis_name = "";
     var yaxis_name_suffix = "";
     var yaxis_idx = 0;
@@ -234,6 +235,7 @@ function plot(tables_to_plot, selected_OPTR, data_sources, graph_div_id="graph")
                 if (schema.hasOwnProperty("Line") )
                 {
                     Line = schema.Line;
+                    schema_defines_line = true;
                 } else
                 {
                     Line =
@@ -241,6 +243,7 @@ function plot(tables_to_plot, selected_OPTR, data_sources, graph_div_id="graph")
                         color: marker_colors[plot_number - 1],
                         width: 3
                     };
+                    schema_defines_line = false;
                 }
 
                 //console.log(table_name + " schema");
@@ -298,7 +301,7 @@ function plot(tables_to_plot, selected_OPTR, data_sources, graph_div_id="graph")
                         yaxis.range = [0.5, num_events + 0.5];
                         add_yaxis = true;
                     }
-                    trace_mode = "lines+markers";
+                    if (schema_defines_line) trace_mode = "lines+markers"; else trace_mode = "markers";
                     for (var j = 0; j < plot_data.date.length; j++)
                     {
                         plot_data.y_value[j] = num_events - event_idx + 1;
@@ -371,7 +374,7 @@ function plot(tables_to_plot, selected_OPTR, data_sources, graph_div_id="graph")
 
                     yaxis_name_suffix = yaxis_idx > 1 ? yaxis_idx:"";
                     yaxis_name = "yaxis" + yaxis_name_suffix;
-                    trace_mode = "lines+markers";
+                    if (schema_defines_line) trace_mode = "lines+markers"; else trace_mode = "markers";
 
                     if (schema.hasOwnProperty("yValueCol") &&
                         plot_data.hasOwnProperty(schema.yValueCol))
