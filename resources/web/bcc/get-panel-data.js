@@ -25,6 +25,19 @@ function onSuccessWithData(data_sources)
         //console.log(data);
         var table_name = data.queryName;
         var data_rows = [data.queryName] = data.rows;
+
+        // This searches for "no data in epic" and removes any rows that contain this string.
+        // This is to keep the plot from trying to show these entries.
+        var num_removed = 0;
+        $.each(data.rows, function(index, row)
+        {
+            if (JSON.stringify(row).match("no data in epic"))
+            {
+                data_rows.splice(index - num_removed, 1);
+                num_removed++;
+            }
+        });
+
         //console.log("just data rows as JSON");
         //console.log(JSON.stringify(data_rows));
         if (data_rows.length)
