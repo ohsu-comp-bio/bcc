@@ -6,20 +6,31 @@
                 <!--if you include this on a table, it will apply standard configuration-->
                 <javaCustomizer>org.labkey.bcc.query.BCCCustomizer</javaCustomizer>
                 <columns>
+                    <column columnName="date">
+                        <columnTitle>Date</columnTitle>
+                        <isHidden>true</isHidden>
+                    </column>
                     <column columnName="MRN">
+                        <formatString>00000000</formatString>
                         <columnTitle>MRN</columnTitle>
+                        <nullable>false</nullable>
                         <phi>PHI</phi>
                         <protected>true</protected>
                     </column>
                     <column columnName="First Name">
                         <columnTitle>First Name</columnTitle>
+                        <nullable>false</nullable>
                         <phi>PHI</phi>
                         <protected>true</protected>
                     </column>
                     <column columnName="Last Name">
                         <columnTitle>Last Name</columnTitle>
+                        <nullable>false</nullable>
                         <phi>PHI</phi>
                         <protected>true</protected>
+                    </column>
+                    <column columnName="Date Of Birth">
+                        <nullable>false</nullable>
                     </column>
                     <!--We may NOT want these dates flagged as PHI since dates are shifted when published?-->
                     <!--<column columnName="Date Of Birth">
@@ -35,6 +46,7 @@
                         <protected>true</protected>
                     </column> -->
                     <column columnName="Gender">
+                        <nullable>true</nullable>
                         <fk>
                             <fkDbSchema>lookups</fkDbSchema>
                             <fkTable>gender</fkTable>
