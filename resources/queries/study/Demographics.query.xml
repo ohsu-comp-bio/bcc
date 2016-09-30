@@ -48,6 +48,7 @@
                     </column>
                     -->
                     <column columnName="Gender">
+                        <description>"M" = Male, "F" = Female, leave blank if unknown or not given.</description>
                         <nullable>true</nullable>
                         <fk>
                             <fkDbSchema>lookups</fkDbSchema>
