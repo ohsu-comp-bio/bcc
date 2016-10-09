@@ -21,6 +21,12 @@
                         <phi>PHI</phi>
                         <protected>true</protected>
                     </column>
+                    <column columnName="PositionStart">
+                        <excludeFromShifting>true</excludeFromShifting>
+                    </column>
+                    <column columnName="PositionEnd">
+                        <excludeFromShifting>true</excludeFromShifting>
+                    </column>
                 </columns>
             </table>
         </tables>
