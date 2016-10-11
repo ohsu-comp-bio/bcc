@@ -89,6 +89,7 @@
             });
 
 
+
             var populateClinicalNarative= function(nariativeRow, ctrl){
 
                 bindUI(ctrl,nariativeRow)
@@ -117,10 +118,6 @@
                 bindUI(ctrl,patientRow);
             };
 
-            var populateClinicalNarriative = function() {
-
-            };
-
 
             var tables_to_plot =
                     [
@@ -133,8 +130,7 @@
                         "Radiotherapy",
                         "OtherTreatments",
                         "CA199",
-                        "TumorSize",
-//                        "Weight"
+                        "TumorSize"
                     ];
 
             plotOPTR(tables_to_plot, participantId, "summaryGraph");
@@ -167,37 +163,46 @@
                     return items;
                 },
 
+
+
+
                 loadReports: function(){
 
-                    this.reports = [
-                        {
-                            label: 'Summary',
-                            name: 'patientSummary',
-                            id: 'patientSummary',
-                            category: 'Clinical',
-                            reportType: 'js',
-                            subjectFieldName: LABKEY.getModuleProperty('Study', 'subject').columnName,
-                            dateFieldName: 'date',
-                            jsHandler: function(tabPanel, tab){
-                                tab.add(Ext4.create('BCC.panel.PatientSummaryPanel', {
-                                    filterArray: tabPanel.getCombinedFilterArray(tab)
-                                }));
-                            }
-                        },
 
-                        this.getReportConfig('Samples', 'study', 'Clinical', 'Samples'),
-                        this.getReportConfig('Treatments', 'study', 'Clinical', 'Treatments'),
-                        this.getReportConfig('Tumor Size', 'study', 'Clinical', 'Tumor Size'),
-                        this.getReportConfig('Weight', 'study', 'Clinical', 'Weight'),
-                        this.getReportConfig('Outcomes', 'study', 'Clinical', 'Outcomes'),
-                        this.getReportConfig('Variants', 'study', 'Genomics', 'Variants'),
-                        this.getReportConfig('Immune Cell Phenotyping', 'study', 'Research', 'Immune Cell Phenotyping'),
-                        this.getReportConfig('Images', 'study', 'Imaging', 'Images'),
-                        this.getReportConfig('Events', 'study', 'Clinical', 'Events')
+
+                    this.reports = [
+
+
+
+
+
+
+                        this.getReportConfig('Samples', 'study', 'Clinical'),
+                        this.getReportConfig('Diagnosis', 'study', 'Clinical'),
+                        this.getReportConfig('Ca199', 'study', 'Clinical', 'CA19-9'),
+                        this.getReportConfig('OncoLogTreatment', 'study', 'Clinical', 'OncoLog Treatments'),
+                        this.getReportConfig('BloodDraw', 'study', 'Clinical', 'Blood Draws'),
+                        this.getReportConfig('Biopsy', 'study', 'Clinical', 'Biopsies'),
+                        this.getReportConfig('Outcomes', 'study', 'Clinical'),
+                        this.getReportConfig('Treatments', 'study', 'Clinical'),
+                        this.getReportConfig('Radiotherapy', 'study', 'Clinical'),
+                        this.getReportConfig('OtherTreatments', 'study', 'Clinical', 'Other Treatments'),
+                        this.getReportConfig('Tumor Size', 'study', 'Clinical', 'Tumor Measuremets'),
+
+                        this.getReportConfig('omeroImages', 'study', 'Imaging', 'Radiology', 'omeroImages_Radiology'),
+                        this.getReportConfig('omeroImages', 'study', 'Imaging', 'EF', 'omeroImages_EFs'),
+                        this.getReportConfig('omeroImages', 'study', 'Imaging', 'H&E', 'omeroImages_HandEs'),
+                        this.getReportConfig('omeroImages', 'study', 'Imaging', 'IHC/IF', 'omeroImages_IHCandIFs'),
+                        this.getReportConfig('omeroImages', 'study', 'Imaging', 'EM', 'omeroImages_IHCs'),
+
+                        this.getReportConfig('Gene Trails Results', 'study', 'Genomics', 'Gene Trails'),
+                        this.getReportConfig('WESResults', 'study', 'Genomics', 'Variant Data', 'SelectedVariants'),
+
+
                     ];
 
-                    this.reports = LDK.Utils.sortByProperty(this.reports, 'name', false);
-                    this.reports = LDK.Utils.sortByProperty(this.reports, 'reportCategory', false);
+//                    this.reports = LDK.Utils.sortByProperty(this.reports, 'name', false);
+//                    this.reports = LDK.Utils.sortByProperty(this.reports, 'reportCategory', false);
 
                     this.createTabPanel();
                 },
@@ -218,18 +223,27 @@
                     }
                 }],
 
-                getReportConfig: function(queryName, schemaName, category, title){
-                    return {
+                getReportConfig: function(queryName, schemaName, category, title, viewName){
+                    var result = {
                         id: queryName,
                         name: queryName,
                         category: category,
                         schemaName: schemaName,
                         queryName: queryName,
-                        label: title,
+                        label: title || queryName,
                         reportType: 'query',
                         subjectFieldName: LABKEY.getModuleProperty('Study', 'subject').columnName,
                         dateFieldName: 'date'
                     };
+
+                    if(viewName){
+                        result.viewName = viewName;
+                        result.id = result.id + '_' + viewName;
+                        result.name = result.name + '_' + viewName;
+                    }
+
+                    return result;
+
                 },
 
                 getSimpleXYPlot: function(queryName, schemaName, category, title, plotConfig){
