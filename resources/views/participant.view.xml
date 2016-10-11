@@ -1,4 +1,4 @@
-<view xmlns="http://labkey.org/data/xml/view" title="Patient Details" frame="portal">
+<view xmlns="http://labkey.org/data/xml/view" title="Patient Details" frame="none">
     <dependencies>
         <dependency path="Ext4ClientApi" />
         <dependency path="ldk/LDKApi.lib.xml"/>
@@ -7,5 +7,13 @@
         <dependency path="https://cdn.plot.ly/plotly-latest.min.js"/>
 
         <dependency path="bcc/panel/PatientSummaryPanel.js"/>
+
+
+        <dependency path="bcc/plotly-latest.min.js"/>
+        <dependency path="bcc/meta.js" />
+        <dependency path="bcc/get-panel-data.js" />
+        <dependency path="bcc/make-annotations.js" />
+        <dependency path="bcc/annotation-makers.js" />
+        <dependency path="bcc/panel-plot.js" />
     </dependencies>
 </view>

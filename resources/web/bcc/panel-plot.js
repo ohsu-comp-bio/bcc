@@ -55,25 +55,20 @@ function plot(tables_to_plot, selected_OPTR, data_sources, graph_div_id="graph")
 
     var layout =
     {
-    	title: "<b>OPTR: " + selected_OPTR + "</b>",
-    	titlefont:
-    	{
-    		size: 20
-    	},
+        //It is the responsibility of the caller to show the appropriate title.
     	height: 600,
-    	//width: 1200,
     	hovermode: 'closest',
+        margin : {
+            t:30            //To Account for the title being removed
+        },
     	xaxis:
     	{
-    		//title: "<b>Date</b>",
     		position: 0,
-    		//domain: [0, 1],
     		domain: [0.1, 1],
     		type: "Date",
     		tickmode: "auto",
     		showline: true,
     		nticks: 12,
-    		//tickangle: 45,
     		linewidth: 2,
     		tickfont:
     		{
@@ -105,7 +100,7 @@ function plot(tables_to_plot, selected_OPTR, data_sources, graph_div_id="graph")
 
         if (DOD != 'Invalid Date')
         {
-            if (DOB != 'Invalid Date')
+            /*if (DOB != 'Invalid Date')
             {
                 //var targetDate = new Date();
                 var age = calculateAge(DOB, DOD);
@@ -120,7 +115,7 @@ function plot(tables_to_plot, selected_OPTR, data_sources, graph_div_id="graph")
                 {
                     layout.title = "<b>Patient deceased at age " + age + " (OPTR: " + selected_OPTR + ")</b>";
                 }
-            }
+            }*/
 
             shape =
             {
@@ -172,25 +167,25 @@ function plot(tables_to_plot, selected_OPTR, data_sources, graph_div_id="graph")
                 layout.annotations = [];
             }
             layout.annotations.push(annotation);
-        } else
-        {
-            if (DOB != 'Invalid Date')
-            {
-                //var targetDate = new Date();
-                var age = calculateAge(DOB, new Date());
-                //console.log("Current age = " + age);
-                if (plot_data.hasOwnProperty("Gender") && plot_data["Gender"] == "M")
-                {
-                    layout.title = "<b>Male age " + age + " (OPTR: " + selected_OPTR + ")</b>";
-                } else if (plot_data.hasOwnProperty("Gender") && plot_data["Gender"] == "F")
-                {
-                    layout.title = "<b>Female age " + age + " (OPTR: " + selected_OPTR + ")</b>";
-                } else
-                {
-                    layout.title = "<b>Patient age " + age + " (OPTR: " + selected_OPTR + ")</b>";
-                }
-            }
         }
+        // else  {
+        //     if (DOB != 'Invalid Date')
+        //     {
+        //         //var targetDate = new Date();
+        //         var age = calculateAge(DOB, new Date());
+        //         //console.log("Current age = " + age);
+        //         if (plot_data.hasOwnProperty("Gender") && plot_data["Gender"] == "M")
+        //         {
+        //             layout.title = "<b>Male age " + age + " (OPTR: " + selected_OPTR + ")</b>";
+        //         } else if (plot_data.hasOwnProperty("Gender") && plot_data["Gender"] == "F")
+        //         {
+        //             layout.title = "<b>Female age " + age + " (OPTR: " + selected_OPTR + ")</b>";
+        //         } else
+        //         {
+        //             layout.title = "<b>Patient age " + age + " (OPTR: " + selected_OPTR + ")</b>";
+        //         }
+        //     }
+        // }
     }
 
     var table_name;
@@ -246,20 +241,10 @@ function plot(tables_to_plot, selected_OPTR, data_sources, graph_div_id="graph")
                     schema_defines_line = false;
                 }
 
-                //console.log(table_name + " schema");
-                //console.log(schema);
-                //console.log("getting fields for table " + table_name);
                 fields = getFields(table_name);
-                //console.log(table_name + " fields");
-                //console.log(fields);
 
-                //console.log("data_sources has own property " + table_name);
                 plot_data = getTraceData(table_name, fields, data_sources);
                 plot_data.y_value = [];
-
-
-                //console.log("plot_data for " + table_name);
-                //console.log(plot_data);
 
                 add_yaxis = false;
 
@@ -309,54 +294,6 @@ function plot(tables_to_plot, selected_OPTR, data_sources, graph_div_id="graph")
                     yaxis_name_suffix = first_event_yaxis_idx > 1 ? first_event_yaxis_idx:""
                     yaxis_name = "yaxis" + yaxis_name_suffix;
 
-                    // This worked except that the hovers for the ends of the lines interfered with
-                    // the marker hovers.  This was even when the line hovers were off (set to 'none').
-                    // The line hovers blocked the marker hovers when centered on the ends of the lines.
-                    // Should be reported as a plotly bug.
-                    // Add an additional trace for a line through events.
-                    //console.log("plot_data.date: " + plot_data.date);
-                    //trace =
-                    //{
-                    //    x: [plot_data.date[0], plot_data.date[plot_data.date.length - 1]],
-                    //    y: [plot_data.y_value[0], plot_data.y_value[0]],
-                    //    hoverinfo: 'none',
-                    //    type: 'scatter',
-                    //    mode: 'line',
-                    //    line:
-                    //    {
-                    //        color: Line.color
-                    //    },
-                    //    yaxis: "y" + yaxis_name_suffix,
-                    //    showlegend: false
-                    //};
-                    //traces.push(trace);
-
-                    // This works, but just using "trace_mode = 'lines+markers'" above is much simpler.
-                    // Plus, the 'lines+markers' method has the behavior of removing the line when the legend is
-                    // clicked to remove the markers (this is the behavior desired by Patrick).
-                    //shape =
-                    //{
-                    //    type: 'line',
-                    //    // x-reference is assigned to the x-values
-                    //    xref: 'x',
-                    //    // y-reference is assigned to the plot paper [0,1]
-                    //    //yref: 'paper',
-                    //    yref: "y" + yaxis_name_suffix,
-                    //    // Ariel mentioned full length lines, this would require min and max dates here.
-                    //    x0: plot_data.date[0],
-                    //    y0: plot_data.y_value[0],
-                    //    x1: plot_data.date[plot_data.date.length - 1],
-                    //    y1: plot_data.y_value[0],
-                    //    //fillcolor: '#d3d3d3',
-                    //    opacity: 0.5,
-                    //    layer: "below",
-                    //    line: Line
-                    //};
-                    //if (!layout.hasOwnProperty("shapes"))
-                    //{
-                    //    layout.shapes = [];
-                    //}
-                    //layout.shapes.push(shape);
                 } else if (schema.Type == "Series")
                 {
                     yaxis_idx++;
@@ -395,21 +332,6 @@ function plot(tables_to_plot, selected_OPTR, data_sources, graph_div_id="graph")
                             if (plot_data["sizeAxis3"][j] && (plot_data["sizeAxis3"][j] > plot_data.y_value[j]))
                             {
                                 plot_data.y_value[j] = plot_data["sizeAxis3"][j];
-                            }
-                        }
-                    }
-
-                    // Might be better to handle this in a view with a calculated column.
-                    if (table_name == "Weight")
-                    {
-                        // If weight is entered as lbs, convert to kg since the graph is assuming kg.
-                        for (var j = 0 ; j < plot_data["weight"].length ; j++)
-                        {
-                            //if (plot_data["units"][j] == "lbs")
-                            if (plot_data["units"][j].match("[lL][bB]"))
-                            {
-                              var w = plot_data.y_value[j] / 2.2046;
-                              plot_data.y_value[j] = w.toFixed(1);
                             }
                         }
                     }
@@ -569,28 +491,10 @@ function plot(tables_to_plot, selected_OPTR, data_sources, graph_div_id="graph")
                 console.log("Not Event or Series");
                 console.log(data_sources[table_name]);
             }
-        }  else
-        {
-            //console.log("data_sources DOES NOT have own property " + table_name);
-            //console.log("data sources:");
-            //console.log(data_sources);
         }
-
     }
 
-
-    //delete layout.yaxis.overlaying
-    //console.log("setting overlaying");
-    //console.log(layout);
-    //console.log("yaxis_name " + yaxis_name);
-    //console.log("num_tables " + num_tables);
     num_tables_plotted = Object.keys(data_sources).length;
-    //console.log("num_tables_plotted " + num_tables_plotted);
-    //layout[yaxis_name].overlaying = false;
-    //layout["yaxis10"].overlaying = false;
-
-    //console.log("setting layout")
-    //layout[yaxis_name].overlaying = false;
 
     // Change title if there is nothing to plot.  If OPTR exists there will be at least
     // one table plotted due to the Demographics table.  So there should be 2 or more tables plotted.
@@ -605,10 +509,7 @@ function plot(tables_to_plot, selected_OPTR, data_sources, graph_div_id="graph")
     Plotly.newPlot(graph_div_id, traces, layout);
 
     g = document.getElementById(graph_div_id);
-    //console.log("g.layout");
-    //console.log(g.layout);
-    //console.log("g.data");
-    //console.log(g.data);
+
 
     a = 10;
 
@@ -620,8 +521,7 @@ function plot(tables_to_plot, selected_OPTR, data_sources, graph_div_id="graph")
     myPlot = document.getElementById(graph_div_id);
 
     myPlot
-	    .on('plotly_click', function(data)
-	    {
+	    .on('plotly_click', function(data) {
 	        makeAnnotations(data, graph_div_id);
 	    })
 	    .on('plotly_clickannotation', function(event, data)
@@ -649,9 +549,6 @@ function getFields(table_name)
         fields.push(item.FieldName);
     });
 
-    //console.log("fields");
-    //console.log(fields);
-
     return fields;
 }
 
@@ -666,13 +563,11 @@ function makeMarkerColors(hue_start, hue_end, saturation, value, steps)
     for (i = 0 ; i < steps ; i++)
     {
         hue = hue_start + i*(hue_end - hue_start)/steps;
-        //console.log("hue: " + hue);
+
         color_text = "hsl(" +
           hue + ", " +
           saturation + "%, " +
           value + "%)";
-        //console.log("color_text");
-        //console.log(color_text);
 
         color_texts.push(color_text);
 
@@ -681,7 +576,6 @@ function makeMarkerColors(hue_start, hue_end, saturation, value, steps)
         el.css({"background-color": color_text, "height": "20px", "width": "20px"});
 
         el.appendTo('#color-spots');
-        //console.log(el[0].outerHTML);
     }
 
     return color_texts;
@@ -706,17 +600,6 @@ function getRange(x, fudge)
 	return [min - (fudge * (max - min)), max + (fudge * (max - min))];
 }
 
-// This is not going to be easy to implement because we don't know the size of the
-// elements we need to stagger until the whole graph is scaled.  And there is no
-// way to know how the graph will be scaled until all elements are added.  Also,
-// the user may zoom in or out at any time.
-//function staggerMarkers(date, y)
-//{
-//    var y2 = [];
-//
-//	return y2;
-//}
-
 function uniq(a)
 {
     var seen = {};
@@ -728,7 +611,21 @@ function uniq(a)
 
 function calculateAge(DOBstring, targetDate) {
 
+    if(!DOBstring){
+        return null;
+    }
+
     var dateOfBirth = new Date(DOBstring);
+
+    if (targetDate) {
+        targetDate = new Date(targetDate)
+    } else {
+        targetDate = new Date();
+    }
+
+    console.log(targetDate);
+    console.log(dateOfBirth);
+
 
     var targetYear = targetDate.getFullYear();
     var targetMonth = targetDate.getMonth();

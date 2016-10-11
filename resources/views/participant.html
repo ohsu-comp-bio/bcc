@@ -1,206 +1,465 @@
-<script type="text/javascript">
-    Ext4.onReady(function (){
-        /* get the participant id from the request URL: this parameter is required. */
-        var participantId = LABKEY.ActionURL.getParameter('participantId') || LABKEY.ActionURL.getParameter('patientId');
-        if (!participantId){
-            alert('Must Provide Id');
-            return;
-        }
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+    <script type="text/javascript">
 
-        var title = 'Patient Details: ' + participantId;
-        document.title = title;
+        var bindUI = function(ctrl, data){
 
-        Ext4.define('bcc.panel.TabbedReportPanel', {
-            extend: 'LDK.panel.TabbedReportPanel',
+            ctrl = $(ctrl);
 
-            initComponent: function(){
-                Ext4.ns('bcc.tabbedReports');
+            ctrl.find("[visibility]").hide();
 
-                Ext4.apply(this, {
-                    //defaultReport: 'abstract',
-                    participantId: participantId,
-                    reportNamespace: bcc.tabbedReports
-                });
-
-                this.callParent();
-
-                this.down('#submitBtn').hidden = true;
-                this.loadReports();
-            },
-
-            getFilterOptionsItems: function(){
-                var items = this.callParent();
-                items[0].hidden = true;
-                items[1].hidden = true;
-
-                return items;
-            },
-
-            loadReports: function(){
-                this.reports = [{
-                    label: 'Summary',
-                    name: 'patientSummary',
-                    id: 'patientSummary',
-                    category: 'Clinical',
-                    reportType: 'js',
-                    subjectFieldName: LABKEY.getModuleProperty('Study', 'subject').columnName,
-                    dateFieldName: 'date',
-                    jsHandler: function(tabPanel, tab){
-                        tab.add(Ext4.create('BCC.panel.PatientSummaryPanel', {
-                            filterArray: tabPanel.getCombinedFilterArray(tab)
-                        }));
-                    }
-                },
-                    this.getReportConfig('Lab Results', 'study', 'Clinical', 'Lab Results'),
-                    this.getReportConfig('Procedures', 'study', 'Clinical', 'Procedures'),
-                    this.getReportConfig('Diagnoses', 'study', 'Clinical', 'Diagnoses'),
-                    this.getReportConfig('Samples', 'study', 'Clinical', 'Samples'),
-                    this.getReportConfig('Treatments', 'study', 'Clinical', 'Treatments'),
-                    this.getReportConfig('Tumor Size', 'study', 'Clinical', 'Tumor Size'),
-                    this.getReportConfig('Weight', 'study', 'Clinical', 'Weight'),
-                    this.getSimpleXYPlot('Weight', 'study', 'Clinical', 'Weight Graph', {
-                        x: 'date',
-                        y: 'weight'
-                    }),
-                    this.getReportConfig('Outcomes', 'study', 'Clinical', 'Outcomes'),
-                    this.getReportConfig('Variants', 'study', 'Genomics', 'Variants'),
-                    this.getReportConfig('Immune Cell Phenotyping', 'study', 'Research', 'Immune Cell Phenotyping'),
-                    this.getReportConfig('Images', 'study', 'Imaging', 'Images'),
-                    this.getReportConfig('Events', 'study', 'Clinical', 'Events')
-                ];
-
-                this.reports = LDK.Utils.sortByProperty(this.reports, 'name', false);
-                this.reports = LDK.Utils.sortByProperty(this.reports, 'reportCategory', false);
-
-                this.createTabPanel();
-            },
-
-            filterTypes: [{
-                xtype: 'ldk-singlesubjectfiltertype',
-                inputValue: LDK.panel.SingleSubjectFilterType.filterName,
-                label: 'Single Participant',
-                hidden: true,
-                filterContext: {
-                    subjects: [participantId]
-                },
-                getSubjects: function(){
-                    return [participantId];
-                },
-                checkValid: function(){
-                    return true;
-                }
-            }],
-
-            getReportConfig: function(queryName, schemaName, category, title){
-                return {
-                    id: queryName,
-                    name: queryName,
-                    category: category,
-                    schemaName: schemaName,
-                    queryName: queryName,
-                    label: title,
-                    reportType: 'query',
-                    subjectFieldName: LABKEY.getModuleProperty('Study', 'subject').columnName,
-                    dateFieldName: 'date'
-                };
-            },
-
-            getSimpleXYPlot: function(queryName, schemaName, category, title, plotConfig){
-                if (!plotConfig || !plotConfig.x || !plotConfig.y){
-                    Ext4.Msg.alert('Error', 'Must provide the plotConfig and X/Y field names');
-                    return;
-                }
-
-                return {
-                    id: 'plot-' + queryName,
-                    name: queryName,
-                    category: category,
-                    schemaName: schemaName,
-                    queryName: queryName,
-                    label: title,
-                    reportType: 'js',
-                    subjectFieldName: LABKEY.getModuleProperty('Study', 'subject').columnName,
-                    dateFieldName: 'date',
-                    plotConfig: plotConfig,
-                    jsHandler: function(tabPanel, tab){
-                        var filterArray = tabPanel.getCombinedFilterArray(tab);
-
-                        LABKEY.Query.selectRows({
-                            schemaName: tab.report.schemaName,
-                            queryName: tab.report.queryName,
-                            filterArray: filterArray,
-                            scope: this,
-                            failure: LDK.Utils.getErrorCallback(),
-                            success: function(results){
-                                console.log(results);
-                                var x = [];
-                                var y = [];
-
-                                LDK.ConvertUtils.parseDatesInSelectRowsResults(results);
-
-                                Ext4.Array.forEach(results.rows, function(row){
-                                    if (Ext4.isDefined(row[tab.report.plotConfig.x]) && Ext4.isDefined(row[tab.report.plotConfig.y])){
-                                        x.push(row[tab.report.plotConfig.x]);
-                                        y.push(row[tab.report.plotConfig.y]);
-                                    }
-                                }, this);
-
-                                if (!results.rows.length){
-                                    tab.add({
-                                        html: 'No records found',
-                                        border: false
-                                    });
-                                }
-                                else {
-                                    tab.add(Ext4.create('LDK.panel.ContentResizingPanel', {
-                                        plotConfig: tab.report.plotConfig,
-                                        width: '100%',
-                                        minHeight: 50,
-                                        border: false,
-                                        listeners: {
-                                            scope: this,
-                                            afterRender: function(panel){
-                                                var data = [{
-                                                    x: x,
-                                                    y: y,
-                                                    mode: 'lines+markers',
-                                                    type: 'scatter'
-                                                }];
-
-                                                Plotly.plot(panel.renderTarget, data, {
-                                                    title: panel.plotConfig.title,
-                                                    //autosize: false,
-                                                    //width: '100%', //why not working?
-                                                    displayModeBar: true,
-                                                    xaxis: {
-                                                        type: 'date',
-                                                        tickformat: '%x',
-                                                        //tickmode: 'auto',
-                                                        ticks: 'outside',
-                                                        tickwidth: 1,
-                                                        tickangle: 40,
-                                                        ticklen: 5,
-                                                        showticklabels: true,
-                                                        showline: false,
-                                                        showgrid: true,
-                                                        autorange: true
-                                                    },
-                                                    yaxis: {
-                                                        showgrid: true
-                                                    }
-                                                });
-                                            }
-                                        }
-                                    }));
-                                }
-                            }
-                        });
-                    }
-                };
+            if(!data) {
+                return;
             }
+
+            for(var attribIdx in data){
+
+
+                if(data[attribIdx] != null){
+
+                    ctrl.find("[visibility='" + attribIdx + "']").show();
+
+                    ctrl.find("[data='" + attribIdx + "']").each(function(){
+                        $(this).html( ($(this).html() + " " +  data[attribIdx]).trim());
+
+                    });
+                }
+
+            }
+        };
+
+        var toggleGraphVisibility = function(show){
+
+            if(show){
+                $("[whenVisible]").show();
+                $("[whenNotVisible]").hide();
+            } else {
+
+                $("[whenVisible]").hide();
+                $("[whenNotVisible]").show();
+            }
+
+        };
+
+        $(document).ready(function(){
+            toggleGraphVisibility(true);
         });
 
-        Ext4.create('bcc.panel.TabbedReportPanel').render('participantDiv');
-    });
-</script>
-<div id="participantDiv"></div>
+        Ext4.onReady(function (){
+            /* get the participant id from the request URL: this parameter is required. */
+            var participantId = LABKEY.ActionURL.getParameter('participantId') || LABKEY.ActionURL.getParameter('patientId');
+            if (!participantId){
+                alert('Must Provide Id');
+                return;
+            }
+
+            var summaryDiv =  jQuery('#patientSummary');
+            var narativeDiv = jQuery('#narriative');
+            bindUI(summaryDiv);
+            bindUI(narativeDiv);
+
+            LABKEY.Query.selectRows({
+                schemaName : "study",
+                queryName : "demographics",
+                filterArray : [
+                    LABKEY.Filter.create("OPTR",participantId)
+                ],
+                success : function(data) {
+
+                    populatePatientSummary(data.rows[0],summaryDiv);
+
+                },
+                error : function(errorInfo, options, responseObj) {
+
+                }
+            });
+
+            LABKEY.Query.selectRows({
+                schemaName : "lists",
+                queryName : "tumorboardpatient",
+                sort : "tumorboardID-",
+                filterArray : [
+                        LABKEY.Filter.create("OPTR",participantId)
+                ],
+                success : function(data){
+
+                            console.log(data);
+                    populateClinicalNarative(data.rows[0],narativeDiv);
+                }
+            });
+
+
+            var populateClinicalNarative= function(nariativeRow, ctrl){
+
+                bindUI(ctrl,nariativeRow)
+
+            }
+
+            var populatePatientSummary = function(patientRow, ctrl) {
+
+
+                //console.log(patientRow);
+
+                switch(patientRow["Gender"])
+                {
+                    case "M":
+                        patientRow["GenderName"] = "Male";
+                        break;
+
+                    case "F":
+                        patientRow["GenderName"]="Female";
+                        break;
+                }
+
+                patientRow["Age"] = calculateAge( patientRow["Date Of Birth"],patientRow["Date Of Death"]);
+
+
+                bindUI(ctrl,patientRow);
+            };
+
+            var populateClinicalNarriative = function() {
+
+            };
+
+
+            var tables_to_plot =
+                    [
+                        "Demographics",
+                        "Diagnosis",
+                        "Biopsy",
+                        "Imaging",
+                        "BloodDraw",
+                        "Treatments",
+                        "Radiotherapy",
+                        "OtherTreatments",
+                        "CA199",
+                        "TumorSize",
+//                        "Weight"
+                    ];
+
+            plotOPTR(tables_to_plot, participantId, "summaryGraph");
+
+            var title = 'Patient Details: ' + participantId;
+            document.title = title;
+
+            Ext4.define('bcc.panel.TabbedReportPanel', {
+                extend: 'LDK.panel.TabbedReportPanel',
+
+                initComponent: function(){
+                    Ext4.ns('bcc.tabbedReports');
+
+                    Ext4.apply(this, {
+                        participantId: participantId,
+                        reportNamespace: bcc.tabbedReports
+                    });
+
+                    this.callParent();
+
+                    this.down('#submitBtn').hidden = true;
+                    this.loadReports();
+                },
+
+                getFilterOptionsItems: function(){
+                    var items = this.callParent();
+                    items[0].hidden = true;
+                    items[1].hidden = true;
+
+                    return items;
+                },
+
+                loadReports: function(){
+
+                    this.reports = [
+                        {
+                            label: 'Summary',
+                            name: 'patientSummary',
+                            id: 'patientSummary',
+                            category: 'Clinical',
+                            reportType: 'js',
+                            subjectFieldName: LABKEY.getModuleProperty('Study', 'subject').columnName,
+                            dateFieldName: 'date',
+                            jsHandler: function(tabPanel, tab){
+                                tab.add(Ext4.create('BCC.panel.PatientSummaryPanel', {
+                                    filterArray: tabPanel.getCombinedFilterArray(tab)
+                                }));
+                            }
+                        },
+
+                        this.getReportConfig('Samples', 'study', 'Clinical', 'Samples'),
+                        this.getReportConfig('Treatments', 'study', 'Clinical', 'Treatments'),
+                        this.getReportConfig('Tumor Size', 'study', 'Clinical', 'Tumor Size'),
+                        this.getReportConfig('Weight', 'study', 'Clinical', 'Weight'),
+                        this.getReportConfig('Outcomes', 'study', 'Clinical', 'Outcomes'),
+                        this.getReportConfig('Variants', 'study', 'Genomics', 'Variants'),
+                        this.getReportConfig('Immune Cell Phenotyping', 'study', 'Research', 'Immune Cell Phenotyping'),
+                        this.getReportConfig('Images', 'study', 'Imaging', 'Images'),
+                        this.getReportConfig('Events', 'study', 'Clinical', 'Events')
+                    ];
+
+                    this.reports = LDK.Utils.sortByProperty(this.reports, 'name', false);
+                    this.reports = LDK.Utils.sortByProperty(this.reports, 'reportCategory', false);
+
+                    this.createTabPanel();
+                },
+
+                filterTypes: [{
+                    xtype: 'ldk-singlesubjectfiltertype',
+                    inputValue: LDK.panel.SingleSubjectFilterType.filterName,
+                    label: 'Single Participant',
+                    hidden: true,
+                    filterContext: {
+                        subjects: [participantId]
+                    },
+                    getSubjects: function(){
+                        return [participantId];
+                    },
+                    checkValid: function(){
+                        return true;
+                    }
+                }],
+
+                getReportConfig: function(queryName, schemaName, category, title){
+                    return {
+                        id: queryName,
+                        name: queryName,
+                        category: category,
+                        schemaName: schemaName,
+                        queryName: queryName,
+                        label: title,
+                        reportType: 'query',
+                        subjectFieldName: LABKEY.getModuleProperty('Study', 'subject').columnName,
+                        dateFieldName: 'date'
+                    };
+                },
+
+                getSimpleXYPlot: function(queryName, schemaName, category, title, plotConfig){
+                    if (!plotConfig || !plotConfig.x || !plotConfig.y){
+                        Ext4.Msg.alert('Error', 'Must provide the plotConfig and X/Y field names');
+                        return;
+                    }
+
+                    return {
+                        id: 'plot-' + queryName,
+                        name: queryName,
+                        category: category,
+                        schemaName: schemaName,
+                        queryName: queryName,
+                        label: title,
+                        reportType: 'js',
+                        subjectFieldName: LABKEY.getModuleProperty('Study', 'subject').columnName,
+                        dateFieldName: 'date',
+                        plotConfig: plotConfig,
+                        jsHandler: function(tabPanel, tab){
+                            var filterArray = tabPanel.getCombinedFilterArray(tab);
+
+                            LABKEY.Query.selectRows({
+                                schemaName: tab.report.schemaName,
+                                queryName: tab.report.queryName,
+                                filterArray: filterArray,
+                                scope: this,
+                                failure: LDK.Utils.getErrorCallback(),
+                                success: function(results){
+                                    console.log(results);
+                                    var x = [];
+                                    var y = [];
+
+                                    LDK.ConvertUtils.parseDatesInSelectRowsResults(results);
+
+                                    Ext4.Array.forEach(results.rows, function(row){
+                                        if (Ext4.isDefined(row[tab.report.plotConfig.x]) && Ext4.isDefined(row[tab.report.plotConfig.y])){
+                                            x.push(row[tab.report.plotConfig.x]);
+                                            y.push(row[tab.report.plotConfig.y]);
+                                        }
+                                    }, this);
+
+                                    if (!results.rows.length){
+                                        tab.add({
+                                            html: 'No records found',
+                                            border: false
+                                        });
+                                    }
+                                    else {
+                                        tab.add(Ext4.create('LDK.panel.ContentResizingPanel', {
+                                            plotConfig: tab.report.plotConfig,
+                                            width: '100%',
+                                            minHeight: 50,
+                                            border: false,
+                                            listeners: {
+                                                scope: this,
+                                                afterRender: function(panel){
+                                                    var data = [{
+                                                        x: x,
+                                                        y: y,
+                                                        mode: 'lines+markers',
+                                                        type: 'scatter'
+                                                    }];
+
+                                                    Plotly.plot(panel.renderTarget, data, {
+                                                        title: panel.plotConfig.title,
+                                                        //autosize: false,
+                                                        //width: '100%', //why not working?
+                                                        displayModeBar: true,
+                                                        xaxis: {
+                                                            type: 'date',
+                                                            tickformat: '%x',
+                                                            //tickmode: 'auto',
+                                                            ticks: 'outside',
+                                                            tickwidth: 1,
+                                                            tickangle: 40,
+                                                            ticklen: 5,
+                                                            showticklabels: true,
+                                                            showline: false,
+                                                            showgrid: true,
+                                                            autorange: true
+                                                        },
+                                                        yaxis: {
+                                                            showgrid: true
+                                                        }
+                                                    });
+                                                }
+                                            }
+                                        }));
+                                    }
+                                }
+                            });
+                        }
+                    };
+                }
+            });
+
+            Ext4.create('bcc.panel.TabbedReportPanel').render('participantDiv');
+        });
+    </script>
+
+    <style type="text/css">
+
+        #patientOverview{
+            width:100%;
+            table-layout: fixed;
+            background-color: white;
+            border-collapse: collapse;
+        }
+
+        #patientOverview td {
+            vertical-align: top;
+        }
+
+        #summaryGraph{
+            height:600px;
+        }
+
+        #narriative{
+            padding:10px;
+            vertical-align: top;
+            text-align: left;
+            background-color: white;
+            max-height: 600px;
+            overflow: hidden;
+            overflow-y:auto;
+            border-left: solid 1px #808080;
+        }
+
+        #patientSummary  td{
+            vertical-align: top;
+            padding:2px;
+        }
+
+        #patientSummary  td.left{
+            text-align: left;
+        }
+
+        #patientSummary  td.right{
+            text-align: right;
+        }
+
+
+
+
+
+        #patientSummary h3, #patientSummary h2{
+            padding: 0;
+            margin:0;
+            -webkit-margin-after:0;
+            -webkit-margin-before: 0;
+
+        }
+
+        #dataDetails {
+
+        }
+
+
+
+
+    </style>
+
+</head>
+
+<body>
+
+
+<table id="patientOverview">
+    <colgroup>
+        <col span="1" style=""/>
+        <col span="1" style="width:10px;"/>
+        <col span="1" style="width:300px;"/>
+    </colgroup>
+    <thead>
+
+
+    </thead>
+    <tbody>
+        <tr id="patientSummary">
+            <td class="left">
+                <h2 visiblility="OPTR" data="OPTR">OPTR: </h2>
+                <div>
+                    <span visibility="Date Of Death">Deceased</span>
+                    <span visibility="Age">
+                            <span data="Age"></span>
+                            year-old
+                        </span>
+                    <span visibility="GenderName" data="GenderName"/>
+
+                </div>
+                <div>
+                    <a href="javascript: toggleGraphVisibility(true);" style="display:inline;" whenNotVisible>show graph</a>
+                    <a href="javascript: toggleGraphVisibility(false);" style="display:inline;" whenVisible>hide graph</a>
+                </div>
+            </td>
+            <td/>
+            <td class="right">
+
+
+            </td>
+        </tr>
+        <tr whenVisible>
+            <td>
+                <div id="summaryGraph">
+
+                </div>
+            </td>
+            <td/>
+            <td>
+                <div id="narriative">
+                    <div visiblility="ClinicalNarrativeHTML" data="ClinicalNarrativeHTML"></div>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+           <td colspan="3" id="participantDiv">
+           </td>
+        </tr>
+    </tbody>
+</table>
+
+<!--<div id="summaryGraph"></div>-->
+<!--<div id="participantDiv"></div>-->
+</body>
+
+
+

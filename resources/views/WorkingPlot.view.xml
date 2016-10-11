@@ -1,6 +1,0 @@
-<view xmlns="http://labkey.org/data/xml/view" title="Test Plot Working" frame="portal">
-    <dependencies>
-        <dependency path="Ext4ClientApi" />
-        <dependency path="plotly.min.js"/>
-    </dependencies>
-</view>

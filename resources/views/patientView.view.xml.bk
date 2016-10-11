@@ -1,5 +1,0 @@
-<view xmlns="http://labkey.org/data/xml/view" title="Pancreatic Translational Tumor Board">
-    <dependencies>
-        <dependency path="LDK.context"/>
-    </dependencies>
-</view>

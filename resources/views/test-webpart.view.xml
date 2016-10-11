@@ -1,8 +1,0 @@
-
-<view xmlns="http://labkey.org/data/xml/view" title="Test Webpart" frame="portal">
-    <dependencies>
-        <dependency path="Ext4ClientApi" />
-        <dependency path="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js" />
-    </dependencies>
-</view>
-

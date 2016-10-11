@@ -1,6 +1,0 @@
-<view xmlns="http://labkey.org/data/xml/view" title="Query Test" frame="portal">
-    <dependencies>
-        <dependency path="Ext4ClientApi" />
-        <dependency path="query_test.js"/>
-    </dependencies>
-</view>
