@@ -1,6 +1,8 @@
-//console.log("get-panel-data.js loaded");
-//console.log("table_schema:");
-//console.log(table_schema);
+var debug_getPanelData = false;
+
+//if (debug_getPanelData) console.log("get-panel-data.js loaded");
+//if (debug_getPanelData) console.log("table_schema:");
+//if (debug_getPanelData) console.log(table_schema);
 
 function onFailure(errorInfo, options, responseObj)
 {
@@ -16,13 +18,13 @@ function onFailure(errorInfo, options, responseObj)
 
 function onSuccessWithData(data_sources)
 {
-    //console.log("data_sources");
-    //console.log(data_sources);
+    //if (debug_getPanelData) console.log("data_sources");
+    //if (debug_getPanelData) console.log(data_sources);
 
     function onSuccess(data)
     {
-        console.log("Success! " + data.rowCount + " rows returned.");
-        //console.log(data);
+        if (debug_getPanelData) console.log("Success! " + data.rowCount + " rows returned.");
+        //if (debug_getPanelData) console.log(data);
         var table_name = data.queryName;
         var data_rows = [data.queryName] = data.rows;
 
@@ -38,16 +40,16 @@ function onSuccessWithData(data_sources)
             }
         });
 
-        //console.log("just data rows as JSON");
-        //console.log(JSON.stringify(data_rows));
+        //if (debug_getPanelData) console.log("just data rows as JSON");
+        //if (debug_getPanelData) console.log(JSON.stringify(data_rows));
         if (data_rows.length)
         {
             data_sources[table_name] = {};
             data_sources[table_name]["objects"] = data_rows;
         }
 
-        console.log("data_sources so far:");
-        console.log(data_sources);
+        if (debug_getPanelData) console.log("data_sources so far:");
+        if (debug_getPanelData) console.log(data_sources);
 
         //console.log(JSON.stringify(data_sources));
     }
@@ -77,8 +79,8 @@ function onSuccessWithData(data_sources)
 
 function createMultiQuery(tables_to_plot, data_sources, optr)
 {
-    console.log("data_sources at start:");
-    console.log(data_sources);
+    if (debug_getPanelData) console.log("data_sources at start:");
+    if (debug_getPanelData) console.log(data_sources);
     for (var prop in data_sources)
     {
         if (data_sources.hasOwnProperty(prop))
@@ -86,8 +88,8 @@ function createMultiQuery(tables_to_plot, data_sources, optr)
             delete data_sources[prop];
         }
     }
-    console.log("data_sources after delete:");
-    console.log(data_sources);
+    if (debug_getPanelData) console.log("data_sources after delete:");
+    if (debug_getPanelData) console.log(data_sources);
 
     var onSuccess = onSuccessWithData(data_sources);
 
@@ -95,11 +97,11 @@ function createMultiQuery(tables_to_plot, data_sources, optr)
 
     $.each(tables_to_plot, function(index, table_name)
     {
-        console.log("in multi request loop. table_name = " + table_name + " optr = " + optr);
+        if (debug_getPanelData) console.log("in multi request loop. table_name = " + table_name + " optr = " + optr);
 
         if (!table_name)
         {
-            console.log("table name undefined");
+            if (debug_getPanelData) console.log("table name undefined");
             return;
         }
 
@@ -136,8 +138,8 @@ function createMultiQuery(tables_to_plot, data_sources, optr)
             failure:onFailure
         };
 
-        console.log("config:");
-        console.log(config);
+        if (debug_getPanelData) console.log("config:");
+        if (debug_getPanelData) console.log(config);
 
         multi_request.add(LABKEY.Query.selectRows, config);
 
@@ -150,11 +152,11 @@ function createMultiQuery(tables_to_plot, data_sources, optr)
 
 function getTraceData(table_name, fields, data_sources)
 {
-    console.log("in getTraceData");
-    console.log("table_name " + table_name + " fields");
-    //console.log(fields);
-    //console.log("table_schema:");
-    //console.log(table_schema);
+    if (debug_getPanelData) console.log("in getTraceData");
+    if (debug_getPanelData) onsole.log("table_name " + table_name + " fields");
+    //if (debug_getPanelData) console.log(fields);
+    //if (debug_getPanelData) console.log("table_schema:");
+    //if (debug_getPanelData) console.log(table_schema);
 
     var selected_items = [];
 
@@ -167,7 +169,7 @@ function getTraceData(table_name, fields, data_sources)
     data_list = data_sources[table_name]["objects"];
     if (data_list.length === 0)
     {
-        console.log("no data in data_sources");
+        if (debug_getPanelData) console.log("no data in data_sources");
         return [];
     }
     //console.log("data_list");
@@ -218,7 +220,7 @@ function getTraceData(table_name, fields, data_sources)
     // Sort data by date
     if (has_date)
     {
-        console.log("date field: " + date_field);
+        if (debug_getPanelData) console.log("date field: " + date_field);
         //console.log("going to sort--date_field: " + date_field);
         selected_items.sort(function(d1, d2)
         {
@@ -227,14 +229,14 @@ function getTraceData(table_name, fields, data_sources)
 
         if (date_field == "date")
         {
-            console.log("has lower case date field: " + date_field);
+            if (debug_getPanelData) console.log("has lower case date field: " + date_field);
             /*
-            console.log(selected_items);
-            console.log("changing to Date");
+             if (debug_getPanelData) console.log(selected_items);
+             if (debug_getPanelData) console.log("changing to Date");
             selected_items.forEach(function(item)
             {
-                console.log("selected item");
-                console.log(item);
+                if (debug_getPanelData) console.log("selected item");
+                if (debug_getPanelData) console.log(item);
                 Object.defineProperty(item, "Date",
                     Object.getOwnPropertyDescriptor(item, "date"));
                 delete item["date"];
@@ -243,10 +245,10 @@ function getTraceData(table_name, fields, data_sources)
         }
     }
 
-    console.log("selected_items");
-    console.log(selected_items);
-    console.log("fields");
-    console.log(fields);
+    if (debug_getPanelData) console.log("selected_items");
+    if (debug_getPanelData) console.log(selected_items);
+    if (debug_getPanelData) console.log("fields");
+    if (debug_getPanelData) console.log(fields);
 
     $.each(selected_items, function(index, item)
     {
@@ -265,8 +267,8 @@ function getTraceData(table_name, fields, data_sources)
 
     });
 
-    console.log("plot_data right now");
-    console.log(plot_data);
+    if (debug_getPanelData) console.log("plot_data right now");
+    if (debug_getPanelData) console.log(plot_data);
 
     if (plot_data[date_field].length == 0)
     {

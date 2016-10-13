@@ -1,12 +1,11 @@
 <customView xmlns="http://labkey.org/data/xml/queryCustomView">
     <columns>
-        <column name="OPTR"/>
         <column name="Date"/>
         <column name="Name"/>
         <column name="omeroId"/>
     </columns>
     <filters>
-        <filter column="Type" operator="eq" value="TEM"/>
+        <filter column="Type" operator="eq" value="H&amp;E"/>
     </filters>
     <sorts>
         <sort column="Date" descending="true"/>

@@ -1,19 +1,20 @@
+var debug_annotationMakers = false;
 /*jslint browser: true, white: true, nomen: true, sloppy: true, vars: true, indent: 4, maxerr: 999*/
 
 function getGenericAnnotationText(table_name, plot_data, point_number)
 {
-    console.log("getGenericAnnotationText");
-    console.log("table_name " + table_name);
-    //console.log("plot_data");
-    //console.log(plot_data);
-    //console.log("OPTR " + OPTR);
-    //console.log("point_number " + point_number);
-    console.log("table_schema");
-    console.log(table_schema);
+    if (debug_annotationMakers) console.log("getGenericAnnotationText");
+    if (debug_annotationMakers) console.log("table_name " + table_name);
+    //if (debug_annotationMakers) console.log("plot_data");
+    //if (debug_annotationMakers) console.log(plot_data);
+    //if (debug_annotationMakers) console.log("OPTR " + OPTR);
+    //if (debug_annotationMakers) console.log("point_number " + point_number);
+    if (debug_annotationMakers) console.log("table_schema");
+    if (debug_annotationMakers) console.log(table_schema);
     var fields = table_schema[table_name].Fields;
 
-    console.log("fields");
-    console.log(fields);
+    if (debug_annotationMakers) console.log("fields");
+    if (debug_annotationMakers) console.log(fields);
 
     //var annotation_text = '<b>Patient: </b>' + OPTR + '<br />';
     var annotation_text = "";
@@ -23,8 +24,8 @@ function getGenericAnnotationText(table_name, plot_data, point_number)
 
     $.each(fields, function(index, field_data){
 
-        //console.log("field_data");
-        //console.log(field_data);
+        //if (debug_annotationMakers) console.log("field_data");
+        //if (debug_annotationMakers) console.log(field_data);
         var display_name = field_data.DisplayName;
         var field_name = field_data.FieldName;
         var units = ("Units" in field_data) ? " " + field_data.Units : "";
@@ -35,18 +36,18 @@ function getGenericAnnotationText(table_name, plot_data, point_number)
         if (field_name != 'date' && field_name != 'units')
         {
             var data = plot_data[field_name][point_number];
-            console.log("data for field " + field_name + ": " + data);
+            if (debug_annotationMakers) console.log("data for field " + field_name + ": " + data);
 
             // Time to get sophisticated about checking whether to display
 
             if (getShouldDisplayData(data))
             {
-                console.log("Adding annotation text for field " + field_name + " " + data);
+                if (debug_annotationMakers) console.log("Adding annotation text for field " + field_name + " " + data);
                 annotation_text += '' +
                     '<b>' + display_name + '</b>: ' +
                     plot_data[field_name][point_number] +
                     units + '<br />';
-                console.log("annotation text: " + annotation_text);
+                if (debug_annotationMakers) console.log("annotation text: " + annotation_text);
             }
         }
 
@@ -71,33 +72,33 @@ function getShouldDisplayData(data)
         + "isnumber: " + isnumber + "\n"
         + "isstring: " + isstring;
 
-    console.log(report);
+    if (debug_annotationMakers) console.log(report);
 
 
     if (isnan && !isstring)
     {
-        console.log(data + " is NaN value");
+        if (debug_annotationMakers) console.log(data + " is NaN value");
         return false;
     }
 
     if (isnull)
     {
-        console.log("value is null -- probably missing or empty");
+        if (debug_annotationMakers) console.log("value is null -- probably missing or empty");
         return false;
     }
 
     if (data == "")
     {
-        console.log("data is an empty string");
+        if (debug_annotationMakers) console.log("data is an empty string");
         return false;
     }
 
     if (data == "NA" || data == "Na" || data == "na")
     {
-        console.log("got some sort of NA: " + data);
+        if (debug_annotationMakers) console.log("got some sort of NA: " + data);
         return false;
     }
 
-    console.log("data checks out for display");
+    if (debug_annotationMakers) console.log("data checks out for display");
     return true;
 }

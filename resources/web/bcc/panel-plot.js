@@ -1,3 +1,6 @@
+var panelPlotDebug  =false;
+
+
 function plotOPTR(tables_to_plot, selected_OPTR, graph_div_id="graph")
 {
     var data_sources = {};
@@ -11,9 +14,9 @@ function plotOPTR(tables_to_plot, selected_OPTR, graph_div_id="graph")
 
 function plot(tables_to_plot, selected_OPTR, data_sources, graph_div_id="graph")
 {
-    console.log("in plot");
-    //console.log("data_sources");
-    //console.log(data_sources);
+    if (panelPlotDebug) console.log("in plot");
+    //if (panelPlotDebug) console.log("data_sources");
+    //if (panelPlotDebug) console.log(data_sources);
 
     var fields = [];
     var plot_data = {};
@@ -42,7 +45,7 @@ function plot(tables_to_plot, selected_OPTR, data_sources, graph_div_id="graph")
     {
         if (data_sources.hasOwnProperty(table_name))
         {
-            //console.log(schema);
+            //if (panelPlotDebug) console.log(schema);
             if (table_schema[table_name].Type == "Event")
             {
                 num_events += 1;
@@ -104,7 +107,7 @@ function plot(tables_to_plot, selected_OPTR, data_sources, graph_div_id="graph")
             {
                 //var targetDate = new Date();
                 var age = calculateAge(DOB, DOD);
-                //console.log("Age at death = " + age);
+                //if (panelPlotDebug) console.log("Age at death = " + age);
                 if (plot_data.hasOwnProperty("Gender") && plot_data["Gender"] == "M")
                 {
                     layout.title = "<b>Male deceased at age " + age + " (OPTR: " + selected_OPTR + ")</b>";
@@ -173,7 +176,7 @@ function plot(tables_to_plot, selected_OPTR, data_sources, graph_div_id="graph")
         //     {
         //         //var targetDate = new Date();
         //         var age = calculateAge(DOB, new Date());
-        //         //console.log("Current age = " + age);
+        //         //if (panelPlotDebug) console.log("Current age = " + age);
         //         if (plot_data.hasOwnProperty("Gender") && plot_data["Gender"] == "M")
         //         {
         //             layout.title = "<b>Male age " + age + " (OPTR: " + selected_OPTR + ")</b>";
@@ -192,7 +195,7 @@ function plot(tables_to_plot, selected_OPTR, data_sources, graph_div_id="graph")
     var plot_number = 0;
     var num_tables = tables_to_plot.length;
 
-    console.log("num_tables = " + num_tables);
+    if (panelPlotDebug) console.log("num_tables = " + num_tables);
 
     for (var i = 0 ; i < num_tables ; i ++)
     {
@@ -351,9 +354,9 @@ function plot(tables_to_plot, selected_OPTR, data_sources, graph_div_id="graph")
                     layout.xaxis.domain = [(series_yaxis_idx - 1) * series_axis_position_increment + 0.025, 1];
                 }
 
-                console.log("add_yaxis " + add_yaxis);
-                console.log("yaxis_idx " + yaxis_idx);
-                console.log("yaxis_name " + yaxis_name);
+                if (panelPlotDebug) console.log("add_yaxis " + add_yaxis);
+                if (panelPlotDebug) console.log("yaxis_idx " + yaxis_idx);
+                if (panelPlotDebug) console.log("yaxis_name " + yaxis_name);
 
                 if (add_yaxis == true)
                 {
@@ -429,7 +432,7 @@ function plot(tables_to_plot, selected_OPTR, data_sources, graph_div_id="graph")
                         {
                             if (schema.hasOwnProperty("MultiLegendColorCycle"))
                             {
-                                //console.log("MultiLegendColorCycle " + schema.MultiLegendColorCycle[MultiLegendCycleIdx]);
+                                //if (panelPlotDebug) console.log("MultiLegendColorCycle " + schema.MultiLegendColorCycle[MultiLegendCycleIdx]);
                                 LegendMarker.color = schema.MultiLegendColorCycle[MultiLegendCycleIdx];
                                 LegendLine.color = LegendMarker.color;
                                 if (add_yaxis == true)
@@ -447,7 +450,7 @@ function plot(tables_to_plot, selected_OPTR, data_sources, graph_div_id="graph")
                                 }
                             } else if (schema.hasOwnProperty("MultiLegendSymbolCycle"))
                             {
-                                //console.log("MultiLegendSymbolCycle " + schema.MultiLegendSymbolCycle[MultiLegendCycleIdx]);
+                                //if (panelPlotDebug) console.log("MultiLegendSymbolCycle " + schema.MultiLegendSymbolCycle[MultiLegendCycleIdx]);
                                 LegendMarker.symbol = schema.MultiLegendSymbolCycle[MultiLegendCycleIdx];
                                 MultiLegendCycleIdx += 1;
                                 if (MultiLegendCycleIdx >= schema.MultiLegendSymbolCycle.length)
@@ -466,7 +469,7 @@ function plot(tables_to_plot, selected_OPTR, data_sources, graph_div_id="graph")
                         }
                     }
 
-                    //console.log(plot_data.date);
+                    //if (panelPlotDebug) console.log(plot_data.date);
 
                     trace =
                     {
@@ -488,8 +491,8 @@ function plot(tables_to_plot, selected_OPTR, data_sources, graph_div_id="graph")
                 });
             } else
             {
-                console.log("Not Event or Series");
-                console.log(data_sources[table_name]);
+                if (panelPlotDebug) console.log("Not Event or Series");
+                if (panelPlotDebug) console.log(data_sources[table_name]);
             }
         }
     }
@@ -538,14 +541,14 @@ function plot(tables_to_plot, selected_OPTR, data_sources, graph_div_id="graph")
 
 function getFields(table_name)
 {
-    //console.log("getting fields for table " + table_name);
+    //if (panelPlotDebug) console.log("getting fields for table " + table_name);
 
     var fields = [];
 
     $.each(table_schema[table_name].Fields, function(index, item){
 
-        //console.log("index: " + index + "item");
-        //console.log(item);
+        //if (panelPlotDebug) console.log("index: " + index + "item");
+        //if (panelPlotDebug) console.log(item);
         fields.push(item.FieldName);
     });
 
@@ -623,8 +626,8 @@ function calculateAge(DOBstring, targetDate) {
         targetDate = new Date();
     }
 
-    console.log(targetDate);
-    console.log(dateOfBirth);
+    if (panelPlotDebug) console.log(targetDate);
+    if (panelPlotDebug) console.log(dateOfBirth);
 
 
     var targetYear = targetDate.getFullYear();
