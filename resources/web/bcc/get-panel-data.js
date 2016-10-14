@@ -150,7 +150,7 @@ function createMultiQuery(tables_to_plot, data_sources, optr)
 }
 
 
-function getTraceData(table_name, fields, data_sources)
+function getTraceData(table_name, fields, data_sources, dateRange)
 {
     if (debug_getPanelData) console.log("in getTraceData");
     if (debug_getPanelData) onsole.log("table_name " + table_name + " fields");
@@ -214,7 +214,18 @@ function getTraceData(table_name, fields, data_sources)
     {
         //console.log("data_list[index][date_field] " + selected_items[index][date_field]);
         selected_items[index][date_field] = formatDate(selected_items[index][date_field]);
-        //selected_items[index][date_field] = new Date(selected_items[index][date_field]);
+
+        var dtm = (new Date(selected_items[index][date_field]));
+
+        if(!dateRange.minDate || dateRange.minDate > dtm){
+            dateRange.minDate = dtm;
+        }
+
+
+        if(!dateRange.maxDate || dateRange.maxDate < dtm){
+            dateRange.maxDate = dtm;
+        }
+
     });
 
     // Sort data by date

@@ -47,7 +47,8 @@ var table_schema =
             },
             {
                 FieldName: "Date Of Death",
-                DisplayName: "Date Of Death"
+                DisplayName: "Date Of Death",
+                IsDate : true
             },
             {
                 FieldName: "First Name",
@@ -80,7 +81,8 @@ var table_schema =
         [
             {
                 FieldName: "date",
-                DisplayName: "Date"
+                DisplayName: "Date",
+                IsDate : true
             },
             // Hover and pickets are not working due to number of fields here.
             //{
@@ -146,7 +148,8 @@ var table_schema =
         [
             {
                 FieldName: "date",
-                DisplayName: "Date"
+                DisplayName: "Date",
+                IsDate : true
             },
             {
                 FieldName: "type",
@@ -186,7 +189,8 @@ var table_schema =
         [
             {
                 FieldName: "date",
-                DisplayName: "Date"
+                DisplayName: "Date",
+                IsDate : true
             },
             {
                 FieldName: "type",
@@ -226,7 +230,8 @@ var table_schema =
         [
             {
                 FieldName: "date",
-                DisplayName: "Date"
+                DisplayName: "Date",
+                IsDate : true
             },
             {
                 FieldName: "type",
@@ -252,7 +257,8 @@ var table_schema =
         [
             {
                 FieldName: "Date",
-                DisplayName: "Date"
+                DisplayName: "Date",
+                IsDate : true
             },
             {
                 FieldName: "Type",
@@ -312,7 +318,8 @@ var table_schema =
         [
             {
                 FieldName:"date",
-                DisplayName: "Date"
+                DisplayName: "Date",
+                IsDate : true
             },
             {
                 FieldName:"procedure",
@@ -325,7 +332,7 @@ var table_schema =
     {
         Type: "Event",
         TableName: "BloodDraw",
-        DisplayName: "Blood Draw",
+        DisplayName: "Research Blood",
         Marker:
         {
             symbol: "circle",
@@ -341,7 +348,8 @@ var table_schema =
         [
             {
                 FieldName:"date",
-                DisplayName: "Date"
+                DisplayName: "Date",
+                IsDate : true
             }
         ]
     },
@@ -355,7 +363,8 @@ var table_schema =
         [
             {
                 FieldName: "date",
-                DisplayName: "Date"
+                DisplayName: "Date",
+                IsDate : true
             },
             {
                 FieldName: "SamplePrimaryType",
@@ -372,7 +381,7 @@ var table_schema =
     {
         Type: "Event",
         TableName: "Biopsy",
-        DisplayName: "Biopsy",
+        DisplayName: "Research Biopsy",
         Marker:
         {
             symbol: "star",
@@ -388,7 +397,8 @@ var table_schema =
         [
             {
                 FieldName: "date",
-                DisplayName: "Date"
+                DisplayName: "Date",
+                IsDate : true
             },
             {
                 FieldName: "Type",
@@ -417,7 +427,8 @@ var table_schema =
         [
             {
                 FieldName: "date",
-                DisplayName: "Date"
+                DisplayName: "Date",
+                IsDate : true
             },
             {
                 FieldName: "Type",
@@ -439,7 +450,8 @@ var table_schema =
         [
             {
                 FieldName: "Date",
-                DisplayName: "Date"
+                DisplayName: "Date",
+                IsDate : true
             },
             {
                 FieldName: "Type",
@@ -471,7 +483,8 @@ var table_schema =
         [
             {
                 FieldName: "date",
-                DisplayName: "Date"
+                DisplayName: "Date",
+                IsDate : true
             },
             {
                 FieldName: "result",
@@ -503,7 +516,8 @@ var table_schema =
         [
             {
                 FieldName: "date",
-                DisplayName: "Date"
+                DisplayName: "Date",
+                IsDate : true
             },
             {
                 FieldName: "CA199",
@@ -527,7 +541,8 @@ var table_schema =
         [
             {
                 FieldName: "Date",
-                DisplayName: "Date"
+                DisplayName: "Date",
+                IsDate : true
             },
             {
                 FieldName: "SizeAxis1",
@@ -562,7 +577,8 @@ var table_schema =
         [
             {
                 FieldName: "date",
-                DisplayName: "Date"
+                DisplayName: "Date",
+                IsDate : true
             },
             {
                 FieldName: "tumorId",
@@ -613,7 +629,8 @@ var table_schema =
         [
             {
                 FieldName: "date",
-                DisplayName: "Date"
+                DisplayName: "Date",
+                IsDate : true
             },
             {
                 FieldName: "weight",

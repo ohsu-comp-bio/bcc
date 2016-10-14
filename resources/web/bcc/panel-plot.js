@@ -68,7 +68,9 @@ function plot(tables_to_plot, selected_OPTR, data_sources, graph_div_id="graph")
     	{
     		position: 0,
     		domain: [0.1, 1],
-    		type: "Date",
+    		type: "date",
+            //range : to be set later after spinning through data
+
     		tickmode: "auto",
     		showline: true,
     		nticks: 12,
@@ -84,11 +86,16 @@ function plot(tables_to_plot, selected_OPTR, data_sources, graph_div_id="graph")
     	}
     };
 
+    var dateRange = {
+        minDate : null,
+        maxDate : null
+    };
+
     if (data_sources.hasOwnProperty("Demographics"))
     {
         fields = getFields("Demographics");
 
-        plot_data = getTraceData("Demographics", fields, data_sources);
+        plot_data = getTraceData("Demographics", fields, data_sources,dateRange);
 
         var DOB = 'Invalid Date';
         var DOD = 'Invalid Date';
@@ -246,7 +253,7 @@ function plot(tables_to_plot, selected_OPTR, data_sources, graph_div_id="graph")
 
                 fields = getFields(table_name);
 
-                plot_data = getTraceData(table_name, fields, data_sources);
+                plot_data = getTraceData(table_name, fields, data_sources, dateRange);
                 plot_data.y_value = [];
 
                 add_yaxis = false;
@@ -480,6 +487,7 @@ function plot(tables_to_plot, selected_OPTR, data_sources, graph_div_id="graph")
                         name: legendText,
                         text: hoverText,
                         hoverinfo: 'text',
+                        visible: legendText == 'Diagnosis' ? 'true' : 'legendonly',
                         type: 'scatter',
                         mode: trace_mode,
                         marker: LegendMarker,
@@ -496,6 +504,13 @@ function plot(tables_to_plot, selected_OPTR, data_sources, graph_div_id="graph")
             }
         }
     }
+
+    //This fixes the date range.  Without this, the date range differs based on
+    //what has been selected in the legend. This does not work well for event data.
+    dateRange.minDate.setDate(dateRange.minDate.getDate() - 20);
+    dateRange.maxDate.setDate(dateRange.maxDate.getDate() + 20);
+    layout.xaxis.range = [ dateRange.minDate.getTime(), dateRange.maxDate.getTime() ];
+
 
     num_tables_plotted = Object.keys(data_sources).length;
 

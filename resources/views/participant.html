@@ -1187,8 +1187,8 @@
                         "Demographics",
                         "Diagnosis",
                         "Biopsy",
-                        "Imaging",
                         "BloodDraw",
+                        "Imaging",
                         "Treatments",
                         "Radiotherapy",
                         "OtherTreatments",
@@ -1201,29 +1201,15 @@
             var title = 'Patient Details: ' + participantId;
             document.title = title;
 
-
-
-
             var configReports_NonClinical = function(reports){
 
                 reports.push(
-
-                        getReportConfig('omeroImages', 'study', 'Imaging', 'CT', 'omeroImages_CT'),
-                        getReportConfig('omeroImages', 'study', 'Imaging', 'H & E', 'omeroImages_HandE'),
-                        getReportConfig('omeroImages', 'study', 'Imaging', 'IHC/IF', 'omeroImages_IHCandIF'),
-                        getReportConfig('omeroImages', 'study', 'Imaging', 'EM', 'omeroImages_EM'),
-                        getReportConfig('omeroImages', 'study', 'Imaging', 'All Imaging'),
 
                         getReportConfig('Mutation Summary', 'study', 'Genomics'),
                         getReportConfig('WES Results', 'study', 'Genomics', 'Somatic Mutations', 'SelectedVariants'),
                         getReportConfig('Germline Variants', 'study', 'Genomics'),
                         getReportConfig('Gene Trails Results', 'study', 'Genomics', 'Gene Trails')
 
-//                        getReportConfig('Gene Trails Results', 'study', 'Transcriptomics', 'RNA-Seq'),
-//
-//                        getReportConfig('Gene Trails Results', 'study', 'Research', 'RNA-Seq'),
-//
-//                        getReportConfig('TumorBoardDocuments', 'lists', 'Test', 'xyz')
                 );
             }
 
@@ -1248,353 +1234,402 @@
                         reports.push(getReportConfig(dataSet.Name, 'study', 'Clinical', dataSet.Label));
                     }
 
-                    configReports_NonClinical(reports);
-
 
                     LABKEY.Query.selectRows({
-                        schemaName : "lists",
-                        queryName : "TumorBoardDocumentType",
-                        sort : "DisplayOrderID",
-                        filterArray : [
-                            LABKEY.Filter.create("PatientOverviewTab",null,LABKEY.Filter.Types.DOES_NOT_HAVE_MISSING_VALUE),
-                            LABKEY.Filter.create("PatientOverviewSubTab",null,LABKEY.Filter.Types.DOES_NOT_HAVE_MISSING_VALUE)
+                        schemaName: "lists",
+                        queryName: "ImageType",
+                        sort: "DisplayOrderID",
+                        filterArray: [
+                            LABKEY.Filter.create("PatientOverviewTab", null, LABKEY.Filter.Types.DOES_NOT_HAVE_MISSING_VALUE),
+                            LABKEY.Filter.create("PatientOverviewSubTab", null, LABKEY.Filter.Types.DOES_NOT_HAVE_MISSING_VALUE)
                         ],
-                        success : function(data){
-
+                        success: function (data) {
 
                             var filterDefs = [];
 
-                            for(var j=0; j< data.rows.length; j++){
-                                var docType = data.rows[j];
-                                var key = docType.PatientOverviewTab + '_' + docType.PatientOverviewSubTab;
-                                if(!filterDefs[key]){
+                            for (var j = 0; j < data.rows.length; j++)
+                            {
+                                var imageType = data.rows[j];
+                                var key = imageType.PatientOverviewTab + '_' + imageType.PatientOverviewSubTab;
+                                if (!filterDefs[key])
+                                {
 
                                     filterDefs[key] = {
-                                        tabName : docType.PatientOverviewTab,
-                                        subTabName : docType.PatientOverviewSubTab,
-                                        filter : [docType.DocumentTypeID]
+                                        tabName: imageType.PatientOverviewTab,
+                                        subTabName: imageType.PatientOverviewSubTab,
+                                        filter: []
                                     }
-                                } else {
-                                    filterDefs[key].filter.push(docType.DocumentTypeID);
                                 }
+
+                                filterDefs[key].filter.push(imageType.ImageTypeID);
                             }
 
-                            console.log(filterDefs);
-                            for(var fdKey in filterDefs){
+                            for (var fdKey in filterDefs)
+                            {
 
-                                var cfg = getReportConfig('TumorBoardDocuments', 'lists',filterDefs[fdKey].tabName , filterDefs[fdKey].subTabName);
+                                var cfg = getReportConfig('omeroImages', 'study', filterDefs[fdKey].tabName, filterDefs[fdKey].subTabName,'omeroImages_PatientView');
 
                                 cfg.id = cfg.id + '_' + fdKey;
                                 cfg.name = cfg.name + '_' + fdKey;
-//                                cfg.additionalFilters = [LABKEY.Filter.create("DocumentTypeID",cfg.filter, LABKEY.Filter.Types.EQUALS_ONE_OF)];
-                                cfg.additionalFilters = [LABKEY.Filter.create("DocumentType", filterDefs[fdKey].filter.join(";") , LABKEY.Filter.Types.EQUALS_ONE_OF)];
+                                cfg.additionalFilters = [LABKEY.Filter.create("ImageTypeID", filterDefs[fdKey].filter.join(";"), LABKEY.Filter.Types.EQUALS_ONE_OF)];
 
                                 reports.push(cfg);
                             }
 
 
-                            Ext4.define('bcc.panel.TabbedReportPanel', {
-                                extend: 'LDK.panel.JFTabbedReportPanel',
+                            configReports_NonClinical(reports);
 
-                                jfcreateTabPanel: function(){
+                            //Obtain the tumor board attached documents
+                            LABKEY.Query.selectRows({
+                                schemaName: "lists",
+                                queryName: "TumorBoardDocumentType",
+                                sort: "DisplayOrderID",
+                                filterArray: [
+                                    LABKEY.Filter.create("PatientOverviewTab", null, LABKEY.Filter.Types.DOES_NOT_HAVE_MISSING_VALUE),
+                                    LABKEY.Filter.create("PatientOverviewSubTab", null, LABKEY.Filter.Types.DOES_NOT_HAVE_MISSING_VALUE)
+                                ],
+                                success: function (data)
+                                {
 
-                                    var tabPanel = this.down('#tabPanel');
 
-                                    if (!this.reports || !this.reports.length){
-                                        tabPanel.add({
-                                            html: 'There are no reports enabled in this folder.  Please contact your administrator if you believe this is an error.',
-                                            style: 'padding: 10px;',
-                                            border: false
-                                        });
-                                        return;
+                                    var filterDefs = [];
+
+                                    for (var j = 0; j < data.rows.length; j++)
+                                    {
+                                        var docType = data.rows[j];
+                                        var key = docType.PatientOverviewTab + '_' + docType.PatientOverviewSubTab;
+                                        if (!filterDefs[key])
+                                        {
+
+                                            filterDefs[key] = {
+                                                tabName: docType.PatientOverviewTab,
+                                                subTabName: docType.PatientOverviewSubTab,
+                                                filter: [docType.DocumentTypeID]
+                                            }
+                                        }
+                                        filterDefs[key].filter.push(docType.DocumentTypeID);
                                     }
 
-                                    Ext4.each(this.reports, function(report){
-                                        if (!report || !report.category)
-                                            return;
+                                    console.log(filterDefs);
+                                    for (var fdKey in filterDefs)
+                                    {
 
-                                        if (report.visible === false)
-                                            return;
+                                        var cfg = getReportConfig('TumorBoardDocuments', 'lists', filterDefs[fdKey].tabName, filterDefs[fdKey].subTabName);
 
-                                        var category = report.category;
+                                        cfg.id = cfg.id + '_' + fdKey;
+                                        cfg.name = cfg.name + '_' + fdKey;
+                                        cfg.additionalFilters = [LABKEY.Filter.create("DocumentType", filterDefs[fdKey].filter.join(";"), LABKEY.Filter.Types.EQUALS_ONE_OF)];
 
-                                        //create top-level tab
-                                        if (!tabPanel.down('panel[itemId="' + category + '"]')){
-                                            tabPanel.add({
-                                                xtype: 'tabpanel',
-                                                style: 'margin-bottom: 10px;',
-                                                itemId: category,
-                                                title: category,
-                                                enableTabScroll: true,
-                                                listeners: {
-                                                    scope: this,
-                                                    tabchange: function(panel, tab, oldTab){
-                                                        this.activeReport = tab;
-                                                        this.silentlySetActiveTab(this.activeReport);
-                                                        //jQuery(".report-tab-bar").removeClass("report-tab-bar");
-                                                        //panel.getTabBar().addCls("report-tab-bar");
-                                                        this.onSubmit();
-                                                    },
-                                                    added: function(panel) {
-                                                        panel.getTabBar().addCls("report-tab-bar");
-                                                    }
-                                                }
-                                            });
-                                        }
+                                        reports.push(cfg);
+                                    }
 
-                                        var subTab = tabPanel.down('panel[itemId="' + category + '"]');
-                                        var reportId = report.id || report.name;
 
-                                        //create 2nd tier tab
-                                        if (!subTab.down('panel[itemId="' + reportId + '"]')){
-                                            var theTab = subTab.add({
-                                                xtype: 'panel',
-                                                style: 'margin-bottom: 10px;',
-                                                title: report.label,
-                                                itemId: reportId,
-                                                report: report,
-                                                bodyStyle:'padding:5px;',
-                                                border: false,
-                                                subjectArray: [],
-                                                filterArray: {},
-                                                tbar: {
-                                                    style: 'padding-left:10px'
-                                                }
-                                            });
+                                    Ext4.define('bcc.panel.TabbedReportPanel', {
+                                        extend: 'LDK.panel.JFTabbedReportPanel',
 
-                                            if (this.report == reportId){
-                                                this.activeReport = theTab;
+                                        jfcreateTabPanel: function ()
+                                        {
+
+                                            var tabPanel = this.down('#tabPanel');
+
+                                            if (!this.reports || !this.reports.length)
+                                            {
+                                                tabPanel.add({
+                                                    html: 'There are no reports enabled in this folder.  Please contact your administrator if you believe this is an error.',
+                                                    style: 'padding: 10px;',
+                                                    border: false
+                                                });
+                                                return;
                                             }
 
-                                            this.reportMap[reportId] = theTab;
+                                            Ext4.each(this.reports, function (report)
+                                            {
+                                                if (!report || !report.category)
+                                                    return;
+
+                                                if (report.visible === false)
+                                                    return;
+
+                                                var category = report.category;
+
+                                                //create top-level tab
+                                                if (!tabPanel.down('panel[itemId="' + category + '"]'))
+                                                {
+                                                    tabPanel.add({
+                                                        xtype: 'tabpanel',
+                                                        style: 'margin-bottom: 10px;',
+                                                        itemId: category,
+                                                        title: category,
+                                                        enableTabScroll: true,
+                                                        listeners: {
+                                                            scope: this,
+                                                            tabchange: function (panel, tab, oldTab)
+                                                            {
+                                                                this.activeReport = tab;
+                                                                this.silentlySetActiveTab(this.activeReport);
+                                                                //jQuery(".report-tab-bar").removeClass("report-tab-bar");
+                                                                //panel.getTabBar().addCls("report-tab-bar");
+                                                                this.onSubmit();
+                                                            },
+                                                            added: function (panel)
+                                                            {
+                                                                panel.getTabBar().addCls("report-tab-bar");
+                                                            }
+                                                        }
+                                                    });
+                                                }
+
+                                                var subTab = tabPanel.down('panel[itemId="' + category + '"]');
+                                                var reportId = report.id || report.name;
+
+                                                //create 2nd tier tab
+                                                if (!subTab.down('panel[itemId="' + reportId + '"]'))
+                                                {
+                                                    var theTab = subTab.add({
+                                                        xtype: 'panel',
+                                                        style: 'margin-bottom: 10px;',
+                                                        title: report.label,
+                                                        itemId: reportId,
+                                                        report: report,
+                                                        bodyStyle: 'padding:5px;',
+                                                        border: false,
+                                                        subjectArray: [],
+                                                        filterArray: {},
+                                                        tbar: {
+                                                            style: 'padding-left:10px'
+                                                        }
+                                                    });
+
+                                                    if (this.report == reportId)
+                                                    {
+                                                        this.activeReport = theTab;
+                                                    }
+
+                                                    this.reportMap[reportId] = theTab;
+                                                }
+                                            }, this);
+
+                                            if (this.activeReport)
+                                            {
+                                                this.silentlySetActiveTab(this.activeReport);
+                                            }
+                                            else if (this.defaultReport)
+                                            {
+                                                var report = this.findReport(this.defaultReport);
+                                                if (report)
+                                                    this.silentlySetActiveTab(report);
+                                            }
+                                            else if (this.defaultTab)
+                                            {
+                                                var tab = tabPanel.down('#' + this.defaultTab);
+                                                tabPanel.suspendEvents();
+                                                tab.suspendEvents();
+                                                tabPanel.setActiveTab(tab);
+                                                tab.resumeEvents();
+                                                tabPanel.resumeEvents();
+                                            }
+
+                                            //populate initial fields
+                                            var shouldChange = true;
+                                            this.initialContext = this.getFiltersFromUrl();
+                                            var filterType = this.initialContext.inputType;
+                                            if (filterType)
+                                            {
+                                                var radio = this.down('#inputType');
+                                                var val = radio.getValue().selector;
+
+                                                radio.setValue({
+                                                    selector: filterType
+                                                });
+
+                                                if (filterType != val)
+                                                    shouldChange = false;
+                                            }
+
+                                            if (shouldChange)
+                                            {
+                                                this.changeFilterType(this.down('#inputType').getValue().selector);
+                                            }
+
+                                            var submitBtn = this.down('#submitBtn');
+                                            if (submitBtn)
+                                            {
+                                                this.tabsReady = true;
+                                                submitBtn.setDisabled(false);
+                                                LABKEY.Utils.signalWebDriverTest("LDK_reportPanelLoaded");
+                                            }
+                                        },
+
+
+                                        initComponent: function ()
+                                        {
+                                            Ext4.ns('bcc.tabbedReports');
+
+                                            Ext4.apply(this, {
+                                                participantId: participantId,
+                                                reportNamespace: bcc.tabbedReports
+                                            });
+
+                                            this.callParent();
+
+                                            this.down('#submitBtn').hidden = true;
+                                            this.loadReports();
+                                        },
+
+                                        getFilterOptionsItems: function ()
+                                        {
+                                            var items = this.callParent();
+                                            items[0].hidden = true;
+                                            items[1].hidden = true;
+
+                                            return items;
+                                        },
+
+
+                                        loadReports: function ()
+                                        {
+
+                                            this.reports = reports;
+                                            this.jfcreateTabPanel();
+                                        },
+
+                                        filterTypes: [{
+                                            //                                    xtype: 'ldk-singlesubjectfiltertype',
+                                            //                                    inputValue: LDK.panel.SingleSubjectFilterType.filterName,
+
+                                            xtype: 'ldk-singlesubjectfiltertypewithfilters',
+                                            inputValue: LDK.panel.SingleSubjectFilterTypeWithFilters.filterName,
+
+
+                                            label: 'Single Participant',
+                                            hidden: true,
+                                            filterContext: {
+                                                subjects: [participantId]
+                                            },
+                                            getSubjects: function ()
+                                            {
+                                                return [participantId];
+                                            },
+                                            checkValid: function ()
+                                            {
+                                                return true;
+                                            }
+                                        }],
+
+
+                                        getSimpleXYPlot: function (queryName, schemaName, category, title, plotConfig)
+                                        {
+                                            if (!plotConfig || !plotConfig.x || !plotConfig.y)
+                                            {
+                                                Ext4.Msg.alert('Error', 'Must provide the plotConfig and X/Y field names');
+                                                return;
+                                            }
+
+                                            return {
+                                                id: 'plot-' + queryName,
+                                                name: queryName,
+                                                category: category,
+                                                schemaName: schemaName,
+                                                queryName: queryName,
+                                                label: title,
+                                                reportType: 'js',
+                                                subjectFieldName: LABKEY.getModuleProperty('Study', 'subject').columnName,
+                                                dateFieldName: 'date',
+                                                plotConfig: plotConfig,
+                                                jsHandler: function (tabPanel, tab)
+                                                {
+                                                    var filterArray = tabPanel.getCombinedFilterArray(tab);
+
+                                                    LABKEY.Query.selectRows({
+                                                        schemaName: tab.report.schemaName,
+                                                        queryName: tab.report.queryName,
+                                                        filterArray: filterArray,
+                                                        scope: this,
+                                                        failure: LDK.Utils.getErrorCallback(),
+                                                        success: function (results)
+                                                        {
+                                                            console.log(results);
+                                                            var x = [];
+                                                            var y = [];
+
+                                                            LDK.ConvertUtils.parseDatesInSelectRowsResults(results);
+
+                                                            Ext4.Array.forEach(results.rows, function (row)
+                                                            {
+                                                                if (Ext4.isDefined(row[tab.report.plotConfig.x]) && Ext4.isDefined(row[tab.report.plotConfig.y]))
+                                                                {
+                                                                    x.push(row[tab.report.plotConfig.x]);
+                                                                    y.push(row[tab.report.plotConfig.y]);
+                                                                }
+                                                            }, this);
+
+                                                            if (!results.rows.length)
+                                                            {
+                                                                tab.add({
+                                                                    html: 'No records found',
+                                                                    border: false
+                                                                });
+                                                            }
+                                                            else
+                                                            {
+                                                                tab.add(Ext4.create('LDK.panel.ContentResizingPanel', {
+                                                                    plotConfig: tab.report.plotConfig,
+                                                                    width: '100%',
+                                                                    minHeight: 50,
+                                                                    border: false,
+                                                                    listeners: {
+                                                                        scope: this,
+                                                                        afterRender: function (panel)
+                                                                        {
+                                                                            var data = [{
+                                                                                x: x,
+                                                                                y: y,
+                                                                                mode: 'lines+markers',
+                                                                                type: 'scatter'
+                                                                            }];
+
+                                                                            Plotly.plot(panel.renderTarget, data, {
+                                                                                title: panel.plotConfig.title,
+                                                                                //autosize: false,
+                                                                                //width: '100%', //why not working?
+                                                                                displayModeBar: true,
+                                                                                xaxis: {
+                                                                                    type: 'date',
+                                                                                    tickformat: '%x',
+                                                                                    //tickmode: 'auto',
+                                                                                    ticks: 'outside',
+                                                                                    tickwidth: 1,
+                                                                                    tickangle: 40,
+                                                                                    ticklen: 5,
+                                                                                    showticklabels: true,
+                                                                                    showline: false,
+                                                                                    showgrid: true,
+                                                                                    autorange: true
+                                                                                },
+                                                                                yaxis: {
+                                                                                    showgrid: true
+                                                                                }
+                                                                            });
+                                                                        }
+                                                                    }
+                                                                }));
+                                                            }
+                                                        }
+                                                    });
+                                                }
+                                            };
                                         }
-                                    }, this);
-
-                                    if (this.activeReport){
-                                        this.silentlySetActiveTab(this.activeReport);
-                                    }
-                                    else if (this.defaultReport){
-                                        var report = this.findReport(this.defaultReport);
-                                        if (report)
-                                            this.silentlySetActiveTab(report);
-                                    }
-                                    else if (this.defaultTab) {
-                                        var tab = tabPanel.down('#' + this.defaultTab);
-                                        tabPanel.suspendEvents();
-                                        tab.suspendEvents();
-                                        tabPanel.setActiveTab(tab);
-                                        tab.resumeEvents();
-                                        tabPanel.resumeEvents();
-                                    }
-
-                                    //populate initial fields
-                                    var shouldChange = true;
-                                    this.initialContext = this.getFiltersFromUrl();
-                                    var filterType = this.initialContext.inputType;
-                                    if (filterType){
-                                        var radio = this.down('#inputType');
-                                        var val = radio.getValue().selector;
-
-                                        radio.setValue({
-                                            selector: filterType
-                                        });
-
-                                        if (filterType != val)
-                                            shouldChange = false;
-                                    }
-
-                                    if (shouldChange) {
-                                        this.changeFilterType(this.down('#inputType').getValue().selector);
-                                    }
-
-                                    var submitBtn = this.down('#submitBtn');
-                                    if (submitBtn){
-                                        this.tabsReady = true;
-                                        submitBtn.setDisabled(false);
-                                        LABKEY.Utils.signalWebDriverTest("LDK_reportPanelLoaded");
-                                    }
-                                },
-
-
-                                initComponent: function(){
-                                    Ext4.ns('bcc.tabbedReports');
-
-                                    Ext4.apply(this, {
-                                        participantId: participantId,
-                                        reportNamespace: bcc.tabbedReports
                                     });
 
-                                    this.callParent();
-
-                                    this.down('#submitBtn').hidden = true;
-                                    this.loadReports();
-                                },
-
-                                getFilterOptionsItems: function(){
-                                    var items = this.callParent();
-                                    items[0].hidden = true;
-                                    items[1].hidden = true;
-
-                                    return items;
-                                },
+                                    Ext4.create('bcc.panel.TabbedReportPanel').render('participantDiv');
 
 
-
-
-                                loadReports: function(){
-
-                                    this.reports = reports;
-                                    this.jfcreateTabPanel();
-                                },
-
-                                filterTypes: [{
-//                                    xtype: 'ldk-singlesubjectfiltertype',
-//                                    inputValue: LDK.panel.SingleSubjectFilterType.filterName,
-
-                                    xtype: 'ldk-singlesubjectfiltertypewithfilters',
-                                    inputValue: LDK.panel.SingleSubjectFilterTypeWithFilters.filterName,
-
-
-                                    label: 'Single Participant',
-                                    hidden: true,
-                                    filterContext: {
-                                        subjects: [participantId]
-                                    },
-                                    getSubjects: function(){
-                                        return [participantId];
-                                    },
-                                    checkValid: function(){
-                                        return true;
-                                    }
-                                }],
-
-
-
-
-                                getSimpleXYPlot: function(queryName, schemaName, category, title, plotConfig){
-                                    if (!plotConfig || !plotConfig.x || !plotConfig.y){
-                                        Ext4.Msg.alert('Error', 'Must provide the plotConfig and X/Y field names');
-                                        return;
-                                    }
-
-                                    return {
-                                        id: 'plot-' + queryName,
-                                        name: queryName,
-                                        category: category,
-                                        schemaName: schemaName,
-                                        queryName: queryName,
-                                        label: title,
-                                        reportType: 'js',
-                                        subjectFieldName: LABKEY.getModuleProperty('Study', 'subject').columnName,
-                                        dateFieldName: 'date',
-                                        plotConfig: plotConfig,
-                                        jsHandler: function(tabPanel, tab){
-                                            var filterArray = tabPanel.getCombinedFilterArray(tab);
-
-                                            LABKEY.Query.selectRows({
-                                                schemaName: tab.report.schemaName,
-                                                queryName: tab.report.queryName,
-                                                filterArray: filterArray,
-                                                scope: this,
-                                                failure: LDK.Utils.getErrorCallback(),
-                                                success: function(results){
-                                                    console.log(results);
-                                                    var x = [];
-                                                    var y = [];
-
-                                                    LDK.ConvertUtils.parseDatesInSelectRowsResults(results);
-
-                                                    Ext4.Array.forEach(results.rows, function(row){
-                                                        if (Ext4.isDefined(row[tab.report.plotConfig.x]) && Ext4.isDefined(row[tab.report.plotConfig.y])){
-                                                            x.push(row[tab.report.plotConfig.x]);
-                                                            y.push(row[tab.report.plotConfig.y]);
-                                                        }
-                                                    }, this);
-
-                                                    if (!results.rows.length){
-                                                        tab.add({
-                                                            html: 'No records found',
-                                                            border: false
-                                                        });
-                                                    }
-                                                    else {
-                                                        tab.add(Ext4.create('LDK.panel.ContentResizingPanel', {
-                                                            plotConfig: tab.report.plotConfig,
-                                                            width: '100%',
-                                                            minHeight: 50,
-                                                            border: false,
-                                                            listeners: {
-                                                                scope: this,
-                                                                afterRender: function(panel){
-                                                                    var data = [{
-                                                                        x: x,
-                                                                        y: y,
-                                                                        mode: 'lines+markers',
-                                                                        type: 'scatter'
-                                                                    }];
-
-                                                                    Plotly.plot(panel.renderTarget, data, {
-                                                                        title: panel.plotConfig.title,
-                                                                        //autosize: false,
-                                                                        //width: '100%', //why not working?
-                                                                        displayModeBar: true,
-                                                                        xaxis: {
-                                                                            type: 'date',
-                                                                            tickformat: '%x',
-                                                                            //tickmode: 'auto',
-                                                                            ticks: 'outside',
-                                                                            tickwidth: 1,
-                                                                            tickangle: 40,
-                                                                            ticklen: 5,
-                                                                            showticklabels: true,
-                                                                            showline: false,
-                                                                            showgrid: true,
-                                                                            autorange: true
-                                                                        },
-                                                                        yaxis: {
-                                                                            showgrid: true
-                                                                        }
-                                                                    });
-                                                                }
-                                                            }
-                                                        }));
-                                                    }
-                                                }
-                                            });
-                                        }
-                                    };
                                 }
                             });
-
-                            Ext4.create('bcc.panel.TabbedReportPanel').render('participantDiv');
-
-
                         }
                     });
-
                 }
             });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         });
     </script>
@@ -1621,7 +1656,7 @@
             vertical-align: top;
             text-align: left;
             background-color: white;
-            max-height: 600px;
+            max-height: 580px;
             overflow: hidden;
             overflow-y:auto;
             border-left: solid 1px #808080;
@@ -1679,8 +1714,9 @@
     <tbody>
         <tr id="patientSummary">
             <td class="left">
-                <h2 visiblility="OPTR" data="OPTR">OPTR: </h2>
                 <div>
+                    <h2 style="display:inline; padding-right:5px;" visiblility="OPTR" data="OPTR">OPTR: </h2>
+
                     <span visibility="Date Of Death">Deceased</span>
                     <span visibility="Age">
                             <span data="Age"></span>
@@ -1689,15 +1725,14 @@
                     <span visibility="GenderName" data="GenderName"/>
 
                 </div>
-                <div>
-                    <a href="javascript: toggleGraphVisibility(true);" style="display:inline;" whenNotVisible>show graph</a>
-                    <a href="javascript: toggleGraphVisibility(false);" style="display:inline;" whenVisible>hide graph</a>
-                </div>
+
             </td>
             <td/>
             <td class="right">
-
-
+                <div style="padding:10px;">
+                    <a href="javascript: toggleGraphVisibility(true);" style="display:inline;" whenNotVisible>show overview</a>
+                    <a href="javascript: toggleGraphVisibility(false);" style="display:inline;" whenVisible>hide overview</a>
+                </div>
             </td>
         </tr>
         <tr whenVisible>
@@ -1714,19 +1749,11 @@
             </td>
         </tr>
         <tr>
-            <td>
-
-            </td>
-        </tr>
-        <tr>
            <td colspan="3" id="participantDiv">
            </td>
         </tr>
     </tbody>
 </table>
-
-<!--<div id="summaryGraph"></div>-->
-<!--<div id="participantDiv"></div>-->
 </body>
 
 
