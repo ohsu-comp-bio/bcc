@@ -368,6 +368,7 @@ function plot(tables_to_plot, selected_OPTR, data_sources, graph_div_id="graph")
                 if (add_yaxis == true)
                 {
                     layout[yaxis_name] = yaxis;
+                    layout["showlegend"] = true;
                 }
 
                 var uniqueIds = [];
