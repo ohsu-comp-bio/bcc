@@ -1,0 +1,11 @@
+<customView xmlns="http://labkey.org/data/xml/queryCustomView">
+    <columns>
+        <column name="TrialID"/>
+        <column name="Description"/>
+        <column name="Phase"/>
+        <column name="Locations"/>
+        <column name="Genes"/>
+        <column name="Drugs"/>
+    </columns>
+</customView>
+

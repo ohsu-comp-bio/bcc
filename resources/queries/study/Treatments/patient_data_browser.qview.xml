@@ -1,0 +1,9 @@
+<customView xmlns="http://labkey.org/data/xml/queryCustomView">
+    <columns>
+        <column name="Date"/>
+        <column name="type"/>
+        <column name="mostDefSurgicalResDate"/>
+        <column name="comment"/>
+    </columns>
+</customView>
+

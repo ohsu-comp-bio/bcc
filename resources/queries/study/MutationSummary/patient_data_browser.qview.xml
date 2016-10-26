@@ -1,0 +1,11 @@
+<customView xmlns="http://labkey.org/data/xml/queryCustomView">
+    <columns>
+        <column name="Aprox_Mutation_Burden_Per_Mb"/>
+        <column name="Non_synonymous"/>
+        <column name="Synonymous"/>
+        <column name="Nonsense"/>
+        <column name="Indels"/>
+        <column name="Splice_Site"/>
+        <column name="Total"/>
+    </columns>
+</customView>

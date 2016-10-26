@@ -1205,10 +1205,10 @@
 
                 reports.push(
 
-                        getReportConfig('Mutation Summary', 'study', 'Genomics'),
-                        getReportConfig('WES Results', 'study', 'Genomics', 'Somatic Mutations', 'SelectedVariants'),
-                        getReportConfig('Germline Variants', 'study', 'Genomics'),
-                        getReportConfig('Gene Trails Results', 'study', 'Genomics', 'Gene Trails')
+                        getReportConfig('Mutation Summary', 'study', 'Genomics', 'Mutation Summary', 'patient_data_browser'),
+                        getReportConfig('WES Results', 'study', 'Genomics', 'Somatic Mutations', 'patient_data_browser'),
+                        getReportConfig('Germline Variants', 'study', 'Genomics', 'Germline Variants', 'patient_data_browser'),
+                        getReportConfig('Gene Trails Results', 'study', 'Genomics', 'Gene Trails Results', 'patient_data_browser')
 
                 );
             }
@@ -1231,7 +1231,9 @@
 
                         var dataSet = data.rows[i];
 
-                        reports.push(getReportConfig(dataSet.Name, 'study', 'Clinical', dataSet.Label));
+                        //reports.push(getReportConfig(dataSet.Name, 'study', 'Clinical', dataSet.Label));
+                        // CRP - Should we check if there is a 'patient_data_browser' for this table first?
+                        reports.push(getReportConfig(dataSet.Name, 'study', 'Clinical', dataSet.Label, 'patient_data_browser'));
                     }
 
 

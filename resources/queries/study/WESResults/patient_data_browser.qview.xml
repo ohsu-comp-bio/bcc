@@ -1,7 +1,5 @@
 <customView xmlns="http://labkey.org/data/xml/queryCustomView">
     <columns>
-        <column name="OPTR"/>
-        <!--<column name="Date"/>-->
         <column name="Flagged"/>
         <column name="Hugo_Symbol"/>
         <column name="Protein_Change"/>

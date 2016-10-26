@@ -1,0 +1,10 @@
+<customView xmlns="http://labkey.org/data/xml/queryCustomView">
+    <columns>
+        <column name="Date"/>
+        <column name="tumorid"/>
+        <column name="sizeAxis1"/>
+        <column name="sizeAxis2"/>
+        <column name="sizeAxis3"/>
+        <column name="Comment"/>
+    </columns>
+</customView>

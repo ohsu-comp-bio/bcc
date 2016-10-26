@@ -1,0 +1,22 @@
+<customView xmlns="http://labkey.org/data/xml/queryCustomView">
+    <columns>
+        <column name="OHSUPathologyID"/>
+        <column name="Diagnosis"/>
+        <column name="OrderedTest"/>
+        <column name="PercentTumor"/>
+        <column name="BuildVersion"/>
+        <column name="Gene"/>
+        <column name="ProteinVariant"/>
+        <column name="Chromosome"/>
+        <column name="PositionStart"/>
+        <column name="PositionEnd"/>
+        <column name="RefBase"/>
+        <column name="Variant"/>
+        <column name="VariantClassification"/>
+        <column name="VariantType"/>
+        <column name="ProteinVariantType"/>
+        <column name="PubMedIDs"/>
+        <column name="Transcript"/>
+        <column name="TranscriptPriority"/>
+    </columns>
+</customView>

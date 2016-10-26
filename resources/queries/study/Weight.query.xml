@@ -8,6 +8,7 @@
                 <columns>
                     <column columnName="weight">
                         <columnTitle>Weight (kg)</columnTitle>
+                        <formatString>###.00 kg</formatString>
                     </column>
 <!--                    <column columnName="OPTR">
                         <phi>PHI</phi>

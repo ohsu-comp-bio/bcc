@@ -1,0 +1,12 @@
+<customView xmlns="http://labkey.org/data/xml/queryCustomView">
+    <columns>
+        <column name="dateOfFirstRecurrence"/>
+        <column name="typeOfFirstRecurrence"/>
+        <column name="siteOfFirstRecurrence"/>
+        <column name="cancerStatus"/>
+        <column name="followupDate"/>
+        <column name="statusAtFollowup"/>
+        <column name="death"/>
+    </columns>
+</customView>
+

@@ -1,0 +1,18 @@
+<customView xmlns="http://labkey.org/data/xml/queryCustomView">
+    <columns>
+        <column name="Date"/>
+        <column name="InitialDiagnosis"/>
+        <column name="DiagnosisFromHistologyCode"/>
+        <column name="Grade"/>
+        <column name="TumorSize"/>
+        <column name="Comment"/>
+        <column name="StageGroupingDominant"/>
+        <column name="Margins"/>
+        <column name="RegLNexam"/>
+        <column name="RegLNpos"/>
+        <column name="LymphVascularInvasion"/>
+        <column name="PrimarySiteMajorGroupsForStaging"/>
+        <column name="HistologyDescription"/>
+    </columns>
+</customView>
+

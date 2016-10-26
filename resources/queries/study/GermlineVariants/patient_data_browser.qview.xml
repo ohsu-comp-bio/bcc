@@ -1,0 +1,12 @@
+<customView xmlns="http://labkey.org/data/xml/queryCustomView">
+    <columns>
+        <column name="Flagged"/>
+        <column name="Hugo_Symbol"/>
+        <column name="Mutation"/>
+        <column name="Variant_Classification"/>
+        <column name="ClinVar"/>
+        <column name="dbSNP_RS"/>
+        <column name="Population_Frequency"/>
+        <column name="Comments"/>
+    </columns>
+</customView>

@@ -1,0 +1,16 @@
+<customView xmlns="http://labkey.org/data/xml/queryCustomView">
+    <columns>
+        <column name="Date"/>
+        <column name="SampleType"/>
+        <column name="SampleSubtype"/>
+        <column name="SampleSource"/>
+        <column name="PreparationMethod"/>
+        <column name="Comment"/>
+        <column name="Box"/>
+        <column name="Quantity"/>
+        <column name="OriginTissue"/>
+        <column name="TumorNormal"/>
+        <column name="TumorType"/>
+        <column name="Initials"/>
+    </columns>
+</customView>
