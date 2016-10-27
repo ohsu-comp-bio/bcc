@@ -1316,7 +1316,7 @@
                                     for (var fdKey in filterDefs)
                                     {
 
-                                        var cfg = getReportConfig('TumorBoardDocuments', 'lists', filterDefs[fdKey].tabName, filterDefs[fdKey].subTabName);
+                                        var cfg = getReportConfig('TumorBoardDocuments', 'lists', filterDefs[fdKey].tabName, filterDefs[fdKey].subTabName,'patient_data_browser');
 
                                         cfg.id = cfg.id + '_' + fdKey;
                                         cfg.name = cfg.name + '_' + fdKey;
