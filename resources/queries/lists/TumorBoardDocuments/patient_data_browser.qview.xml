@@ -3,6 +3,6 @@
         <column name="TumorBoard"/>
         <column name="Type"/>
         <column name="Document"/>
-        <column name="Netes"/>
+        <column name="Notes"/>
     </columns>
 </customView>
