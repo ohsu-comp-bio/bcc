@@ -24,6 +24,7 @@
             allowEditing: true,
             maxSubjectsToShow: 15,
             showDiscvrLink: true,
+            defaultTab: 'Clinical',
 
             initComponent: function(){
                 Ext4.apply(this, {
@@ -140,6 +141,15 @@
 
                 if (childTab){
                     tab.fireEvent('tabchange', tab, childTab);
+                } else {
+                    console.error('CRP - Set and activate left most sub-tab by default.');
+                    var tabPanel = this.down('#tabPanel');
+                    var categoryTab = tabPanel.getActiveTab();
+                    this.activeReport = categoryTab.items.get(0);
+                    var parentTab = this.activeReport.up('tabpanel');
+                    tabPanel.setActiveTab(parentTab);
+                    parentTab.setActiveTab(this.activeReport);
+                    this.loadTab(this.activeReport);
                 }
             },
 
@@ -235,6 +245,7 @@
             },
 
             onSubmit: function(btn){
+console.error('CRP - onSubmit.');
                 if (!this.checkValid())
                     return;
 
@@ -695,7 +706,7 @@
                                     this.silentlySetActiveTab(this.activeReport);
                                 }
                                 else {
-                                    console.error('unable to find tab: ' + t[1])
+                                    console.error('unable to find tab: ' + t[1]);
                                 }
                                 break;
                             default:
@@ -1331,7 +1342,7 @@
 
                                         jfcreateTabPanel: function ()
                                         {
-
+console.error('jfcreateTabPanel');
                                             var tabPanel = this.down('#tabPanel');
 
                                             if (!this.reports || !this.reports.length)
@@ -1411,26 +1422,6 @@
                                                 }
                                             }, this);
 
-                                            if (this.activeReport)
-                                            {
-                                                this.silentlySetActiveTab(this.activeReport);
-                                            }
-                                            else if (this.defaultReport)
-                                            {
-                                                var report = this.findReport(this.defaultReport);
-                                                if (report)
-                                                    this.silentlySetActiveTab(report);
-                                            }
-                                            else if (this.defaultTab)
-                                            {
-                                                var tab = tabPanel.down('#' + this.defaultTab);
-                                                tabPanel.suspendEvents();
-                                                tab.suspendEvents();
-                                                tabPanel.setActiveTab(tab);
-                                                tab.resumeEvents();
-                                                tabPanel.resumeEvents();
-                                            }
-
                                             //populate initial fields
                                             var shouldChange = true;
                                             this.initialContext = this.getFiltersFromUrl();
@@ -1451,6 +1442,30 @@
                                             if (shouldChange)
                                             {
                                                 this.changeFilterType(this.down('#inputType').getValue().selector);
+                                            }
+
+                                            if (this.activeReport)
+                                            {
+                                                this.silentlySetActiveTab(this.activeReport);
+                                            }
+                                            else if (this.defaultReport)
+                                            {
+                                                var report = this.findReport(this.defaultReport);
+                                                if (report)
+                                                    this.silentlySetActiveTab(report);
+                                            }
+                                            else if (this.defaultTab)
+                                            {
+                                                var tab = tabPanel.down('#' + this.defaultTab);
+                                                tabPanel.suspendEvents();
+                                                tab.suspendEvents();
+                                                tabPanel.setActiveTab(tab);
+                                                tab.resumeEvents();
+                                                tabPanel.resumeEvents();
+                                                console.error('CRP - Set and activate left most sub-tab by default.');
+                                                this.activeReport = tab.items.get(0);
+                                                this.silentlySetActiveTab(this.activeReport);
+                                                this.loadTab(this.activeReport);
                                             }
 
                                             var submitBtn = this.down('#submitBtn');
