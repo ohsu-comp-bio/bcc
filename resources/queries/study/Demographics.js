@@ -21,4 +21,13 @@ function beforeUpdate(row, oldRow, errors) {
     if (testDate = 'Invalid Date') {
         row.date = new Date();
     }
+
+    if(row['Date Of Birth']){
+
+        var dobDTM = new Date(row['Date Of Birth']);
+        var gmtDtmStr = dobDTM.toISOString();
+        var gmtDtStr = gmtDtmStr.substring(0,10);
+
+        row['Date Of Birth'] = gmtDtStr;
+    }
 }
