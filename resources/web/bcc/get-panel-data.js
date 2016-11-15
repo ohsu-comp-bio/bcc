@@ -195,65 +195,37 @@ function getTraceData(table_name, fields, data_sources, dateRange)
     // Normalize date attribute name.
     var date_field = "";
     var has_date = false;
-
-    if (fields.indexOf("date") !== -1 )
-    {
+    if (fields.indexOf("date") !== -1 ){
         date_field = "date";
         has_date = true;
     }
-    if (fields.indexOf("Date") != -1)
-    {
+    if (fields.indexOf("Date") != -1){
         date_field = "Date";
         has_date = true;
     }
 
-    //console.log("has date: " + has_date);
+    if (debug_getPanelData) console.log("has date: " + has_date);
+    if (has_date){
+        // Convert string dates to date objects.
+        $.each(selected_items, function(index, object){
+            //console.log("data_list[index][date_field] " + selected_items[index][date_field]);
+            selected_items[index][date_field] = formatDate(selected_items[index][date_field]);
 
-    // Convert string dates to date objects.
-    $.each(selected_items, function(index, object)
-    {
-        //console.log("data_list[index][date_field] " + selected_items[index][date_field]);
-        selected_items[index][date_field] = formatDate(selected_items[index][date_field]);
-
-        var dtm = (new Date(selected_items[index][date_field]));
-
-        if(!dateRange.minDate || dateRange.minDate > dtm){
-            dateRange.minDate = dtm;
-        }
-
-
-        if(!dateRange.maxDate || dateRange.maxDate < dtm){
-            dateRange.maxDate = dtm;
-        }
-
-    });
-
-    // Sort data by date
-    if (has_date)
-    {
-        if (debug_getPanelData) console.log("date field: " + date_field);
-        //console.log("going to sort--date_field: " + date_field);
-        selected_items.sort(function(d1, d2)
-        {
-            return new Date(d1[date_field]) - new Date(d2[date_field]);
+            var dtm = (new Date(selected_items[index][date_field]));
+            if(!dateRange.minDate || dateRange.minDate > dtm){
+                dateRange.minDate = dtm;
+            }
+            if(!dateRange.maxDate || dateRange.maxDate < dtm){
+                dateRange.maxDate = dtm;
+            }
         });
 
-        if (date_field == "date")
-        {
-            if (debug_getPanelData) console.log("has lower case date field: " + date_field);
-            /*
-             if (debug_getPanelData) console.log(selected_items);
-             if (debug_getPanelData) console.log("changing to Date");
-            selected_items.forEach(function(item)
-            {
-                if (debug_getPanelData) console.log("selected item");
-                if (debug_getPanelData) console.log(item);
-                Object.defineProperty(item, "Date",
-                    Object.getOwnPropertyDescriptor(item, "date"));
-                delete item["date"];
-            });
-            */
-        }
+        // Sort data by date
+        if (debug_getPanelData) console.log("date field: " + date_field);
+        //console.log("going to sort--date_field: " + date_field);
+        selected_items.sort(function(d1, d2){
+            return new Date(d1[date_field]) - new Date(d2[date_field]);
+        });
     }
 
     if (debug_getPanelData) console.log("selected_items");
@@ -281,10 +253,12 @@ function getTraceData(table_name, fields, data_sources, dateRange)
     if (debug_getPanelData) console.log("plot_data right now");
     if (debug_getPanelData) console.log(plot_data);
 
-    if (plot_data[date_field].length == 0)
-    {
-        plot_data = [];
-    }
+    // It is possible to have data without a date, for example the demographics data that we
+    // use does not need the date field.
+    //if (plot_data[date_field].length == 0)
+    //{
+    //    plot_data = [];
+    //}
 
     //console.log("plot_data from getTraceData for table " + table_name);
     //console.log(plot_data);

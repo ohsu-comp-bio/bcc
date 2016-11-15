@@ -33,10 +33,10 @@ var table_schema =
         DisplayName: "Demographics",
         Fields:
         [
-            {
-                FieldName: "date",
-                DisplayName: "Date"
-            },
+            //{
+            //    FieldName: "date",
+            //    DisplayName: "Date"
+            //},
             {
                 FieldName: "Date Of Birth",
                 DisplayName: "Date Of Birth"

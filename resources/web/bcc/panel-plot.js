@@ -95,7 +95,7 @@ function plot(tables_to_plot, selected_OPTR, data_sources, graph_div_id="graph")
     {
         fields = getFields("Demographics");
 
-        plot_data = getTraceData("Demographics", fields, data_sources,dateRange);
+        plot_data = getTraceData("Demographics", fields, data_sources, dateRange);
 
         var DOB = 'Invalid Date';
         var DOD = 'Invalid Date';
@@ -110,6 +110,14 @@ function plot(tables_to_plot, selected_OPTR, data_sources, graph_div_id="graph")
 
         if (DOD != 'Invalid Date')
         {
+            // Add DOD into date range.
+            if(!dateRange.minDate || dateRange.minDate > DOD){
+                dateRange.minDate = DOD;
+            }
+            if(!dateRange.maxDate || dateRange.maxDate < DOD){
+                dateRange.maxDate = DOD;
+            }
+
             /*if (DOB != 'Invalid Date')
             {
                 //var targetDate = new Date();
@@ -508,10 +516,17 @@ function plot(tables_to_plot, selected_OPTR, data_sources, graph_div_id="graph")
 
     //This fixes the date range.  Without this, the date range differs based on
     //what has been selected in the legend. This does not work well for event data.
-    dateRange.minDate.setDate(dateRange.minDate.getDate() - 20);
-    dateRange.maxDate.setDate(dateRange.maxDate.getDate() + 20);
-    layout.xaxis.range = [ dateRange.minDate.getTime(), dateRange.maxDate.getTime() ];
-
+    // Make sure date range is valid.
+    if (dateRange.minDate && dateRange.maxDate) {
+        // The date arithmetic below is not always working (see comment above about not working well with event data).
+        // This must have something to do with the type of date objects that get defined under different circumstances.
+        // Just adding and subtracting milliseconds from GMT time works better.
+        //dateRange.minDate.setDate(dateRange.minDate.getDate() - 20);
+        //dateRange.maxDate.setDate(dateRange.maxDate.getDate() + 20);
+        //layout.xaxis.range = [ dateRange.minDate.getTime(), dateRange.maxDate.getTime() ];
+        // 20 days in milliseconds: 1728000000
+        layout.xaxis.range = [ dateRange.minDate.getTime() - 1728000000, dateRange.maxDate.getTime() + 1728000000 ];
+    }
 
     num_tables_plotted = Object.keys(data_sources).length;
 
