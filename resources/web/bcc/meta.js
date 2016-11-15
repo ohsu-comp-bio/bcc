@@ -431,7 +431,7 @@ var table_schema =
                 IsDate : true
             },
             {
-                FieldName: "Type",
+                FieldName: "imageTypeID",
                 DisplayName: "Type"
             },
             {
@@ -454,7 +454,7 @@ var table_schema =
                 IsDate : true
             },
             {
-                FieldName: "Type",
+                FieldName: "imageTypeID",
                 DisplayName: "Type"
             }
         ]

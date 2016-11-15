@@ -1,10 +1,8 @@
 <customView xmlns="http://labkey.org/data/xml/queryCustomView">
     <columns>
         <column name="Date"/>
-        <!--<column name="Name"/>-->
-        <column name="tumorID"/>
-        <column name="ImageTypeID"/>
-        <column name="omeroId"/>
+        <column name="imageTypeID"/>
+        <column name="comment"/>
     </columns>
     <sorts>
         <sort column="Date" descending="false"/>
