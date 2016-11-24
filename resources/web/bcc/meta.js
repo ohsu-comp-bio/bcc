@@ -431,7 +431,7 @@ var table_schema =
                 IsDate : true
             },
             {
-                FieldName: "imageTypeID",
+                FieldName: "imageTypeID/ImageTypeCode",
                 DisplayName: "Type"
             },
             {
