@@ -25,8 +25,8 @@ function plot(tables_to_plot, selected_OPTR, data_sources, graph_div_id="graph")
     var yaxis = {};
     var schema = {};
     var annotation = {};
-    var event_yaxis_domain = [0.75, 1];
-    var series_yaxis_domain = [0, 0.75];
+    var event_yaxis_domain = [0.75, 1.00];
+    var series_yaxis_domain = [0.00, 0.75];
     var max_domain = 1.0;
     var add_yaxis = false;
     var schema_defines_line = false;
@@ -351,6 +351,14 @@ function plot(tables_to_plot, selected_OPTR, data_sources, graph_div_id="graph")
                             {
                                 plot_data.y_value[j] = plot_data["sizeAxis3"][j];
                             }
+                        }
+                    } else if (table_name == "CA199")
+                    {
+                        y1 = plot_data.y_value.map(parseFloat);
+                        //y2 = y1.map(toFixed(2));
+                        for (var j = 0 ; j < y1.length ; j++)
+                        {
+                            y2 = y1[j].toFixed(2);
                         }
                     }
 

@@ -43,10 +43,22 @@ function getGenericAnnotationText(table_name, plot_data, point_number)
             if (getShouldDisplayData(data))
             {
                 if (debug_annotationMakers) console.log("Adding annotation text for field " + field_name + " " + data);
-                annotation_text += '' +
-                    '<b>' + display_name + '</b>: ' +
-                    plot_data[field_name][point_number] +
-                    units + '<br />';
+                // PT-129 "Limit number of decimal points for CA19-9 plot".
+                if (table_schema[table_name].hasOwnProperty("yValueCol") &&
+                    field_name == table_schema[table_name].yValueCol)
+                {
+                    // Assuming that value is parsable as a float?
+                    annotation_text += '' +
+                        '<b>' + display_name + '</b>: ' +
+                        parseFloat(plot_data[field_name][point_number]).toFixed(0) +
+                        units + '<br />';
+                } else
+                {
+                    annotation_text += '' +
+                        '<b>' + display_name + '</b>: ' +
+                        plot_data[field_name][point_number] +
+                        units + '<br />';
+                }
                 if (debug_annotationMakers) console.log("annotation text: " + annotation_text);
             }
         }

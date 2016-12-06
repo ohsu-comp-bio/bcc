@@ -19,7 +19,10 @@ function makeAnnotations(point_data, graph_div_id)
     var annotation_text = point.fullData.text[point.pointNumber];
     //console.log("annotation_text");
     //console.log(annotation_text);
-    
+    //console.log("point_data = " + point_data);
+    //console.log("point.yaxis._gd.clientWidth = " + point.yaxis._gd.clientWidth);
+    //console.log("point.yaxis._gd.clientHeight = " + point.yaxis._gd.clientHeight);
+
     var newAnnotation =
     {
         x: point.x,
@@ -27,7 +30,7 @@ function makeAnnotations(point_data, graph_div_id)
         yref: yref,
         arrowhead: 8,
         ax: 0,
-        ay: -60,
+        ay: -45,
         bgcolor: 'rgba(255, 255, 255, 0.9)',
         arrowcolor: point.fullData.marker.color,
         font:
@@ -37,12 +40,14 @@ function makeAnnotations(point_data, graph_div_id)
         bordercolor: point.fullData.marker.color,
         borderwidth: 2,
         borderpad: 2,
-        text: annotation_text
+        text: annotation_text,
+        opacity: 0.75
     };
     
     var divid = document.getElementById(graph_div_id);
     var newIndex = (divid.layout.annotations || []).length;
-    
+
+
     // delete instead if clicked twice
     if (newIndex)
     {
@@ -69,7 +74,21 @@ function makeAnnotations(point_data, graph_div_id)
         }
     
     }
-    
+
+    // We are ready to add it now, but check it's placement first.
+    // Get y position of new annotation relative to full graph y domain.
+    yAnnDomain = point.yaxis.domain[0] +
+                 ((newAnnotation.y - point.yaxis.range[0]) / (point.yaxis.range[1] - point.yaxis.range[0])) *
+                 (point.yaxis.domain[1] - point.yaxis.domain[0]);
+    yHeadroomInPixels = (1.0 - yAnnDomain) * divid.layout.height;
+    textLines = newAnnotation.text.split("<br />").length;
+
+    // If there is too little headroom, flip annotation to underneath the marker.
+    if (yHeadroomInPixels < textLines * 16)
+    {
+      newAnnotation.ay *= -1;
+    }
+
     Plotly.relayout
     (
         graph_div_id,
