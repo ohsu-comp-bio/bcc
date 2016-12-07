@@ -1,8 +1,6 @@
 <view xmlns="http://labkey.org/data/xml/view" title="PTTB BCC Plot" frame="portal">
     <dependencies>
         <dependency path="bcc/Ext4ClientApi" />
-        <dependency path="bcc/all-data.js"/>
-        <dependency path="bcc/plotly.min.js"/>
         <dependency path="bcc/pttb-plot.js" />
     </dependencies>
 </view>
